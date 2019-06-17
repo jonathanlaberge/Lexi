@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prototype 3</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="assets/js/jquery-ui.min.js"></script>
+
+    
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/customize-presets.css">
+    <link rel="stylesheet" href="lib/presets/p1.css">
+
+
+    <script type="text/javascript" src="dist/knob.js"></script>
+    <script type="text/javascript" src="lib/presets/p1.js"></script>
+
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lekton:400italic' rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,700" rel="stylesheet"
+          type="text/css">
+    <style>
+       
+
+
+        
+        
+        #submit {
+    border: 0;
+    line-height: 2.5;
+    padding: 0 20px;
+    font-size: 1rem;
+    text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+    border-radius: 10px;
+    background-color: rgba(220, 0, 0, 1);
+    background-image: linear-gradient(to top left,
+                                      rgba(0, 0, 0, .2),
+                                      rgba(0, 0, 0, .2) 30%,
+                                      rgba(0, 0, 0, 0));
+    box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
+                inset -2px -2px 3px rgba(0, 0, 0, .6);
+}
+
+.styled:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+.styled:active {
+    box-shadow: inset -2px -2px 3px rgba(255, 255, 255, .6),
+                inset 2px 2px 3px rgba(0, 0, 0, .6);
+}
+        
+        
+
+    </style>
+</head>
+    <body>
+        Knob Picker
+        <div class="container">
+            <div class="row m-2">
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 1</h5>
+                            <input id="picker" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 2</h5>
+                            <input id="picker2" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 3</h5>
+                            <input id="picker3" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 4</h5>
+                            <input id="picker4" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row m-2">
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 5</h5>
+                            <input id="picker5" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 6</h5>
+                            <input id="picker6" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 7</h5>
+                            <input id="picker7" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 8</h5>
+                            <input id="picker8" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            <div class="row m-2">
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 9</h5>
+                            <input id="picker9" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+     
+       
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 10</h5>
+                            <input id="picker10" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 11</h5>
+                            <input id="picker11" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Question 12</h5>
+                            <input id="picker12" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        
+
+     <script>
+     var reponsesNumber = new Map();
+     var validator = new Map();
+     validator.set("picker1", 1);
+     validator.set("picker2", 1);
+     validator.set("picker3", 1);
+     validator.set("picker4", 1);
+     validator.set("picker5", 1);
+     validator.set("picker6", 1);
+     validator.set("picker7", 1);
+     validator.set("picker8", 1);
+     validator.set("picker9", 1);
+     validator.set("picker10", 1);
+     validator.set("picker11", 1);
+     validator.set("picker12", 1);
+
+  
+
+    for (var i = 1; i < 6; i++) {
+        Array.prototype.slice.call(document.getElementsByClassName('preset' + i)).forEach(function(el) {
+            new Knob(el, new Ui['P' + i]());
+            el.addEventListener('change', function  () {
+              console.log(el.id +' ' + el.value)
+              
+              
+              
+          	reponsesNumber.set(el.id , parseInt(el.value));
+              
+            
+           // console.log(reponsesNumber)
+              
+            })
+        })
+    }
+     //console.log(Ui['P1'])
+   
+     
+     
+
+function compareMaps(map1, map2) {
+    var testVal;
+    if (map1.size !== map2.size) {
+        return false;
+    }
+    for (var [key, val] of map1) {
+        testVal = map2.get(key);
+        // in cases of an undefined value, make sure the key
+        // actually exists on the object so there are no false positives
+        if (testVal !== val || (testVal === undefined && !map2.has(key))) {
+            return false;
+        }
+    }
+    return true;
+}
+     
+     
+     
+</script>
+
+
+<div id="submit" class="btn-lg btn-success float-right m-2">
+	Vérifier
+</div>
+
+
+<script>
+$('#submit').on('click', function(e) 
+		{  
+			console.log(reponsesNumber);
+			console.log( validator);
+			console.log(compareMaps(reponsesNumber, validator));
+
+    
+    
+    
+     document.getElementById("picker1").style.backgroundColor = "lightblue"; 
+alert(document.getElementById("picker1").style.backgroundColor); 
+    
+		});
+</script>
+
+
+<svg>
+    <filter id="dropshadow" height="150%" width="150%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+        <feOffset dx="0" dy="3" result="offsetblur"/>
+        <feMerge>
+            <feMergeNode/>
+            <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+    </filter>
+    <filter id='inner-shadow'>
+
+        <!-- Shadow Offset -->
+        <feOffset
+                dx='0'
+                dy='5'
+                />
+
+        <!-- Shadow Blur -->
+        <feGaussianBlur
+                stdDeviation='5'
+                result='offset-blur'
+                />
+
+        <!-- Invert the drop shadow
+             to create an inner shadow -->
+        <feComposite
+                operator='out'
+                in='SourceGraphic'
+                in2='offset-blur'
+                result='inverse'
+                />
+
+        <!-- Color & Opacity -->
+        <feFlood
+                flood-color='black'
+                flood-opacity='0.75'
+                result='color'
+                />
+
+        <!-- Clip color inside shadow -->
+        <feComposite
+                operator='in'
+                in='color'
+                in2='inverse'
+                result='shadow'
+                />
+
+        <!-- Put shadow over original object -->
+        <feComposite
+                operator='over'
+                in='shadow'
+                in2='SourceGraphic'
+                />
+    </filter>
+</svg>
+</body>
+</html>

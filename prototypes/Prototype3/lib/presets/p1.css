@@ -1,0 +1,58 @@
+.p1 rect {
+  fill: rgba(0, 255, 206, 0.74);
+}
+
+.p1 g polygon {
+  opacity: 1;
+}
+
+.p1 circle {
+  fill: rgb(0, 88, 255);
+  stroke: #ff0000;
+  stroke-width: 2;
+  filter: url(#dropshadow);
+}
+
+.p1 text {
+  font-size: 10px;
+  fill: #050104;
+  font-family: sans-serif;
+  font-weight: 300;
+  -webkit-transition: all .1s ease-in-out;
+}
+
+.p1 text.active {
+  font-size: 15px;
+  -webkit-transition: all .3s ease-in-out;
+}
+
+
+
+
+.p1Bad rect {
+  fill: rgba(0, 255, 206, 0.74);
+}
+
+.p1Bad g polygon {
+  opacity: 1;
+}
+
+.p1Bad circle {
+  fill: rgb(255, 0, 0);
+  stroke: #ff0000;
+  stroke-width: 2;
+  filter: url(#dropshadow);
+}
+
+.p1Bad text {
+  font-size: 10px;
+  fill: #050101;
+  font-family: sans-serif;
+  font-weight: 300;
+  -webkit-transition: all .1s ease-in-out;
+}
+
+.p1Bad text.active {
+  font-size: 15px;
+  -webkit-transition: all .3s ease-in-out;
+}

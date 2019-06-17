@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+   <title>Prototype 3</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="assets/js/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+	<link rel="stylesheet" href="assets/css/jquery-ui.structure.css">
+	<link rel="stylesheet" href="assets/css/jquery-ui.theme.css">
+	
+    
+    
+     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/customize-presets.css">
+    <link rel="stylesheet" href="lib/presets/p1.css">
+    <script type="text/javascript" src="dist/knob.js"></script>
+    <script type="text/javascript" src="lib/presets/p1.js"></script>
+    
+    
+    
+    
+    
+  	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lekton:400italic' rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,700" rel="stylesheet"
+          type="text/css">
+	<style>
+
+        
+        
+               
+
+
+        
+        
+        #submit {
+    border: 0;
+    line-height: 2.5;
+    padding: 0 20px;
+    font-size: 1rem;
+    text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+    border-radius: 10px;
+    background-color: rgba(220, 0, 0, 1);
+    background-image: linear-gradient(to top left,
+                                      rgba(0, 0, 0, .2),
+                                      rgba(0, 0, 0, .2) 30%,
+                                      rgba(0, 0, 0, 0));
+    box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
+                inset -2px -2px 3px rgba(0, 0, 0, .6);
+}
+
+.styled:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+.styled:active {
+    box-shadow: inset -2px -2px 3px rgba(255, 255, 255, .6),
+                inset 2px 2px 3px rgba(0, 0, 0, .6);
+}
+        
+ .customize .p1 circle {
+    fill: rgb(226, 0, 0);
+    stroke: 0xff3100;
+}
+        
+	</style>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	<script>
+		var reponsesNumber = new Map();
+		const numberOfSlider = 12;
+		var canValidate = false;
+		var themeID = 0;
+		var questionnaireID = 0;
+		
+		$(function()
+		{
+			var urlParams;
+			(window.onpopstate = function () 
+			{
+				var match,
+					pl     = /\+/g,  // Regex for replacing addition symbol with a space
+					search = /([^&=]+)=?([^&]*)/g,
+					decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+					query  = window.location.search.substring(1);
+
+				urlParams = {};
+				while (match = search.exec(query))
+					urlParams[decode(match[1])] = decode(match[2]);
+			})();
+			
+			themeID = urlParams.theme;
+			questionnaireID = urlParams.questionnaire;
+			
+			
+			$("#erreur").hide();
+			$("#succes").hide();
+			
+		/*	$("#picker12").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber12").text($(this).slider("value"));
+					reponsesNumber.set("picker12",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber12").text(ui.value);
+					reponsesNumber.set("picker12",ui.value);
+					CheckAllSlider();
+				}
+			});*/
+			
+			
+
+			
+			$('#submit').on('click', function(e) 
+			{
+				if(canValidate)
+				{
+					$("#erreur").hide();
+					$("#succes").hide();
+					$.ajax(
+					{
+						type: "POST",
+						url: "api/v1/validateQCM",  
+						data: JSON.stringify({"themeID":themeID ,"questionnaireID":questionnaireID ,"reponses":reponsesNumber}),
+						async: true,
+						dataType: "json",
+						success: function(result)
+						{
+							$.each(result.bonnesReponses, function(index, element) 
+							{
+								if(element)
+								{
+									$("#pickerBackgroup" + (index + 1)).css("background-color", "#bcffb7");
+									$("#pickerBackgroup" + (index + 1)).css("border-color", "#800000");
+									$("#pickerBackgroup" + (index + 1)).css("color", "green");
+								}
+								else
+								{
+									$("#pickerBackgroup" + (index + 1)).css("background-color", "red");
+									$("#pickerBackgroup" + (index + 1)).css("border-color", "red");
+									$("#pickerBackgroup" + (index + 1)).parent().css("color", "ffadad");
+								}
+				
+							});
+							
+							if(result.nombreErreur == 0)
+							{
+								$("#succes").show();
+							}
+							else
+							{
+								$("#erreur").show();
+							}
+						},
+						error: function(err)
+						{
+							alert("An error occured: " + err.status + " " + err.statusText);
+						}
+					});
+				}
+			});
+			
+			if(!Number.isInteger(Number.parseInt(themeID)) || 
+					!Number.isInteger(Number.parseInt(questionnaireID)))
+			{
+				alert("Le thème ou le questionnaire n'a pas été selectionné.");
+				
+			}
+		});
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row m-4">
+			<div id="erreur" class="alert alert-danger" role="alert">
+				Tu as commis des erreurs! Elles ont marquées en rouge.
+			</div>
+			<div id="succes" class="alert alert-success" role="alert">
+				Tu as les bonnes réponses. Bravo !
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-4">
+				<div id="pickerBackgroup1" class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 1</h5>
+						<div>
+                            <input id="picker1" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo" disabled/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div id="pickerBackgroup2" class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 2</h5>
+						<div>
+                            <input id="picker2" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div id="pickerBackgroup3" class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 3</h5>
+						<div>
+                            <input id="picker3" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-4">
+				<div id="pickerBackgroup4" class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 4</h5>
+						<div>
+	                            <input id="picker4" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div id="pickerBackgroup5" class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 5</h5>
+						<div>
+                            <input id="picker5" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div id="pickerBackgroup6" class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 6</h5>
+						<div>
+                            <input id="picker6" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-4">
+				<div id="pickerBackgroup7" class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 7</h5>
+						<div >
+                            <input id="picker7" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div id="pickerBackgroup8" class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 8</h5>
+						<div>
+			                            <input id="picker8" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 9</h5>
+						<div id="pickerBackgroup9">
+                            <input id="picker9" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 10</h5>
+						<div id="pickerBackgroup10">
+                            <input id="picker10" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 11</h5>
+						<div id="pickerBackgroup11">
+                            <input id="picker11" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 12</h5>
+						<div id="pickerBackgroup12">
+		                            <input id="picker12" class="preset1" type="range" data-width="150" data-height="150" data-angleOffset="270" data-angleRange="180" data-labels="default,o,oo,ooo"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div id="submit" class="btn-lg btn-success float-right m-2 disabled">Vérifier</div>
+			</div>
+		</div>
+	</div> 
+    
+    
+    
+        <script>
+
+
+    for (var i = 1; i < 6; i++) {
+        Array.prototype.slice.call(document.getElementsByClassName('preset' + i)).forEach(function(el) {
+            new Knob(el, new Ui['P' + i]());
+            el.addEventListener('change', function  () {
+              console.log(el.id +' ' + el.value)
+              
+              
+              
+          	reponsesNumber.set(el.id , parseInt(el.value));
+              
+            
+             
+                CheckAllSlider();
+				
+                
+                
+            console.log(reponsesNumber)
+              
+            })
+        })
+    }
+            
+//            document.getElementsByClassName('preset1')).forEach(function(el) 
+//            {
+//                new Knob(el, new Ui['P1']());
+//                el.addEventListener('change', function  () 
+//                {
+//                    console.log(el.id +' ' + el.value)
+//                    
+//                    reponsesNumber.set(el.id , parseInt(el.value));
+//                    
+//                    CheckAllSlider();
+//                    
+//                    console.log(reponsesNumber)
+//                })
+//            })
+     //console.log(Ui['P1'])
+            
+       function CheckAllSlider()
+			{
+				canValidate = true;
+				for (var i = 1; i <= numberOfSlider; i++)
+				{
+					if (reponsesNumber.get("picker" + i) == 0)
+					{
+						canValidate = false;
+					}
+				}
+				
+				if (canValidate)
+				{
+					$('#submit').removeClass("disabled");
+				}
+				else
+				{
+					$('#submit').addClass("disabled");
+				}
+				
+			}
+            
+            
+          </script>
+    
+    
+<svg>
+    <filter id="dropshadow" height="150%" width="150%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+        <feOffset dx="0" dy="3" result="offsetblur"/>
+        <feMerge>
+            <feMergeNode/>
+            <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+    </filter>
+    <filter id='inner-shadow'>
+
+        <!-- Shadow Offset -->
+        <feOffset
+                dx='0'
+                dy='5'
+                />
+
+        <!-- Shadow Blur -->
+        <feGaussianBlur
+                stdDeviation='5'
+                result='offset-blur'
+                />
+
+        <!-- Invert the drop shadow
+             to create an inner shadow -->
+        <feComposite
+                operator='out'
+                in='SourceGraphic'
+                in2='offset-blur'
+                result='inverse'
+                />
+
+        <!-- Color & Opacity -->
+        <feFlood
+                flood-color='black'
+                flood-opacity='0.75'
+                result='color'
+                />
+
+        <!-- Clip color inside shadow -->
+        <feComposite
+                operator='in'
+                in='color'
+                in2='inverse'
+                result='shadow'
+                />
+
+        <!-- Put shadow over original object -->
+        <feComposite
+                operator='over'
+                in='shadow'
+                in2='SourceGraphic'
+                />
+    </filter>
+</svg>
+</body>
+</html>
+

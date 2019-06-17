@@ -1,0 +1,521 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<title>QCM</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="assets/js/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+	<link rel="stylesheet" href="assets/css/jquery-ui.structure.css">
+	<link rel="stylesheet" href="assets/css/jquery-ui.theme.css">
+	
+  	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+	<style>
+		.custom-handle {
+			width: 3em !important;
+			height: 1.6em !important;
+			top: 50% !important;
+			margin-top: -.8em !important;
+			margin-left: -1.5em !important;
+			text-align: center !important;
+			line-height: 1.6em !important;
+		}
+	</style>
+	<script>
+		var reponsesNumber = new Map();
+		const numberOfSlider = 12;
+		var canValidate = false;
+		var canContinue = false;
+		var themeID = 0;
+		var questionnaireID = 0;
+		
+		$(function()
+		{
+			var urlParams;
+			(window.onpopstate = function () 
+			{
+				var match,
+					pl     = /\+/g,  // Regex for replacing addition symbol with a space
+					search = /([^&=]+)=?([^&]*)/g,
+					decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+					query  = window.location.search.substring(1);
+
+				urlParams = {};
+				while (match = search.exec(query))
+					urlParams[decode(match[1])] = decode(match[2]);
+			})();
+			
+			themeID = urlParams.theme;
+			questionnaireID = urlParams.questionnaire;
+			
+			
+			$("#erreur").hide();
+			$("#succes").hide();
+			
+			$("#picker1").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber1").text($(this).slider("value"));
+					reponsesNumber.set("picker1",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber1").text(ui.value);
+					reponsesNumber.set("picker1",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker2").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber2").text($(this).slider("value"));
+					reponsesNumber.set("picker2",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber2").text(ui.value);
+					reponsesNumber.set("picker2",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker3").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber3").text($(this).slider("value"));
+					reponsesNumber.set("picker3",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber3").text(ui.value);
+					reponsesNumber.set("picker3",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker4").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber4").text($(this).slider("value"));
+					reponsesNumber.set("picker4",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber4").text(ui.value);
+					reponsesNumber.set("picker4",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker5").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber5").text($(this).slider("value"));
+					reponsesNumber.set("picker5",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber5").text(ui.value);
+					reponsesNumber.set("picker5",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker6").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber6").text($(this).slider("value"));
+					reponsesNumber.set("picker6",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber6").text(ui.value);
+					reponsesNumber.set("picker6",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker7").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber7").text($(this).slider("value"));
+					reponsesNumber.set("picker7",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber7").text(ui.value);
+					reponsesNumber.set("picker7",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker8").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber8").text($(this).slider("value"));
+					reponsesNumber.set("picker8",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber8").text(ui.value);
+					reponsesNumber.set("picker8",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker9").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber9").text($(this).slider("value"));
+					reponsesNumber.set("picker9",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber9").text(ui.value);
+					reponsesNumber.set("picker9",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker10").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber10").text($(this).slider("value"));
+					reponsesNumber.set("picker10",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber10").text(ui.value);
+					reponsesNumber.set("picker10",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker11").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber11").text($(this).slider("value"));
+					reponsesNumber.set("picker11",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber11").text(ui.value);
+					reponsesNumber.set("picker11",ui.value);
+					CheckAllSlider();
+				}
+			});
+			$("#picker12").slider(
+			{
+				range: "max",
+				min: 0,
+				max: 3,
+				create: function()
+				{
+					$("#pickerNumber12").text($(this).slider("value"));
+					reponsesNumber.set("picker12",$(this).slider("value"));
+				},
+				slide: function(event, ui) 
+				{
+					$("#pickerNumber12").text(ui.value);
+					reponsesNumber.set("picker12",ui.value);
+					CheckAllSlider();
+				}
+			});
+			
+			
+			function CheckAllSlider()
+			{
+				canValidate = true;
+				for (var i = 1; i <= numberOfSlider; i++)
+				{
+					if (reponsesNumber.get("picker" + i) == 0)
+					{
+						canValidate = false;
+					}
+				}
+				
+				if (canValidate)
+				{
+					$('#submit').removeClass("disabled");
+				}
+				else
+				{
+					$('#submit').addClass("disabled");
+				}
+			}
+			
+			$('#submit').on('click', function(e) 
+			{
+				if(canValidate)
+				{
+					$("#erreur").hide();
+					$("#succes").hide();
+					$.ajax(
+					{
+						type: "POST",
+						url: "api/v1/validateQCM",  
+						data: JSON.stringify({"themeID":themeID ,"questionnaireID":questionnaireID ,"reponses":reponsesNumber}),
+						async: true,
+						dataType: "json",
+						success: function(result)
+						{
+							$.each(result.bonnesReponses, function(index, element) 
+							{
+								if(element)
+								{
+									$("#picker" + (index + 1)).css("background-color", "green");
+									$("#pickerNumber" + (index + 1)).css("border-color", "green");
+									$("#pickerNumber" + (index + 1)).css("color", "green");
+									$( "#picker" + (index + 1)).slider("disable");
+								}
+								else
+								{
+									$("#picker" + (index + 1)).css("background-color", "red");
+									$("#pickerNumber" + (index + 1)).css("border-color", "red");
+									$("#pickerNumber" + (index + 1)).css("color", "red");
+								}
+								//~ $("#picker" + (index + 1)).slider('value', element);
+								//~ $("#pickerNumber" + (index + 1)).text(element);
+							});
+							
+							if(result.nombreErreur == 0)
+							{
+								$("#succes").show();
+								canContinue = true;
+								$("#continue").removeClass("disabled");
+							}
+							else
+							{
+								$("#erreur").show();
+							}
+						},
+						error: function(err)
+						{
+							alert("An error occured: " + err.status + " " + err.statusText);
+						}
+					});
+				}
+			});
+			
+			$('#back').on('click', function(e) 
+			{
+				location.href = 'index.html';
+			});
+			
+			$('#continue').on('click', function(e) 
+			{
+				if(canContinue)
+				{
+					if (questionnaireID < 60)
+						location.href = 'QCM.html?theme=' + themeID + '&questionnaire=' + (parseInt(questionnaireID) + 1);
+					else
+						location.href = 'QCM.html?theme=' + (parseInt(themeID) + 1) + '&questionnaire=' + 1;
+				}
+			});
+			
+			if(!Number.isInteger(Number.parseInt(themeID)) || 
+					!Number.isInteger(Number.parseInt(questionnaireID)))
+			{
+				alert("Le thème ou le questionnaire n'a pas été selectionné.");
+				location.href = 'index.html';
+			}
+			else
+			{
+				if(questionnaireID > 60 || themeID > 60)
+				{
+					location.href = 'index.html';
+				}
+				$("#titre").text("Thème " + themeID + ", Questionnaire " + questionnaireID);
+			}
+		});
+	</script>
+</head>
+<body>
+	<h1 id="titre" class="m-2"></h1>
+	<div class="container">
+		<div class="row m-4">
+			<div id="erreur" class="alert alert-danger" role="alert">
+				Tu as commis des erreurs! Elles ont marquées en rouge.
+			</div>
+			<div id="succes" class="alert alert-success" role="alert">
+				Tu as les bonnes réponses. Bravo !
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 1</h5>
+						<div id="picker1">
+							<div id="pickerNumber1" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 2</h5>
+						<div id="picker2">
+							<div id="pickerNumber2" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 3</h5>
+						<div id="picker3">
+							<div id="pickerNumber3" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 4</h5>
+						<div id="picker4">
+							<div id="pickerNumber4" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 5</h5>
+						<div id="picker5">
+							<div id="pickerNumber5" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 6</h5>
+						<div id="picker6">
+							<div id="pickerNumber6" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 7</h5>
+						<div id="picker7">
+							<div id="pickerNumber7" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 8</h5>
+						<div id="picker8">
+							<div id="pickerNumber8" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 9</h5>
+						<div id="picker9">
+							<div id="pickerNumber9" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 10</h5>
+						<div id="picker10">
+							<div id="pickerNumber10" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 11</h5>
+						<div id="picker11">
+							<div id="pickerNumber11" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 12</h5>
+						<div id="picker12">
+							<div id="pickerNumber12" class="ui-slider-handle custom-handle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div id="back" class="btn-lg btn-secondary float-right m-2">Retour</div>
+				<div id="continue" class="btn-lg btn-primary float-right m-2 disabled">Continuer</div>
+				<div id="submit" class="btn-lg btn-success float-right m-2 disabled">Vérifier</div>
+			</div>
+		</div>
+	</div> 
+</body>
+</html>
+
