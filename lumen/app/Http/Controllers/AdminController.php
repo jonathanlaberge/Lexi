@@ -9,24 +9,23 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-      //  $this->middleware('auth:admin');
+        $this->middleware('auth:admin');
     }
 
     public function CategorieCreation(Request $request)
-    {;
-		$idCategorie = $request->input('idCategorie');
-		$nom = $request->input('nom');
-		$matiere = $request->input('matiere');
-		$niveau = $request->input('niveau');
-		$estPublic = $request->input('estPublic');
+    {
+		$body = json_decode($request->getContent());
 		
-		$idMaitresseCreatrice = 1;//////////////////////////////////////ASSOCIATION fiche avec ADMIN
+		$idCategorie = $body->idCategorie;
+		$nom = $body->nom;
+		$matiere = $body->matiere;
+		$niveau = $body->niveau;
+		$estPublic = $body->estPublic;
 		
-		if (!$request->has(['idCategorie', 'nom', 'matiere', 'niveau', 'estPublic']))
-			return response()->json(["code" => "400", "message" => "Missing Parameter"], 400);
+		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!$request->filled(['idCategorie', 'nom', 'matiere', 'niveau', 'estPublic']))
-			return response()->json(["code" => "400", "message" => "Unfilled Parameter"], 400);
+		if (!isset($idCategorie, $nom, $matiere, $niveau, $estPublic))
+			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 		
 		DB::insert('
 			INSERT INTO `categorie`
@@ -38,8 +37,7 @@ class AdminController extends Controller
     
     public function CategorieDelete(Request $request, $idCategorie)
     {
-		//////////////////////////////////////SELON OWNERSHIP LADMIN
-		$idMaitresseCreatrice = 1;
+		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
 		if (!IsValidID($idCategorie))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
@@ -54,19 +52,17 @@ class AdminController extends Controller
     
     public function CategorieGet(Request $request, $idCategorie)
     {
-		//////////////////////////////////////SELON OWNERSHIP LADMIN
-		$idMaitresseCreatrice = 1;
+		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
         if (!IsValidID($idCategorie))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
-         
-         
+        
         $result = DB::select('
             SELECT * FROM `categorie`
             WHERE (`idCategorie` = ?) AND
 			(`estPublic` = 1 OR `idMaitresseCreatrice` =?)',
             [$idCategorie, $idMaitresseCreatrice]);
-         
+        
         if ($result == null) 
         {
             return response()->json(["code" => "404", "message" => "Data Not Found"], 404);
@@ -77,8 +73,7 @@ class AdminController extends Controller
     
     public function CategorieGetList(Request $request, $page = 1)
     {
-        //////////////////////////////////////SELON LADMIN
-		$idMaitresseCreatrice = 1;
+		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
 		if (!IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
@@ -92,36 +87,65 @@ class AdminController extends Controller
 
     public function FicheCreation(Request $request)
     {
-		$idFiche = $request->input('idFiche');
-		$idCategorie = $request->input('idCategorie');
-		$titre = $request->input('titre');
+		$body = json_decode($request->getContent());
 		
-		$listeQuestion = $request->input('listeQuestion');
+		$idFiche = $body->idFiche;
+		$idCategorie = $body->idCategorie;
+		$titre = $body->titre;		
+		$listeQuestion = $body->listeQuestion;
 		
-		$idMaitresseCreatrice = 1;//////////////////////////////////////ASSOCIATION fiche avec ADMIN
+		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!$request->has(['idFiche', 'idCategorie', 'titre', 'listeQuestion']))
-			return response()->json(["code" => "400", "message" => "Missing Parameter"], 400);
+		if (!isset($idFiche, $idCategorie, $titre, $listeQuestion))
+			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 		
-		if (!$request->filled(['idFiche', 'idCategorie', 'titre', 'listeQuestion']))
-			return response()->json(["code" => "400", "message" => "Unfilled Parameter"], 400);
-		
-		DB::insert('
-			INSERT INTO `fiche`
-			(`idFiche`, `idCategorie`, `titre`, `idMaitresseCreatrice`) 
-			VALUES (?,?,?,?)', [$idFiche, $idCategorie, $titre, $idMaitresseCreatrice]);
+		try
+		{
+			DB::beginTransaction();
 			
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Liste des questions...
+			DB::insert('
+				INSERT INTO `fiche`
+				(`idFiche`, `idCategorie`, `titre`, `idMaitresseCreatrice`) 
+				VALUES (?,?,?,?)', [$idFiche, $idCategorie, $titre, $idMaitresseCreatrice]);
+
+			$failed = false;
+			$i = 1;
+			foreach ($questionList as $question)
+			{
+				if (!isset($question->question, $question->choixDeReponses, question->bonneReponse))
+				{
+					$failed = true;
+					break;
+				}
+				DB::insert('
+					INSERT INTO `question`
+					(`idQuestion`, `idFiche`, `idCategorie`, `question`, `choixDeReponses`, `bonneReponse`)
+					VALUES (?,?,?,?,?,?)',
+					[$i, $idFiche, $idCategorie, $question->question, $question->choixDeReponses, $question->bonneReponse]);
+					
+				$i++;
+			}
 			
+			if ($failed)
+			{
+				DB::rollBack();
+				return response()->json(["code" => "400", "message" => "Invalid Parameter in listeQuestion"], 400);
+			}
+			else
+				DB::commit();
+		}
+		catch (Exception $e)
+		{
+			DB::rollBack();
+			return response()->json(['code' => 500 ,'message' => 'Could Not Create'], 500);
+		}
+		
 		return response()->json(["code" => "200", "message" => "OK"], 200);
     }
     
     public function FicheDelete(Request $request, $idCategorie, $idFiche)
     {
-        $idFiche = $request->input('idFiche') ;
-		
-		//////////////////////////////////////SELON OWNERSHIP LADMIN
-		$idMaitresseCreatrice = 1;
+		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
 		if (!IsValidID($idCategorie) || !IsValidID($idFiche))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
@@ -138,8 +162,7 @@ class AdminController extends Controller
     
     public function FicheGet(Request $request, $idCategorie, $idFiche)
     {
-		//////////////////////////////////////SELON OWNERSHIP LADMIN
-		$idMaitresseCreatrice = 1;
+		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
         if (!IsValidID($idCategorie) || !IsValidID($idFiche))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
@@ -174,8 +197,7 @@ class AdminController extends Controller
     
     public function FicheGetList(Request $request, $page = 1)
     {
-        //////////////////////////////////////SELON LADMIN
-		$idMaitresseCreatrice = 1;
+		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
 		if (!IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
@@ -191,19 +213,18 @@ class AdminController extends Controller
     {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////HOLD Maitraisse Eleve
 		//////////////////////////////////////ASSOCIATION ELEVE avec ADMIN
-		$idMaitresse = 1;
- 
-		$prenom = $request->input('prenom');
-		$nom = $request->input('nom');
-		$dateNaissance = $request->input('dateNaissance');
-		$genre = $request->input('genre');
-		$avatar = $request->input('avatar');
-
-		if (!$request->has(['prenom', 'nom', 'dateNaissance', 'genre', 'avatar']))
-			return response()->json(["code" => "400", "message" => "Missing Parameter"], 400);
+		$body = json_decode($request->getContent());
 		
-		if (!$request->filled(['prenom', 'nom', 'dateNaissance', 'genre', 'avatar']))
-			return response()->json(["code" => "400", "message" => "Unfilled Parameter"], 400);
+		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
+ 
+		$prenom = $body->prenom;
+		$nom = $body->nom;
+		$dateNaissance = $body->dateNaissance;
+		$genre = $body->genre;
+		$avatar = $body->avatar;
+
+		if (!isset($prenom, $nom, $dateNaissance, $genre, $avatar))
+			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 		
 		DB::insert('
 			INSERT INTO `eleve` 
@@ -219,7 +240,7 @@ class AdminController extends Controller
     {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////HOLD Maitraisse Eleve
 		//////////////////////////////////////SELON LA CLASSE DE LADMIN
-		$idMaitresse = 1;
+		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 		
 		if (!IsValidID($idEleve))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
@@ -236,7 +257,7 @@ class AdminController extends Controller
     {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////HOLD Maitraisse Eleve
 		//////////////////////////////////////SELON LA CLASSE DE LADMIN
-		$idMaitresse = 1;
+		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 		
 		if (!IsValidID($idEleve))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
@@ -257,7 +278,7 @@ class AdminController extends Controller
     {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////HOLD Maitraisse Eleve
 		//////////////////////////////////////SELON LA CLASSE DE LADMIN?????????????????????????????????
-		$idMaitresse = 1;
+		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 		
 		if (!IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
@@ -273,7 +294,7 @@ class AdminController extends Controller
     {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////HOLD Maitraisse Eleve
 		//////////////////////////////////////SELON LA CLASSE DE LADMIN
-		$idMaitresse = 1;
+		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 		
 		if (!IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
