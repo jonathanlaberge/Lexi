@@ -240,6 +240,7 @@ class AccountController extends Controller
 		}
 		catch (Exception $e)
 		{
+			DB::rollBack();
 			return response()->json(['code' => 500 ,'message' => 'Could Not Update'], 500);
 		}
 
