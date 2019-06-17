@@ -186,11 +186,15 @@ class AccountController extends Controller
 			if(isset($body->motdepasse))
 			{
 				$nomberAffected++;
+				$hashed = password_hash(
+					$body->motdepasse,
+					PASSWORD_ARGON2I,
+					['memory_cost' => 2048, 'time_cost' => 6, 'threads' => 2]);
 				DB::update('
 					UPDATE `maitresse` 
 					SET `motdepasse` =?
 					WHERE `maitresse`.`idMaitresse` =?',
-					[$body->motdepasse,$idMaitresse]);
+					[$hashed,$idMaitresse]);
 			}
 			
 			if(isset($body->prenom))
