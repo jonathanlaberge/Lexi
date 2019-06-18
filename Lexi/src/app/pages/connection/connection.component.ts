@@ -1,15 +1,61 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
+import { Router, ActivatedRoute } from "@angular/router"
+import { getAppInitializer } from '@angular/router/src/router_module';
+import { CheckboxControlValueAccessor } from '@angular/forms';
+
 
 @Component({
-  selector: 'app-connection',
-  templateUrl: './connection.component.html',
-  styleUrls: ['./connection.component.css']
+    selector: 'app-connection',
+    templateUrl: './connection.component.html',
+    styleUrls: ['./connection.component.css']
 })
 export class ConnectionComponent implements OnInit {
 
-  constructor() { }
 
-  ngOnInit() {
-  }
+   
+    loginForm: FormGroup;
+    password: string;
+    email: string;
+    
+    constructor(private formBuilder: FormBuilder) { }
+
+    ngOnInit() {
+        this.loginForm = this.formBuilder.group({
+       
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', [Validators.required, Validators.minLength(8)]],
+
+        }, {
+              //  validator: MustMatch('password', 'confirmPassword')
+            });
+
+
+    }
+
+
+    get errorMessage() { return this.loginForm.controls; }
+    
+
+
+    resetForm() {
+        this.loginForm.reset();
+    }
+
+
+
+    submit() {
+        if (this.loginForm.invalid) {
+           // this.clrForm.markAsTouched();
+        } else {
+            console.log(this.loginForm.value);
+        }
+
+
+    }
+
+
+
+
 
 }

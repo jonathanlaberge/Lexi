@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\pages",
+    "\\src\\app\\pages\\connection",
+    "\\src\\app\\pages\\tableauDeBord\\eleve",
+    "\\src\\app\\pages\\tableauDeBord\\QCM"
+  ],
+  "SelectedNode": "\\src\\app\\pages\\connection\\connection.component.html",
+  "PreviewInSolutionExplorer": false
+}
