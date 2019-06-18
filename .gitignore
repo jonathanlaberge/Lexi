@@ -76,3 +76,4 @@ typings/
 .fusebox/
 Lexi/.vs/ProjectSettings.json
 Lexi/.vs/slnx.sqlite
+Lexi/.vs/config/applicationhost.config
