@@ -3,10 +3,9 @@
     "",
     "\\src",
     "\\src\\app",
+    "\\src\\app\\model",
     "\\src\\app\\pages",
-    "\\src\\app\\pages\\connection",
-    "\\src\\app\\pages\\tableauDeBord\\eleve",
-    "\\src\\app\\pages\\tableauDeBord\\QCM"
+    "\\src\\app\\pages\\connection"
   ],
   "SelectedNode": "\\src\\app\\pages\\connection\\connection.component.html",
   "PreviewInSolutionExplorer": false

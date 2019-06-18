@@ -36,6 +36,10 @@ export class ConnectionComponent implements OnInit {
     
 
 
+
+
+
+
     resetForm() {
         this.loginForm.reset();
     }

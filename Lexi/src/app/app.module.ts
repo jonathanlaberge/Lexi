@@ -28,6 +28,9 @@ import { EleveFicheComponent } from './pages/tableau-de-bord-eleve/eleve-fiche/e
 import { EleveQCMComponent } from './pages/tableau-de-bord-eleve/eleve-qcm/eleve-qcm.component';
 import { EleveHistoriqueComponent } from './pages/tableau-de-bord-eleve/eleve-historique/eleve-historique.component';
 
+
+
+import { FormsModule } from '@angular/forms';
 @NgModule(
     {
         declarations:
@@ -52,6 +55,7 @@ import { EleveHistoriqueComponent } from './pages/tableau-de-bord-eleve/eleve-hi
             ],
         imports:
             [
+                FormsModule,
                 BrowserModule,
                 AppRoutingModule,
                 ReactiveFormsModule,
