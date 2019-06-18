@@ -90,6 +90,7 @@ class AccountController extends Controller
 		}
 		else
 		{
+			////////////////////////////////////////////////////////////////////////////////////// VALIDATION MAITRAISSE ELEVE
 			$user->mode = "user";
 			$user->idEleveEnCours = $body->idEleveEnCours;
 		}
@@ -166,16 +167,16 @@ class AccountController extends Controller
     {
 		$body = json_decode($request->getContent());
 		
-		$idMaitresse = $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
+		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		$nomberAffected = 0;
+		$numberAffected = 0;
 		
 		try
 		{
 			DB::beginTransaction();
 			if(isset($body->email))
 			{
-				$nomberAffected++;
+				$numberAffected++;
 				DB::update('
 					UPDATE `maitresse` 
 					SET `email` =?
@@ -185,7 +186,7 @@ class AccountController extends Controller
 			
 			if(isset($body->motdepasse))
 			{
-				$nomberAffected++;
+				$numberAffected++;
 				$hashed = password_hash(
 					$body->motdepasse,
 					PASSWORD_ARGON2I,
@@ -199,7 +200,7 @@ class AccountController extends Controller
 			
 			if(isset($body->prenom))
 			{
-				$nomberAffected++;
+				$numberAffected++;
 				DB::update('
 					UPDATE `maitresse` 
 					SET `prenom` =?
@@ -209,7 +210,7 @@ class AccountController extends Controller
 			
 			if(isset($body->nom))
 			{
-				$nomberAffected++;
+				$numberAffected++;
 				DB::update('
 					UPDATE `maitresse` 
 					SET `nom` =?
@@ -219,7 +220,7 @@ class AccountController extends Controller
 			
 			if(isset($body->dateNaissance))
 			{
-				$nomberAffected++;
+				$numberAffected++;
 				DB::update('
 					UPDATE `maitresse` 
 					SET `dateNaissance` =?
@@ -229,7 +230,7 @@ class AccountController extends Controller
 			
 			if(isset($body->genre))
 			{
-				$nomberAffected++;
+				$numberAffected++;
 				DB::update('
 					UPDATE `maitresse` 
 					SET `genre` =?
@@ -244,6 +245,6 @@ class AccountController extends Controller
 			return response()->json(['code' => 500 ,'message' => 'Could Not Update'], 500);
 		}
 
-		return response()->json(['code' => 200 ,'message' => $nomberAffected.' Variable(s) Affected'] , 200);
+		return response()->json(['code' => 200 ,'message' => $numberAffected.' Variable(s) Affected'] , 200);
     } 
 }

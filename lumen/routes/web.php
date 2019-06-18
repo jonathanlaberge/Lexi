@@ -35,14 +35,16 @@ $router->group(['prefix' => 'v1'], function () use ($router)
 			$router->post('creation', 'AdminController@FicheCreation');
 			$router->delete('{idCategorie:[0-9]+}/{idFiche:[0-9+]}', 'AdminController@FicheDelete');
 			$router->get('{idCategorie:[0-9]+}/{idFiche:[0-9+]}', 'AdminController@FicheGet');
+			$router->post('{idCategorie:[0-9]+}/{idFiche:[0-9+]}', 'AdminController@FicheSet');
 			$router->get('liste[/{page:[0-9]+}]', 'AdminController@FicheGetList');
-			//$router->get('liste/{page:[0-9]+}/parcategorie/{idCategorie:[0-9]+}', 'AdminController@FicheGetListCategorie');
+			$router->get('liste/{page:[0-9]+}/parcategorie/{idCategorie:[0-9]+}', 'AdminController@FicheGetListCategorie');
 		});
 		$router->group(['prefix' => 'categorie'], function () use ($router) 
 		{
 			$router->post('creation', 'AdminController@CategorieCreation');
 			$router->delete('{idCategorie:[0-9]+}', 'AdminController@CategorieDelete');
 			$router->get('{idCategorie:[0-9]+}', 'AdminController@CategorieGet');
+			$router->post('{idCategorie:[0-9]+}', 'AdminController@CategorieSet');
 			$router->get('liste[/{page:[0-9]+}]', 'AdminController@CategorieGetList');
 		});
 		$router->group(['prefix' => 'user'], function () use ($router) 
@@ -50,7 +52,10 @@ $router->group(['prefix' => 'v1'], function () use ($router)
 			$router->post('creation', 'AdminController@UserCreation');
 			$router->delete('{idEleve:[0-9]+}', 'AdminController@UserDelete');
 			$router->get('{idEleve:[0-9]+}', 'AdminController@UserGet');
+			//$router->post('{idEleve:[0-9]+}', 'AdminController@UserSet');
 			$router->get('liste[/{page:[0-9]+}]', 'AdminController@UserGetList');
+			//$router->get('{idEleve:[0-9]+}/listedestaches', 'AdminController@FicheGetTODOList');
+			//$router->post('{idEleve:[0-9]+}/listedestaches', 'AdminController@FicheSetTODOList');
 		});
 		$router->get('historique[/{page:[0-9]+}]', 'AdminController@Historique');
 	});
@@ -63,6 +68,7 @@ $router->group(['prefix' => 'v1'], function () use ($router)
 			$router->get('{idCategorie:[0-9]+}/{idFiche:[0-9]+}', 'UserController@FicheGet');
 			$router->get('liste[/{page:[0-9]+}]', 'UserController@FicheGetList');
 			//$router->get('liste/{page:[0-9]+}/parcategorie/{idCategorie:[0-9]+}', 'UserController@FicheGetListCategorie');
+			//$router->get('listedestaches[/{page:[0-9]+}]', 'UserController@FicheGetTODOList');
 		});
 		$router->get('historique[/{page:[0-9]+}]', 'UserController@Historique');
 	});

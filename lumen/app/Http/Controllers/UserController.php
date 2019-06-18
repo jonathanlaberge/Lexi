@@ -10,18 +10,19 @@ class UserController extends Controller
 {
     public function __construct()
     {
-		//$this->middleware('auth');
+		$this->middleware('auth');
     }
     
     public function FicheValidation(Request $request)
     {
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////historique
 		if (!$request->has(['idFiche', 'idCategorie', 'listeQuestion']))
 			return response()->json(["code" => "400", "message" => "Missing Parameter"], 400);
 		
 		if (!$request->filled(['idFiche', 'idCategorie', 'listeQuestion']))
 			return response()->json(["code" => "400", "message" => "Unfilled Parameter"], 400);
 		
-		$idCategorie  =$request->input('idCategorie');
+		$idCategorie = $request->input('idCategorie');
 		$IdFiche = $request->input('IdFiche') ;
 		$questionACorriger = json_decode($request->input('listeQuestion'));
 		
@@ -110,16 +111,24 @@ class UserController extends Controller
     {
 		if (!IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
+		
+		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 
 		//////////////////////////////////////SELON LELEVE PLAYLIST
 
-		return response()->json(DB::select('SELECT * FROM `fiche` LIMIT ?,30',[($page * 30) - 30]), 200);
+		return response()->json(DB::select('
+			SELECT * 
+			FROM `fiche` 
+			WHERE wwwwwwwwwwwwwwwww//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			LIMIT ?,30',[($page * 30) - 30]), 200);
     }
     
     public function Historique(Request $request, $page = null)
     {
-		//////////////////////////////////////SELON LELEVE
-		$idEleve = 1;
+		$idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
+		
+		if ($idEleve == 0)
+			return response()->json(["code" => "403", "message" => "No student selected"], 403);
 		
 		if (!IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);

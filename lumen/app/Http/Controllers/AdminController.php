@@ -70,6 +70,68 @@ class AdminController extends Controller
         
         return response()->json($result[0], 200);
     }
+	
+    public function CategorieSet(Request $request, $idCategorie)
+    {
+		$body = json_decode($request->getContent());
+		
+		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
+		
+		$numberAffected = 0;
+		
+		try
+		{
+			DB::beginTransaction();
+			if(isset($body->nom))
+			{
+				$numberAffected++;
+				DB::update('
+					UPDATE `categorie` 
+					SET `nom` =?
+					WHERE `idMaitresseCreatrice` =?',
+					[$body->nom,$idMaitresse]);
+			}
+			
+			if(isset($body->matiere))
+			{
+				$numberAffected++;
+				DB::update('
+					UPDATE `categorie` 
+					SET `matiere` =?
+					WHERE `idMaitresseCreatrice` =?',
+					[$body->matiere,$idMaitresse]);
+			}
+			
+			if(isset($body->niveau))
+			{
+				$numberAffected++;
+				DB::update('
+					UPDATE `categorie` 
+					SET `niveau` =?
+					WHERE `idMaitresseCreatrice` =?',
+					[$body->niveau,$idMaitresse]);
+			}
+			
+			if(isset($body->estPublic))
+			{
+				$numberAffected++;
+				DB::update('
+					UPDATE `categorie` 
+					SET `estPublic` =?
+					WHERE `idMaitresseCreatrice` =?',
+					[$body->estPublic,$idMaitresse]);
+			}
+			
+			DB::commit();
+		}
+		catch (Exception $e)
+		{
+			DB::rollBack();
+			return response()->json(['code' => 500 ,'message' => 'Could Not Update'], 500);
+		}
+
+		return response()->json(['code' => 200 ,'message' => $numberAffected.' Variable(s) Affected'] , 200);
+    }
     
     public function CategorieGetList(Request $request, $page = 1)
     {
@@ -110,7 +172,7 @@ class AdminController extends Controller
 
 			$failed = false;
 			$i = 1;
-			foreach ($questionList as $question)
+			foreach ($listeQuestion as $question)
 			{
 				if (!isset($question->question, $question->choixDeReponses, question->bonneReponse))
 				{
@@ -195,6 +257,84 @@ class AdminController extends Controller
         return response()->json($fiche, 200);
     }
     
+	public function FicheSet(Request $request, $idCategorie, $idFiche)
+    {
+		$body = json_decode($request->getContent());
+		
+		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
+		
+		$numberAffected = 0;
+		
+		try
+		{
+			DB::beginTransaction();
+			if(isset($body->nom))
+			{
+				$numberAffected++;
+				DB::update('
+					UPDATE `categorie` 
+					SET `nom` =?
+					WHERE `idMaitresseCreatrice` =?',
+					[$body->nom,$idMaitresse]);
+			}
+			
+			if(isset($body->matiere))
+			{
+				$numberAffected++;
+				DB::update('
+					UPDATE `categorie` 
+					SET `matiere` =?
+					WHERE `idMaitresseCreatrice` =?',
+					[$body->matiere,$idMaitresse]);
+			}
+			
+			if(isset($body->niveau))
+			{
+				$numberAffected++;
+				DB::update('
+					UPDATE `categorie` 
+					SET `niveau` =?
+					WHERE `idMaitresseCreatrice` =?',
+					[$body->niveau,$idMaitresse]);
+			}
+			
+			if(isset($body->estPublic))
+			{
+				$numberAffected++;
+				DB::update('
+					UPDATE `categorie` 
+					SET `estPublic` =?
+					WHERE `idMaitresseCreatrice` =?',
+					[$body->estPublic,$idMaitresse]);
+			}
+			
+			if(isset($body->listeQuestion))
+			{
+				foreach ($body->listeQuestion as $question)
+				{
+					if (isset($question->idQuestion, $question->idFiche, $question->idCategorie, $question->question, $question->choixDeReponses, question->bonneReponse))
+					{
+						$numberAffected++;
+						DB::insert('
+							UPDATE `question` 
+							SET `quesion` =?,`choixDeReponses` =?,`bonneReponse` =? 
+							WHERE `idQuestion` =?,`idFiche` =?,`idCategorie` =?',
+							[$question->question, $question->choixDeReponses, $question->bonneReponse, $question->idQuestion, $question->idFiche, $question->idCategorie]);
+					}
+				}
+			}
+			
+			DB::commit();
+		}
+		catch (Exception $e)
+		{
+			DB::rollBack();
+			return response()->json(['code' => 500 ,'message' => 'Could Not Update'], 500);
+		}
+
+		return response()->json(['code' => 200 ,'message' => $numberAffected.' Variable(s) Affected'] , 200);
+    }
+	
     public function FicheGetList(Request $request, $page = 1)
     {
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
@@ -206,9 +346,21 @@ class AdminController extends Controller
 			SELECT * FROM `fiche` 
 			WHERE `estPublic` = 1 OR `idMaitresseCreatrice` =? 
 			LIMIT ?,30',[$idMaitresseCreatrice, ($page * 30) - 30]), 200);
-
     }
     
+	public function FicheGetListCategorie(Request $request, $page = 1, $idCategorie)
+	{
+		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
+		
+		if (!IsValidID($page))
+			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
+
+		return response()->json(DB::select('
+			SELECT * FROM `fiche` 
+			WHERE `idCategorie` =?` AND (estPublic` = 1 OR `idMaitresseCreatrice` =? )
+			LIMIT ?,30',[$idCategorie, $idMaitresseCreatrice, ($page * 30) - 30]), 200);
+	}
+	
     public function UserCreation(Request $request)
     {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////HOLD Maitraisse Eleve
