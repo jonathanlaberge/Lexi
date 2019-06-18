@@ -74,3 +74,5 @@ typings/
 
 # FuseBox cache
 .fusebox/
+Lexi/.vs/ProjectSettings.json
+Lexi/.vs/slnx.sqlite
