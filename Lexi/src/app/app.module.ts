@@ -16,7 +16,7 @@ import { EleveFicheARemplirComponent } from './pages/tableau-de-bord/eleve/eleve
 import { EleveCreationComponent } from './pages/tableau-de-bord/eleve/eleve-creation/eleve-creation.component';
 import { EleveStatistiqueComponent } from './pages/tableau-de-bord/eleve/eleve-statistique/eleve-statistique.component';
 
-import { QCMComponent } from './pages/tableau-de-bord/qcm/qcm.component';
+import { QCMComponent } from './pages/tableau-de-bord/QCM/qcm.component';
 import { QCMCreationCategorieComponent } from './pages/tableau-de-bord/QCM/qcmcreation-categorie/qcmcreation-categorie.component';
 import { QCMCreationFicheComponent } from './pages/tableau-de-bord/QCM/qcmcreation-fiche/qcmcreation-fiche.component';
 import { QCMModificationCategorieComponent } from './pages/tableau-de-bord/QCM/qcmmodification-categorie/qcmmodification-categorie.component';
