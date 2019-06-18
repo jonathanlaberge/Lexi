@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FicheARemplirComponent } from './fiche-aremplir.component';
+import { TableauDeBordEleveComponent } from './tableau-de-bord-eleve.component';
 
-describe('FicheARemplirComponent', () => {
-  let component: FicheARemplirComponent;
-  let fixture: ComponentFixture<FicheARemplirComponent>;
+describe('TableauDeBordEleveComponent', () => {
+  let component: TableauDeBordEleveComponent;
+  let fixture: ComponentFixture<TableauDeBordEleveComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FicheARemplirComponent ]
+      declarations: [ TableauDeBordEleveComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FicheARemplirComponent);
+    fixture = TestBed.createComponent(TableauDeBordEleveComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
