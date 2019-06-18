@@ -5,7 +5,7 @@
 
     <clr-input-container>
         <label>Utilisateur</label>
-        <input clrInput type="email" [(ngModel)]="email" name="Utilisateur" required />
+        <input clrInput type="email" value="{{email}}" name="Utilisateur" required />
         <clr-control-helper>Email utilisé lors de l'enregistrement.</clr-control-helper>
         <clr-control-error *clrIfError="'errorMessage.email.errors.required'">L'email est obligatoire</clr-control-error>
         <clr-control-error *clrIfError="'errorMessage.email.errors.email'">L"email n'est pas valide, un " @ " et un " . " est requis.</clr-control-error>
@@ -17,7 +17,7 @@
     <clr-input-container>
 
         <label>Mot de passe</label>
-        <input clrInput type="password" [(ngModel)]="password" name="example" required />
+        <input clrInput type="password" value="{{password}}" name="example" required />
         <clr-control-helper>Le mot de passe doit être secret et n'est connu que de vous.</clr-control-helper>
         <clr-control-error *clrIfError="errorMessage.password.errors.required">Le mots de passe doit être au minimum de 8 characters de long.</clr-control-error>
         <clr-control-error *clrIfError="errorMessage.password.errors.minlength">Le mots de passe doit être au minimum de 8 characters de long.</clr-control-error>
