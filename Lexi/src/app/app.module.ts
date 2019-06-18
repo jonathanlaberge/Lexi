@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ClarityModule } from "@clr/angular";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -53,7 +54,9 @@ import { EleveHistoriqueComponent } from './pages/tableau-de-bord-eleve/eleve-hi
             [
                 BrowserModule,
                 AppRoutingModule,
-                ReactiveFormsModule
+                ReactiveFormsModule,
+                BrowserAnimationsModule,
+                ClarityModule,
             ],
         providers: [],
         bootstrap: [AppComponent]
