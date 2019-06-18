@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
-import { Router, ActivatedRoute } from "@angular/router"
-import { getAppInitializer } from '@angular/router/src/router_module';
+import { Router, ActivatedRoute } from "@angular/router";
 import { CheckboxControlValueAccessor } from '@angular/forms';
 
 
