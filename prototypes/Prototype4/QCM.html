@@ -1,0 +1,470 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	  <h1>jQuery Knob</h1>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="dist/jquery.knob.min.js"></script>
+	
+  	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <style>
+            body{
+              padding: 0;
+              margin: 0px 0px;
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-weight: 300;
+              text-rendering: optimizelegibility;
+            }
+            p{font-size: 30px; line-height: 30px}
+            div.card-body{text-align: center;}
+            div.card-body > p{font-size: 20px}
+        </style>
+	
+	<script>
+		var reponsesNumber = new Map();
+		const numberOfSlider = 12;
+		var canValidate = false;
+		var canContinue = false;
+		var themeID = 0;
+		var questionnaireID = 0;
+		
+		$(function()
+		{
+			var urlParams;
+			(window.onpopstate = function () 
+			{
+				var match,
+					pl     = /\+/g,  // Regex for replacing addition symbol with a space
+					search = /([^&=]+)=?([^&]*)/g,
+					decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+					query  = window.location.search.substring(1);
+
+				urlParams = {};
+				while (match = search.exec(query))
+					urlParams[decode(match[1])] = decode(match[2]);
+			})();
+			
+			themeID = urlParams.theme;
+			questionnaireID = urlParams.questionnaire;
+			
+			
+			$("#erreur").hide();
+			$("#succes").hide();
+			
+        
+            
+            function getDot(number)
+			{
+                switch (parseInt(number)) {
+   
+                    case 0:
+                        return ''
+        
+                    case 1:
+                        return '•'
+                        
+                    case 2:
+                        return '••'
+                        
+                    case 3:
+                        return '•••'
+                        
+                    default:
+                        return ''
+                }
+			}
+                   
+            
+            
+            function getNumberFromDot(dot)
+			{
+                switch (dot) {
+   
+                    case '':
+                        return 0
+        
+                    case '•':
+                        return 1
+                        
+                    case '••':
+                        return 2
+                        
+                    case '•••':
+                        return 3
+                        
+                        
+                    default:
+                        return dot
+                }
+			}
+            
+            
+			function CheckAllSlider()
+			{
+                if (reponsesNumber.size == numberOfSlider){
+                    canValidate = true;
+                    for (var i = 1; i <= numberOfSlider; i++)
+                    {
+                        if (reponsesNumber.get("picker" + i) == 0)
+                        {
+                            canValidate = false;
+                        }
+                    }
+
+                    if (canValidate)
+                    {
+                        $('#submit').removeClass("disabled");
+                    }
+                    else
+                    {
+                        $('#submit').addClass("disabled");
+                    }
+                }
+			
+            }
+            
+            
+			$('#submit').on('click', function(e) 
+			{
+				if(canValidate)
+				{
+					$("#erreur").hide();
+					$("#succes").hide();
+					$.ajax(
+					{
+						type: "POST",
+						url: "api/v1/validateQCM",  
+						data: JSON.stringify({"themeID":themeID ,"questionnaireID":questionnaireID ,"reponses":reponsesNumber}),
+						async: true,
+						dataType: "json",
+						success: function(result)
+						{
+							$.each(result.bonnesReponses, function(index, element) 
+							{
+                                
+                                
+								if(element)
+								{
+									$("#pickerBackground" + (index + 1)).parent().css("background-color", "rgba(0, 255, 0, 0.44)");
+									$("#pickerBackground" + (index + 1)).parent().parent().css("border-color", "green");
+                                    
+                                    $("#picker" + (index + 1)).attr('data-readOnly',true);
+                                    
+									$("#pickerBackground" + (index + 1)).parent().parent().css("color", "green");
+									/*$( "#picker" + (index + 1)).slider("disable");*/
+								}
+								else
+								{
+									$("#picker" + (index + 1)).parent().css("background-color", "rgba(255, 0, 0, 0.44)");
+									$("#pickerNumber" + (index + 1)).parent().parent().css("border-color", "red");
+									$("#pickerNumber" + (index + 1)).parent().parent().css("color", "red");
+								}
+								//~ $("#picker" + (index + 1)).slider('value', element);
+								//~ $("#pickerNumber" + (index + 1)).text(element);
+							});
+							
+							if(result.nombreErreur == 0)
+							{
+								$("#succes").show();
+								canContinue = true;
+								$("#continue").removeClass("disabled");
+							}
+							else
+							{
+								$("#erreur").show();
+							}
+						},
+						error: function(err)
+						{
+							alert("An error occured: " + err.status + " " + err.statusText);
+						}
+					});
+				}
+			});// on click
+			
+            
+            
+            
+            
+			$('#back').on('click', function(e) 
+			{
+				location.href = 'index.html';
+			});
+			
+			$('#continue').on('click', function(e) 
+			{
+				if(canContinue)
+				{
+					if (questionnaireID < 60)
+						location.href = 'QCM.html?theme=' + themeID + '&questionnaire=' + (parseInt(questionnaireID) + 1);
+					else
+						location.href = 'QCM.html?theme=' + (parseInt(themeID) + 1) + '&questionnaire=' + 1;
+				}
+			});
+			
+			if(!Number.isInteger(Number.parseInt(themeID)) || 
+					!Number.isInteger(Number.parseInt(questionnaireID)))
+			{
+				/*alert("Le thème ou le questionnaire n'a pas été selectionné.");
+				location.href = 'index.html';*/
+			}
+			else
+			{
+				if(questionnaireID > 60 || themeID > 60)
+				{
+					location.href = 'index.html';
+				}
+				$("#titre").text("Thème " + themeID + ", Questionnaire " + questionnaireID);
+			}
+            
+            
+            
+                $(".knob").knob({
+                    readOnly : false ,
+                    
+                    change : function (value) {
+                        console.log("change : " + value);
+                    },
+                    release : function (value) {
+                       // console.log(this.$.attr('value'));
+                        console.log(reponsesNumber.set(this.$.context.id,value));
+                        CheckAllSlider();
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                     //   console.log(this.$.context.id);
+                        
+                    },
+                    cancel : function () {
+                        console.log("cancel : ", this);
+                    },
+                    format : function (value) {
+                     
+                        return getDot(value) ;
+                     
+                    },
+                    parse: function (v) {
+                        if(v == 0)
+                            return parseFloat(v);
+                        else
+                            return parseFloat(getNumberFromDot(v));
+                        
+                    },
+                    draw : function () {
+
+                        // "tron" case
+                        if(this.$.data('skin') == 'tron') {
+
+                            this.cursorExt = 0.3;
+
+                            var a = this.arc(this.cv)  // Arc
+                                , pa                   // Previous arc
+                                , r = 1;
+
+                            this.g.lineWidth = this.lineWidth;
+
+                            if (this.o.displayPrevious) {
+                                pa = this.arc(this.v);
+                                this.g.beginPath();
+                                this.g.strokeStyle = this.pColor;
+                                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, pa.s, pa.e, pa.d);
+                                this.g.stroke();
+                            }
+
+                            this.g.beginPath();
+                            this.g.strokeStyle = r ? this.o.fgColor : this.fgColor ;
+                            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, a.s, a.e, a.d);
+                            this.g.stroke();
+
+                            this.g.lineWidth = 2;
+                            this.g.beginPath();
+                            this.g.strokeStyle = this.o.fgColor;
+                            this.g.arc( this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                            this.g.stroke();
+
+                            return false;
+                        }
+                    }
+                });
+
+                // Example of infinite knob, iPod click wheel
+                var v, up=0,down=0,i=0
+                    ,$idir = $("div.idir")
+                    ,$ival = $("div.ival")
+                    ,incr = function() { i++; $idir.show().html("+").fadeOut(); $ival.html(i); }
+                    ,decr = function() { i--; $idir.show().html("-").fadeOut(); $ival.html(i); };
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+		});
+        
+        
+        
+
+	</script>
+</head>
+<body>
+	<h1 id="titre" class="m-2"></h1>
+	<div class="container">
+		<div class="row m-4">
+			<div id="erreur" class="alert alert-danger" role="alert">
+				Tu as commis des erreurs! Elles ont marquées en rouge.
+			</div>
+			<div id="succes" class="alert alert-success" role="alert">
+				Tu as les bonnes réponses. Bravo !
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 1</h5>
+						<div id="pickerBackground1">
+	            <input id="picker1" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#ff0000" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 2</h5>
+						<div id="pickerBackground2">
+            <input id="picker2" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 3</h5>
+						<div id="pickerBackground3">
+            <input id="picker3" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 4</h5>
+						<div id="pickerBackground4">
+            <input id="picker4" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 5</h5>
+						<div id="pickerBackground5">
+            <input id="picker5" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 6</h5>
+						<div id="pickerBackground6">
+            <input id="picker6" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 7</h5>
+						<div id="pickerBackground7">
+            <input id="picker7" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 8</h5>
+						<div id="pickerBackground8">
+            <input id="picker8" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row m-2">
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 9</h5>
+						<div id="pickerBackground9">
+            <input id="picker9" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 10</h5>
+						<div id="pickerBackground10">
+            <input id="picker10" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 11</h5>
+						<div id="pickerBackground11">
+            <input id="picker11" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Question 12</h5>
+						<div id="pickerBackground12">
+            <input id="picker12" class="knob" data-fgColor="#000000" data-width="99%" data-cursor=true data-fgColor="#222222" data-step="1" data-min="0" data-max="3" data-displayPrevious=true data-thickness=.3 data-width="10%" data-angleArc=300 value="0" data-skin="tron">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div id="back" class="btn-lg btn-secondary float-right m-2">Retour</div>
+				<div id="continue" class="btn-lg btn-primary float-right m-2 disabled">Continuer</div>
+				<div id="submit" class="btn-lg btn-success float-right m-2 disabled">Vérifier</div>
+			</div>
+		</div>
+	</div> 
+</body>
+</html>
+
