@@ -16,12 +16,12 @@ import { EleveFicheARemplirComponent } from './pages/tableau-de-bord/eleve/eleve
 import { EleveCreationComponent } from './pages/tableau-de-bord/eleve/eleve-creation/eleve-creation.component';
 import { EleveStatistiqueComponent } from './pages/tableau-de-bord/eleve/eleve-statistique/eleve-statistique.component';
 
-import { QCMComponent } from './pages/tableau-de-bord/QCM/qcm.component';
-import { QCMCreationCategorieComponent } from './pages/tableau-de-bord/QCM/qcmcreation-categorie/qcmcreation-categorie.component';
-import { QCMCreationFicheComponent } from './pages/tableau-de-bord/QCM/qcmcreation-fiche/qcmcreation-fiche.component';
-import { QCMModificationCategorieComponent } from './pages/tableau-de-bord/QCM/qcmmodification-categorie/qcmmodification-categorie.component';
-import { QCMModificationFicheComponent } from './pages/tableau-de-bord/QCM/qcmmodification-fiche/qcmmodification-fiche.component';
-import { QCMStatistiqueComponent } from './pages/tableau-de-bord/QCM/qcmstatistique/qcmstatistique.component';
+import { QCMComponent } from './pages/tableau-de-bord/qcm/qcm.component';
+import { QCMCreationCategorieComponent } from './pages/tableau-de-bord/qcm/qcmcreation-categorie/qcmcreation-categorie.component';
+import { QCMCreationFicheComponent } from './pages/tableau-de-bord/qcm/qcmcreation-fiche/qcmcreation-fiche.component';
+import { QCMModificationCategorieComponent } from './pages/tableau-de-bord/qcm/qcmmodification-categorie/qcmmodification-categorie.component';
+import { QCMModificationFicheComponent } from './pages/tableau-de-bord/qcm/qcmmodification-fiche/qcmmodification-fiche.component';
+import { QCMStatistiqueComponent } from './pages/tableau-de-bord/qcm/qcmstatistique/qcmstatistique.component';
 
 import { TableauDeBordEleveComponent } from './pages/tableau-de-bord-eleve/tableau-de-bord-eleve.component';
 import { EleveFicheComponent } from './pages/tableau-de-bord-eleve/eleve-fiche/eleve-fiche.component';
