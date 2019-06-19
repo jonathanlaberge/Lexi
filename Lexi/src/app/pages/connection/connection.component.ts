@@ -11,10 +11,16 @@ import { ClrForm } from '@clr/angular';
     styleUrls: ['./connection.component.css']
 })
 export class ConnectionComponent implements OnInit {
-    @ViewChild(ClrForm, { static: true }) clrForm;
-
+    @ViewChild(ClrForm, { static: true }) loginClrForm;
+    @ViewChild(ClrForm, { static: true }) registerClrForm;
+    
    
     loginForm: FormGroup;
+    registerForm: FormGroup;
+
+
+
+
 
     isRegisterModalOpen: boolean = false;
 
@@ -37,38 +43,48 @@ export class ConnectionComponent implements OnInit {
            // }
     );
 
+        this.registerForm = this.formBuilder.group({
 
+
+
+            /*
+            	email
+                motdepass
+                prenom
+                nom
+                dateNaissance
+                genre
+
+            */
+
+            email: ['', [Validators.required, Validators.email]],
+            motdepass: ['', [Validators.required, Validators.minLength(8)]],
+            confirmationmotdepass: ['', [Validators.required, Validators.minLength(8)]],
+            prenom: ['', [Validators.required]],
+            nom: ['', [Validators.required,]],
+            dateNaissance: ['', []],
+            genre: ['', []]
+
+        }, {
+                validator: MustMatch('motdepass', 'confirmationmotdepass'),
+          }
+        );
     }
 
 
     get errorMessage() { return this.loginForm.controls; }
-    
 
 
-
-
-
-
-    resetForm() {
-        this.isRegisterModalOpen = true;
-
-
-
-     //   this.loginForm.reset();
-    }
 
 
 
     submit() {
         if (this.loginForm.invalid) {
-            this.clrForm.markAsTouched();
+            this.loginClrForm.markAsTouched();
         } else {
 
-           //this.loginForm.value.email;
-           //  this.loginForm.value.password;
-          
-
-
+            //this.loginForm.value.email;
+            //  this.loginForm.value.password;
 
             console.log(this.loginForm.value);
         }
@@ -77,7 +93,71 @@ export class ConnectionComponent implements OnInit {
     }
 
 
+    
+
+    openRegisterModalForm() {
+        this.isRegisterModalOpen = true;
+    }
 
 
 
+
+    registerModalForm() {
+
+
+
+        if (this.registerForm.invalid) {
+            this.registerClrForm.markAsTouched();
+            console.log(this.registerForm.value);
+            
+        } else {
+
+            //this.loginForm.value.email;
+            //  this.loginForm.value.password;
+
+            console.log(this.registerForm.value);
+            this.isRegisterModalOpen = !this.isRegisterModalOpen;
+        }
+
+
+
+
+      
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    resetRegisterModalForm() {
+        this.registerForm.reset();
+    }
+}
+
+
+export function MustMatch(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+        const control = formGroup.controls[controlName];
+        const matchingControl = formGroup.controls[matchingControlName];
+
+        if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+            // return if another validator has already found an error on the matchingControl
+            return;
+        }
+
+        // set error on matchingControl if validation fails
+        if (control.value !== matchingControl.value) {
+            matchingControl.setErrors({ mustMatch: true });
+        } else {
+            matchingControl.setErrors(null);
+        }
+    }
 }
