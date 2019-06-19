@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
 import { ClrForm } from '@clr/angular';
+import { Maitresse } from 'src/app/model/maitresse';
+import { APIService } from 'src/app/service/api.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 
@@ -13,8 +16,8 @@ import { ClrForm } from '@clr/angular';
 export class ConnectionComponent implements OnInit {
     @ViewChild(ClrForm, { static: true }) loginClrForm;
     @ViewChild(ClrForm, { static: true }) registerClrForm;
-    
-   
+
+
     loginForm: FormGroup;
     registerForm: FormGroup;
 
@@ -25,7 +28,7 @@ export class ConnectionComponent implements OnInit {
     isRegisterModalOpen: boolean = false;
 
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder, private router: Router, private route: ActivatedRoute, private apiService: APIService) {
 
     }
 
@@ -34,14 +37,14 @@ export class ConnectionComponent implements OnInit {
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
-       
+
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(8)]],
 
         }//, {
-              //  validator: MustMatch('password', 'confirmPassword')
-           // }
-    );
+            //  validator: MustMatch('password', 'confirmPassword')
+            // }
+        );
 
         this.registerForm = this.formBuilder.group({
 
@@ -67,7 +70,7 @@ export class ConnectionComponent implements OnInit {
 
         }, {
                 validator: MustMatch('motdepass', 'confirmationmotdepass'),
-          }
+            }
         );
     }
 
@@ -81,66 +84,145 @@ export class ConnectionComponent implements OnInit {
     submit() {
         if (this.loginForm.invalid) {
             this.loginClrForm.markAsTouched();
-        } else {
+        }
+
+        else {
 
             //this.loginForm.value.email;
             //  this.loginForm.value.password;
 
             console.log(this.loginForm.value);
+
+
+
+
+
+
+
+            APIService.currentMaitresse = new Maitresse();
+
+
+
+
+
+
+            this.apiService.Login(this.loginClrForm.value.email, this.loginClrForm.value.password ).subscribe((data: any) => {
+                this.userValidation = (data as UserMessage);
+                APIService.CurrentUser = (this.userValidation.specifiedUser as User);
+
+                if (this.userValidation.userValidationMessage == 0) {
+                    //CONTINUE IF LOGIN VALID
+                    RoutingService.SetRouteToLoggedIn();
+                    RoutingService.IsLoggedIn = true;
+
+                    localStorage.setItem('uinfo', JSON.stringify(APIService.currentMaitresse));
+
+
+                    this.router.navigateByUrl(this.return);
+                }
+                /*   //Error
+                   else {
+                     APIService.CurrentUser = null;
+                      $.notify(
+                          {
+                              icon: "ti-alert",
+                              message: "There was an error while logging in! Please try again later."
+                          },
+                          {
+                              type: "danger", timer: 100,
+                              placement: { from: "top", align: "center" }
+                          });
+   
+                  }*/
+            });
+
         }
 
 
     }
 
 
-    
-
-    openRegisterModalForm() {
-        this.isRegisterModalOpen = true;
-    }
 
 
 
 
-    registerModalForm() {
 
 
 
-        if (this.registerForm.invalid) {
-            this.registerClrForm.markAsTouched();
-            console.log(this.registerForm.value);
-            
-        } else {
 
-            //this.loginForm.value.email;
-            //  this.loginForm.value.password;
+            openRegisterModalForm() {
+                this.isRegisterModalOpen = true;
+            }
 
-            console.log(this.registerForm.value);
-            this.isRegisterModalOpen = !this.isRegisterModalOpen;
+
+
+
+            registerModalForm() {
+
+
+
+                if (this.registerForm.invalid) {
+                    this.registerClrForm.markAsTouched();
+                    console.log(this.registerForm.value);
+
+                } else {
+
+                    //this.loginForm.value.email;
+                    //  this.loginForm.value.password;
+
+                    console.log(this.registerForm.value);
+                    this.isRegisterModalOpen = !this.isRegisterModalOpen;
+
+                }
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            resetRegisterModalForm() {
+                this.registerForm.reset();
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
-
-
-
-
-      
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    resetRegisterModalForm() {
-        this.registerForm.reset();
-    }
-}
 
 
 export function MustMatch(controlName: string, matchingControlName: string) {
@@ -159,5 +241,6 @@ export function MustMatch(controlName: string, matchingControlName: string) {
         } else {
             matchingControl.setErrors(null);
         }
+
     }
 }
