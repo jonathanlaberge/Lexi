@@ -1,15 +1,28 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { RoutingService } from 'src/app/service/routing.service';
 
-@Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
-})
-export class SidebarComponent implements OnInit {
+@Component(
+    {
+        selector: 'dashboard-sidebar',
+        templateUrl: './sidebar.component.html'
+    })
+export class SidebarComponent implements OnInit
+{
+    menuItems: any[];
 
-  constructor() { }
+    routeSubscription: Subscription;
 
-  ngOnInit() {
-  }
+    constructor() { }
+
+    ngOnInit()
+    {
+        this.menuItems = RoutingService.currentRoute.filter(menuItem => menuItem);
+
+        this.routeSubscription = RoutingService.routeSubject.subscribe((route: any[]) => 
+        {
+            this.menuItems = route.filter(menuItem => menuItem);
+        })
+    }
 
 }

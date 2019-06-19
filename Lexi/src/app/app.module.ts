@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ClarityModule } from "@clr/angular";
 
@@ -27,10 +27,14 @@ import { TableauDeBordEleveComponent } from './pages/tableau-de-bord-eleve/table
 import { EleveFicheComponent } from './pages/tableau-de-bord-eleve/eleve-fiche/eleve-fiche.component';
 import { EleveQCMComponent } from './pages/tableau-de-bord-eleve/eleve-qcm/eleve-qcm.component';
 import { EleveHistoriqueComponent } from './pages/tableau-de-bord-eleve/eleve-historique/eleve-historique.component';
+import { SidebarModule } from './ui/dashboard/sidebar/sidebar.module';
+import { NavbarModule } from './ui/dashboard/navbar/navbar.module';
+import { FooterModule } from './ui/dashboard/footer/footer.module';
+import { CurseursModule } from './ui/curseurs/curseurs.module';
+import { RouterModule } from '@angular/router';
 
 
 
-import { FormsModule } from '@angular/forms';
 @NgModule(
     {
         declarations:
@@ -57,10 +61,15 @@ import { FormsModule } from '@angular/forms';
             [
                 FormsModule,
                 BrowserModule,
+                RouterModule,
                 AppRoutingModule,
                 ReactiveFormsModule,
                 BrowserAnimationsModule,
                 ClarityModule,
+                SidebarModule,
+                NavbarModule,
+                FooterModule,
+                CurseursModule
             ],
         providers: [],
         bootstrap: [AppComponent]

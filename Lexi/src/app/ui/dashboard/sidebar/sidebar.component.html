@@ -1,3 +1,10 @@
-<p>
-  sidebar works!
-</p>
+<nav class="subnav">
+    <ul class="nav">
+        <li *ngFor="let menuItem of menuItems" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+            <a class="nav-link" [routerLink]="[menuItem.path]">
+                <clr-icon [attr.shape]="[menuItem.icon]"></clr-icon>
+                {{menuItem.title}}
+            </a>
+        </li>
+    </ul>
+</nav>

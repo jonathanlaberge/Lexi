@@ -1,3 +1,22 @@
-<p>
-  navbar works!
-</p>
+<header class="header header-3">
+    <div class="branding">
+        <a [routerLink]="['../tableaudebord']" class="nav-link">
+            <clr-icon shape="bullet-list"></clr-icon>
+            <span class="title">Lexi</span>
+        </a>
+    </div>
+    <div class="header-nav">
+        <a *ngIf="isAdmin && !eleveConnected" [routerLink]="['../tableaudebord']" class="nav-link active"><span class="nav-text">Tableau de bord</span></a>
+        <a *ngIf="isAdmin && !eleveConnected" [routerLink]="['../eleve']" class="nav-link"><span class="nav-text">Portail des élèves</span></a>
+
+        <a *ngIf="!isAdmin && !eleveConnected" [routerLink]="['../tableaudebord']" class="nav-link"><span class="nav-text">Tableau de bord</span></a>
+        <a *ngIf="!isAdmin && !eleveConnected" [routerLink]="['../eleve']" class="nav-link active"><span class="nav-text">Portail des élèves</span></a>
+
+        <a *ngIf="eleveConnected" [routerLink]="['../eleve']" class="nav-link"><span class="nav-text">Quitter</span></a>
+    </div>
+    <div class="header-actions">
+        <a href="..." class="nav-link nav-icon">
+            <clr-icon shape="cog"></clr-icon>
+        </a>
+    </div>
+</header>

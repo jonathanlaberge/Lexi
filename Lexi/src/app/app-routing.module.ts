@@ -72,7 +72,7 @@ const routes: Routes =
             children:
                 [
                     {
-                        path: 'eleve',
+                        path: 'fiche',
                         component: EleveFicheComponent
                     },
                     {

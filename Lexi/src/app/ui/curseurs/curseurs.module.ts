@@ -5,10 +5,12 @@ import { CurseurCirculaireComponent } from './curseur-circulaire/curseur-circula
 import { CurseurTriangulaireComponent } from './curseur-triangulaire/curseur-triangulaire.component';
 import { CurseurImageComponent } from './curseur-image/curseur-image.component';
 
-@NgModule({
-  declarations: [CurseurSimpleComponent, CurseurCirculaireComponent, CurseurTriangulaireComponent, CurseurImageComponent],
-  imports: [
-    CommonModule
-  ]
-})
+@NgModule(
+    {
+        declarations: [CurseurSimpleComponent, CurseurCirculaireComponent, CurseurTriangulaireComponent, CurseurImageComponent],
+        imports: [
+            CommonModule
+        ],
+        exports: [CurseurSimpleComponent, CurseurCirculaireComponent, CurseurTriangulaireComponent, CurseurImageComponent]
+    })
 export class CurseursModule { }
