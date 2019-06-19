@@ -1,32 +1,84 @@
 
 
-<h1>Login</h1>
-<form clrForm clrLayout="horizontal" [formGroup]="loginForm" (ngSubmit)="submit()">
-
-    <clr-input-container>
-        <label>Utilisateur</label>
-        <input clrInput type="email" [(ngModel)]="email" value="{{email}}" name="Utilisateur" required />
-        <clr-control-helper>Email utilisé lors de l'enregistrement.</clr-control-helper>
-        <clr-control-error *clrIfError="'errorMessage.email.errors.required'">L'email est obligatoire</clr-control-error>
-        <clr-control-error *clrIfError="'errorMessage.email.errors.email'">L"email n'est pas valide, un " @ " et un " . " est requis.</clr-control-error>
-    </clr-input-container>
-
-    errorMessage
 
 
-    <clr-input-container>
 
-        <label>Mot de passe</label>
-        <input clrInput type="password" [(ngModel)]="password" value="{{password}}" name="example" required />
-        <clr-control-helper>Le mot de passe doit être secret et n'est connu que de vous.</clr-control-helper>
-        <clr-control-error *clrIfError="errorMessage.password.errors.required">Le mots de passe doit être au minimum de 8 characters de long.</clr-control-error>
-        <clr-control-error *clrIfError="errorMessage.password.errors.minlength">Le mots de passe doit être au minimum de 8 characters de long.</clr-control-error>
-    </clr-input-container>
 
-    <div>
-    <button class="btn btn-primary" type="submit" (click)="submit()">Submit</button>
-    <button class="btn" type="button" (click)="resetForm()">Reset</button>
+
+
+
+
+
+
+
+
+
+
+<div class="login-wrapper">
+ 
+    <form class="login" clrForm  [formGroup]="loginForm" (ngSubmit)="submit()">
+        <section class="title">
+            <h3 class="welcome">Bienvenue au</h3>
+            Lexi
+            <h5 class="hint">Un questionnaire intéractif accessible.</h5>
+        </section>
+
+
+
+
+
+        <div class="login-group">
+
+
+
+         
+            <clr-input-container>
+                <label>Utilisateur</label>
+                <input placeholder="Email de connection" clrInput type="email"  formControlName="email" name="Utilisateur" required />
+                <clr-control-error *clrIfError="'required'">L'email est obligatoire</clr-control-error>
+                <clr-control-error *clrIfError="'email'">L'email ne contien pas de @. </clr-control-error>
+            </clr-input-container>
+
+
+     
+          
+            <clr-input-container>
+                <label>Mot de passe</label>
+
+                <span class="label">Mot de passe</span>
+                <input clrInput placeholder="Mot de passe" type="password"  formControlName="password" name="password" required />
+
+
+
+                <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
+                <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.password.length}} {{loginForm.value.password.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
+
+            </clr-input-container>
+
+            <div>
+                <button class="btn btn-primary" type="submit">Se connecter</button>
+                <br>
+                <button class="btn btn-success" type="button" (click)="resetForm()">Enregistrement</button>
+                <br>
+                <button class="btn" type="button" (click)="resetForm()">Reset</button>
+            </div>
+
+
+        </div>
+    </form>
+</div>
+
+
+
+
+
+<clr-modal [(clrModalOpen)]="isRegisterModalOpen">
+    <h3 class="modal-title">Pour s'enregister, remplisser ce formulaire : </h3>
+    <div class="modal-body">
+        <p>But not much to say...</p>
     </div>
-
-</form>
-
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="isRegisterModalOpen = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="isRegisterModalOpen = false">Ok</button>
+    </div>
+</clr-modal>

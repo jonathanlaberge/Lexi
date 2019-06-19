@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
+import { ClrForm } from '@clr/angular';
+
 
 
 
@@ -9,14 +11,20 @@ import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
     styleUrls: ['./connection.component.css']
 })
 export class ConnectionComponent implements OnInit {
-
+    @ViewChild(ClrForm, { static: true }) clrForm;
 
    
     loginForm: FormGroup;
-    password: string;
-    email: string;
-    
-    constructor(private formBuilder: FormBuilder) { }
+
+    isRegisterModalOpen: boolean = false;
+
+
+    constructor(private formBuilder: FormBuilder) {
+
+    }
+
+
+
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
@@ -24,9 +32,10 @@ export class ConnectionComponent implements OnInit {
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(8)]],
 
-        }, {
+        }//, {
               //  validator: MustMatch('password', 'confirmPassword')
-            });
+           // }
+    );
 
 
     }
@@ -41,15 +50,26 @@ export class ConnectionComponent implements OnInit {
 
 
     resetForm() {
-        this.loginForm.reset();
+        this.isRegisterModalOpen = true;
+
+
+
+     //   this.loginForm.reset();
     }
 
 
 
     submit() {
         if (this.loginForm.invalid) {
-           // this.clrForm.markAsTouched();
+            this.clrForm.markAsTouched();
         } else {
+
+           //this.loginForm.value.email;
+           //  this.loginForm.value.password;
+          
+
+
+
             console.log(this.loginForm.value);
         }
 
