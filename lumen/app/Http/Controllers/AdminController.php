@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        //$this->middleware('auth:admin');
+		$this->middleware('auth');
     }
 
     public function CategorieCreation(Request $request)
@@ -39,7 +41,7 @@ class AdminController extends Controller
     {
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!IsValidID($idCategorie))
+		if (!$this->IsValidID($idCategorie))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 		
 		$result = DB::delete('DELETE FROM `categorie` WHERE `idCategorie` =? AND `idMaitresseCreatrice` =?', [$idFiche, $idMaitresseCreatrice]);
@@ -54,7 +56,7 @@ class AdminController extends Controller
     {
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
-        if (!IsValidID($idCategorie))
+        if (!$this->IsValidID($idCategorie))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
         
         $result = DB::select('
@@ -137,7 +139,7 @@ class AdminController extends Controller
     {
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!IsValidID($page))
+		if (!$this->IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		return response()->json(DB::select('
@@ -174,7 +176,7 @@ class AdminController extends Controller
 			$i = 1;
 			foreach ($listeQuestion as $question)
 			{
-				if (!isset($question->question, $question->choixDeReponses, question->bonneReponse))
+				if (!isset($question->question, $question->choixDeReponses, $question->bonneReponse))
 				{
 					$failed = true;
 					break;
@@ -209,7 +211,7 @@ class AdminController extends Controller
     {
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!IsValidID($idCategorie) || !IsValidID($idFiche))
+		if (!$this->IsValidID($idCategorie) || !$this->IsValidID($idFiche))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 		
 		$result = DB::delete('
@@ -226,7 +228,7 @@ class AdminController extends Controller
     {
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
-        if (!IsValidID($idCategorie) || !IsValidID($idFiche))
+        if (!$this->IsValidID($idCategorie) || !$this->IsValidID($idFiche))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
          
         $fiche = new Fiche();
@@ -312,7 +314,7 @@ class AdminController extends Controller
 			{
 				foreach ($body->listeQuestion as $question)
 				{
-					if (isset($question->idQuestion, $question->idFiche, $question->idCategorie, $question->question, $question->choixDeReponses, question->bonneReponse))
+					if (isset($question->idQuestion, $question->idFiche, $question->idCategorie, $question->question, $question->choixDeReponses, $question->bonneReponse))
 					{
 						$numberAffected++;
 						DB::insert('
@@ -339,7 +341,7 @@ class AdminController extends Controller
     {
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!IsValidID($page))
+		if (!$this->IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		return response()->json(DB::select('
@@ -352,7 +354,7 @@ class AdminController extends Controller
 	{
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!IsValidID($page))
+		if (!$this->IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		return response()->json(DB::select('
@@ -394,7 +396,7 @@ class AdminController extends Controller
 		//////////////////////////////////////SELON LA CLASSE DE LADMIN
 		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!IsValidID($idEleve))
+		if (!$this->IsValidID($idEleve))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 		
 		$result = DB::delete('DELETE FROM `classe_eleve_maitresse` WHERE `idMaitresse` =? `idEleve` =?', [$idMaitresse, $idEleve]);
@@ -411,7 +413,7 @@ class AdminController extends Controller
 		//////////////////////////////////////SELON LA CLASSE DE LADMIN
 		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!IsValidID($idEleve))
+		if (!$this->IsValidID($idEleve))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 		
 		$result = DB::select('
@@ -432,7 +434,7 @@ class AdminController extends Controller
 		//////////////////////////////////////SELON LA CLASSE DE LADMIN?????????????????????????????????
 		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!IsValidID($page))
+		if (!$this->IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		return response()->json(DB::select('
@@ -448,13 +450,13 @@ class AdminController extends Controller
 		//////////////////////////////////////SELON LA CLASSE DE LADMIN
 		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		if (!IsValidID($page))
+		if (!$this->IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		return response()->json(DB::select('SELECT * FROM `historique` LIMIT ?,30',[($page * 30) - 30]), 200); 
     }
 	
-	protected function IsValidID($var)
+	private function IsValidID($var)
     {
 		if ($var <= 0 || $var > 2147483647 || $var == null)
 			return false;

@@ -75,7 +75,7 @@ class UserController extends Controller
     
     public function FicheGet(Request $request, $idCategorie, $idFiche)
     {
-        if (!IsValidID($idCategorie) || !IsValidID($idFiche))
+        if (!$this->IsValidID($idCategorie) || !$this->IsValidID($idFiche))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 		
 		//////////////////////////////////////SELON LELEVE PLAYLIST
@@ -109,7 +109,7 @@ class UserController extends Controller
     
     public function FicheGetList(Request $request, $page = null)
     {
-		if (!IsValidID($page))
+		if (!$this->IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 		
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
@@ -130,14 +130,14 @@ class UserController extends Controller
 		if ($idEleve == 0)
 			return response()->json(["code" => "403", "message" => "No student selected"], 403);
 		
-		if (!IsValidID($page))
+		if (!$this->IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		return response()->json(DB::select('SELECT * FROM `historique` WHERE idEleve = ? LIMIT ?,30',[$idEleve, ($page * 30) - 30]), 200);
 		
     }
     
-	protected function IsValidID($var)
+	private function IsValidID($var)
     {
 		if ($var <= 0 || $var > 2147483647 || $var == null)
 			return false;
