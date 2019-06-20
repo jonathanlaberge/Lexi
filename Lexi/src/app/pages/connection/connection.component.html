@@ -5,14 +5,49 @@
         <section class="title">
             <h3 class="welcome">Bienvenue au</h3>
             Lexi
-            <h5 class="hint">Un questionnaire intéractif accessible.</h5>
+            <h5 class="hint">Un questionnaire intéractif.</h5>
         </section>
-
-
-
-
-
         <div class="login-group">
+
+
+
+
+
+            <div class="alert alert-danger" role="alert" [hidden]="!erreurLogin">
+                <div class="alert-items">
+                    <div class="alert-item static">
+                        <div class="alert-icon-wrapper">
+                            <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                        </div>
+                        <span class="alert-text">
+                            Le mot de passe ou le email sont éronnés.
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-danger" role="alert" [hidden]="!erreurServeur">
+                <div class="alert-items">
+                    <div class="alert-item static">
+                        <div class="alert-icon-wrapper">
+                            <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                        </div>
+                        <span class="alert-text">
+                            Il y a un erreur avec le serveur.
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            
+
+
+
+
+
+
+
+
 
 
 
@@ -61,7 +96,42 @@
     <h3 class="modal-title">Enregistrement</h3>
 
     <div class="modal-body">
-    <p>Pour s'enregister, remplisser ce formulaire :</p>
+
+
+        <div class="alert alert-danger" role="alert" [hidden]="!erreurEmail">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Il y a deja un email déja un utilisateur avec ce email.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-danger" role="alert" [hidden]="!erreurServeurModal">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Il y a un erreur avec le serveur.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+        <p>Pour s'enregister, remplisser ce formulaire :</p>
 
 
         <form class="login" clrForm [formGroup]="registerForm" (ngSubmit)="registerModalForm()">
@@ -85,7 +155,7 @@
                     <span class="label">Mot de passe</span>
                     <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
                     <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
-                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.motdepasse.length}} {{loginForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
+                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.motdepasse.length}} {{registerForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
                     <clr-control-error *clrIfError="'mustMatch'">Les mot de passe sont different.  </clr-control-error>
 
                 </clr-input-container>
@@ -94,9 +164,9 @@
                 <clr-input-container>
                     <label>Confirmation mot de passe</label>
                     <span class="label">Mot de passe</span>
-                    <input clrInput placeholder="Répété le mot de passe" type="password" formControlName="motdepasse" name="confirmationmotdepasse" required />
+                    <input clrInput placeholder="Répété le mot de passe" type="password" formControlName="confirmationmotdepasse" name="confirmationmotdepasse" required />
                     <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
-                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.motdepasse.length}} {{loginForm.value.confirmationmotdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
+                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.confirmationmotdepasse.length}} {{registerForm.value.confirmationmotdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
                     <clr-control-error *clrIfError="'mustMatch'">Les mot de passe sont different. </clr-control-error>
                 </clr-input-container>
 
@@ -143,33 +213,10 @@
         </form>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="isRegisterModalOpen = false">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="registerModalForm()">Ok</button>
-    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="isRegisterModalOpen = false">Annuller</button>
+            <button type="button" class="btn btn-primary btn btn-success" (click)="registerModalForm()">S'enregistrer</button>
+        </div>
 </clr-modal>
 <!------------------------------------------------------------------------------- -->

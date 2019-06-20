@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
 import { ClrForm } from '@clr/angular';
 import { Maitresse } from 'src/app/model/maitresse';
 import { APIService } from 'src/app/service/api.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Data } from '@angular/router';
 import { ConnectionDTO } from 'src/app/model/dto/connection-dto';
 import { RoutingService } from 'src/app/service/routing.service';
 
@@ -27,6 +27,27 @@ export class ConnectionComponent implements OnInit {
 
     return: string = '';
     isRegisterModalOpen: boolean = false;
+
+    erreurLogin: boolean = false;
+    erreurServeur: boolean = false;
+    erreurEmail: boolean = false;
+    erreurServeurModal: boolean = false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     constructor(private formBuilder: FormBuilder, private router: Router, private route: ActivatedRoute, private apiService: APIService) {
@@ -61,6 +82,32 @@ export class ConnectionComponent implements OnInit {
                 validator: MustMatch('motdepasse', 'confirmationmotdepasse'),
             }
         );
+
+
+
+        /*localStorage.setItem('maitresseInfo', JSON.stringify(APIService.currentMaitresse));
+        localStorage.setItem('token', JSON.stringify(APIService.token));*/
+
+
+
+        if (localStorage.getItem('maitresseInfo') != null && localStorage.getItem('token') != null ) {
+
+            APIService.currentMaitresse = JSON.parse(localStorage.getItem('maitresseInfo')) as Maitresse;
+
+
+            RoutingService.isLoggedIn = true;
+            RoutingService.adminMode = true;
+            APIService.token = JSON.parse(localStorage.getItem('token'));
+
+           RoutingService.SetRouteToAdmin();
+
+        }
+
+            
+
+
+
+
 
 
 
@@ -102,34 +149,34 @@ export class ConnectionComponent implements OnInit {
 
 
 
-           
 
-           var credential: ConnectionDTO;
-           
-            
+
+            var credential: ConnectionDTO;
+
+
 
 
 
             var maitresse: Maitresse = new Maitresse();
             maitresse.motdepasse = this.loginForm.value.motdepasse as string;
             maitresse.email = this.loginForm.value.email as string;
-     
+
 
 
             this.apiService.Connection(maitresse).subscribe((data: any) => {
-                if (data.code == 401) {
+                if (data != null) {
                     // error credentiel
                     APIService.currentMaitresse = null;
 
+                }
 
-                    
-                } else { 
+                if(data.token) {
                     credential = (data as ConnectionDTO);
 
-            
-                APIService.currentMaitresse = (credential.account as Maitresse);
 
-                
+                    APIService.currentMaitresse = (credential.account as Maitresse);
+
+
                     //CONTINUE IF LOGIN VALID
                     RoutingService.SetRouteToAdmin();
                     RoutingService.isLoggedIn = true;
@@ -143,20 +190,8 @@ export class ConnectionComponent implements OnInit {
 
                     this.router.navigateByUrl(this.return);
                 }
-                /*   //Error
-                   else {
-                     APIService.CurrentUser = null;
-                      $.notify(
-                          {
-                              icon: "ti-alert",
-                              message: "There was an error while logging in! Please try again later."
-                          },
-                          {
-                              type: "danger", timer: 100,
-                              placement: { from: "top", align: "center" }
-                          });
-   
-                  }*/
+
+            
             });
 
         }
@@ -173,70 +208,91 @@ export class ConnectionComponent implements OnInit {
 
 
 
-            openRegisterModalForm() {
-                this.isRegisterModalOpen = true;
-            }
+    openRegisterModalForm() {
+        this.isRegisterModalOpen = true;
+    }
 
 
 
 
-            registerModalForm() {
+    registerModalForm() {
 
 
 
-                if (this.registerForm.invalid) {
-                    this.registerClrForm.markAsTouched();
-                    console.log(this.registerForm.value);
+        if (this.registerForm.invalid) {
+            this.registerClrForm.markAsTouched();
+            console.log("bad value");
 
-                } else {
+        } else {
 
-                    //this.loginForm.value.email;
-                    //  this.loginForm.value.password;
+            //this.loginForm.value.email;
+            //  this.loginForm.value.password;
 
-                    console.log(this.registerForm.value);
-
-
-
-                    var maitresse: Maitresse = new Maitresse();
-                    maitresse.motdepasse = this.loginForm.value.motdepasse as string;
-                    maitresse.email = this.loginForm.value.email as string;
+            console.log(this.registerForm.value);
 
 
 
+            var maitresse: Maitresse = new Maitresse();
 
 
-                   
+            maitresse.motdepasse = this.registerForm.value.motdepasse as string;
+            maitresse.email = this.registerForm.value.email as string;
+            maitresse.prenom = this.registerForm.value.prenom as string;
+            maitresse.nom = this.registerForm.value.nom as string;
 
-           /* this.apiService.Enregistrement(maitresse).subscribe((data: any) => {
-                if (data.code == 200) {
-                    // error credentiel
-                   
+           
+            maitresse.dateNaissance = this.registerForm.value.dateNaissance as Date;
+
+            maitresse.genre = this.registerForm.value.genre as number;
 
 
 
-                } else {
-                    
+            this.apiService.Enregistrement(maitresse).subscribe((data: any) => {
+
+
+
+
+
+
+
+
+
+
+
+                if (data.code == 401) {
+
+                    this.erreurEmail = false;
                 }
-   
-            });*/
+                else if (data.code == 500)
+                {
+                    this.erreurServeurModal = false;
+                } else if (data.code == 400) {
 
-
-
-                this.isRegisterModalOpen = !this.isRegisterModalOpen;
+                    this.erreurEmail = false;
                 }
-            }
+
+            });
 
 
 
+            
 
 
-
-
-
-            resetRegisterModalForm() {
-                this.registerForm.reset();
-            }
+           // this.isRegisterModalOpen = !this.isRegisterModalOpen;
         }
+    }
+
+
+
+
+
+
+
+
+    resetRegisterModalForm() {
+        this.registerForm.reset();
+    }
+}
 
 
 export function MustMatch(controlName: string, matchingControlName: string) {
@@ -244,15 +300,13 @@ export function MustMatch(controlName: string, matchingControlName: string) {
         const control = formGroup.controls[controlName];
         const matchingControl = formGroup.controls[matchingControlName];
 
-        if (matchingControl.errors && !matchingControl.errors.mustMatch)
-        {
+        if (matchingControl.errors && !matchingControl.errors.mustMatch) {
             // return if another validator has already found an error on the matchingControl
             return;
         }
 
         // set error on matchingControl if validation fails
-        if (control.value !== matchingControl.value)
-        {
+        if (control.value !== matchingControl.value) {
             matchingControl.setErrors({ mustMatch: true });
         } else {
             matchingControl.setErrors(null);
