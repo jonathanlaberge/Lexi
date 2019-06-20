@@ -6,13 +6,13 @@
         </a>
     </div>
     <div class="header-nav">
-        <a *ngIf="isAdmin && !eleveConnected" [routerLink]="['../tableaudebord']" class="nav-link active"><span class="nav-text">Tableau de bord</span></a>
-        <a *ngIf="isAdmin && !eleveConnected" [routerLink]="['../eleve']" class="nav-link"><span class="nav-text">Portail des élèves</span></a>
+        <a *ngIf="isAdmin && !eleveConnected" (click)="GoToTableauDeBord()" class="nav-link active"><span class="nav-text">Tableau de bord</span></a>
+        <a *ngIf="isAdmin && !eleveConnected" (click)="GoToElevePortail()" class="nav-link"><span class="nav-text">Portail des élèves</span></a>
 
-        <a *ngIf="!isAdmin && !eleveConnected" [routerLink]="['../tableaudebord']" class="nav-link"><span class="nav-text">Tableau de bord</span></a>
-        <a *ngIf="!isAdmin && !eleveConnected" [routerLink]="['../eleve']" class="nav-link active"><span class="nav-text">Portail des élèves</span></a>
+        <a *ngIf="!isAdmin && !eleveConnected" (click)="GoToTableauDeBord()" class="nav-link"><span class="nav-text">Tableau de bord</span></a>
+        <a *ngIf="!isAdmin && !eleveConnected" (click)="GoToElevePortail()" class="nav-link active"><span class="nav-text">Portail des élèves</span></a>
 
-        <a *ngIf="eleveConnected" [routerLink]="['../eleve']" class="nav-link"><span class="nav-text">Quitter la session</span></a>
+        <a *ngIf="eleveConnected" (click)="GoToElevePortail()" class="nav-link"><span class="nav-text">Quitter la session</span></a>
     </div>
     <div class="header-actions">
         <clr-dropdown *ngIf="!eleveConnected">
@@ -21,9 +21,19 @@
                 <clr-icon shape="caret down"></clr-icon>
             </button>
             <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-                <a (click)="ShowProfile" clrDropdownItem>Profil</a>
-                <a (click)="Logout" clrDropdownItem>Se Déconnecter</a>
+                <a (click)="ShowProfile()" clrDropdownItem>Profil</a>
+                <a (click)="Logout()" clrDropdownItem>Se Déconnecter</a>
             </clr-dropdown-menu>
         </clr-dropdown>
     </div>
 </header>
+<clr-modal [(clrModalOpen)]="showLoginModal">
+    <h3 class="modal-title">Reconnection en tant que maitresse</h3>
+    <div class="modal-body">
+        <p>Veuiller entrer le mot de passe de <b>{{name}}</b> pour continuer.</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="showLoginModal = false">Annuler</button>
+        <button type="button" class="btn btn-primary" (click)="basic = false">Ok</button>
+    </div>
+</clr-modal>

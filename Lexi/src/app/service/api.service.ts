@@ -49,4 +49,10 @@ export class APIService
         this.SetHeader();
         return this.httpClient.post(`${API_URL}compte/enregistrement`, JSON.stringify(maitresse), this.options);
     }
+
+    public Mode(obj: any)
+    {
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}compte/mode`, JSON.stringify(obj), this.options);
+    }
 }

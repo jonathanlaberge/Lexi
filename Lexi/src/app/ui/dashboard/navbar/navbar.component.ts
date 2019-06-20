@@ -15,6 +15,7 @@ export class NavbarComponent implements OnInit
     isAdmin = false;
     eleveConnected = false;
     name = null;
+    showLoginModal = false;
 
     routeSubscription: Subscription;
 
@@ -38,6 +39,18 @@ export class NavbarComponent implements OnInit
     {
         ///////////////////////////////////////////////////////////////////////////////////////////////
     }
+    GoToTableauDeBord()
+    {
+        if (RoutingService.adminMode)
+            this.router.navigate(['/tableaudebord']);
+        else
+            this.showLoginModal = true;
+    }
+    GoToElevePortail()
+    {
+        APIService.token = null;
+        this.router.navigate(['/eleve']);
+    }
 
     Logout()
     {
@@ -49,6 +62,6 @@ export class NavbarComponent implements OnInit
         RoutingService.adminMode = false;
         RoutingService.eleveConnected = false;
 
-        this.router.navigate(['/'])
+        this.router.navigate(['/']);
     }
 }
