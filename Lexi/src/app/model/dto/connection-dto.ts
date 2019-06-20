@@ -7,4 +7,13 @@ export class ConnectionDTO {
     token: string;
 
 
+
+
+
+
+
+
+
+
+
 }

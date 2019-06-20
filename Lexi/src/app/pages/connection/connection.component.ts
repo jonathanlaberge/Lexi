@@ -4,6 +4,8 @@ import { ClrForm } from '@clr/angular';
 import { Maitresse } from 'src/app/model/maitresse';
 import { APIService } from 'src/app/service/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ConnectionDTO } from 'src/app/model/dto/connection-dto';
+import { RoutingService } from 'src/app/service/routing.service';
 
 
 
@@ -23,8 +25,7 @@ export class ConnectionComponent implements OnInit {
 
 
 
-
-
+    return: string = '';
     isRegisterModalOpen: boolean = false;
 
 
@@ -39,7 +40,7 @@ export class ConnectionComponent implements OnInit {
         this.loginForm = this.formBuilder.group({
 
             email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(8)]],
+            motdepasse: ['', [Validators.required, Validators.minLength(8)]],
 
         }//, {
             //  validator: MustMatch('password', 'confirmPassword')
@@ -61,17 +62,30 @@ export class ConnectionComponent implements OnInit {
             */
 
             email: ['', [Validators.required, Validators.email]],
-            motdepass: ['', [Validators.required, Validators.minLength(8)]],
-            confirmationmotdepass: ['', [Validators.required, Validators.minLength(8)]],
+            motdepasse: ['', [Validators.required, Validators.minLength(8)]],
+            confirmationmotdepasse: ['', [Validators.required, Validators.minLength(8)]],
             prenom: ['', [Validators.required]],
             nom: ['', [Validators.required,]],
             dateNaissance: ['', []],
             genre: ['', []]
 
         }, {
-                validator: MustMatch('motdepass', 'confirmationmotdepass'),
+                validator: MustMatch('motdepasse', 'confirmationmotdepasse'),
             }
         );
+
+
+
+        this.route.queryParams.subscribe(params => {
+            this.return = params['return'] || '/dashboard';
+            if (RoutingService.isLoggedIn == true)
+                this.router.navigateByUrl(this.return);
+        });
+
+
+
+
+
     }
 
 
@@ -99,24 +113,43 @@ export class ConnectionComponent implements OnInit {
 
 
 
-            APIService.currentMaitresse = new Maitresse();
+           
+
+           var credential: ConnectionDTO;
+           
+            
 
 
 
+            var maitresse: Maitresse;
+            maitresse.email = this.loginClrForm.value.email;
+                maitresse.motdepasse = this.loginClrForm.value.password;
 
 
+            this.apiService.Connection(maitresse).subscribe((data: any) => {
+                if (data.code == 401) {
+                    // error credentiel
+                    APIService.currentMaitresse = null;
 
-            this.apiService.Login(this.loginClrForm.value.email, this.loginClrForm.value.password ).subscribe((data: any) => {
-                this.userValidation = (data as UserMessage);
-                APIService.CurrentUser = (this.userValidation.specifiedUser as User);
 
-                if (this.userValidation.userValidationMessage == 0) {
+                    
+                } else { 
+                    credential = (data as ConnectionDTO);
+
+            
+                APIService.currentMaitresse = (credential.account as Maitresse);
+
+                
                     //CONTINUE IF LOGIN VALID
-                    RoutingService.SetRouteToLoggedIn();
-                    RoutingService.IsLoggedIn = true;
+                    RoutingService.SetRouteToAdmin();
+                    RoutingService.isLoggedIn = true;
+                    RoutingService.adminMode = true;
+                    APIService.token = credential.token;
 
-                    localStorage.setItem('uinfo', JSON.stringify(APIService.currentMaitresse));
 
+
+                    localStorage.setItem('maitresseInfo', JSON.stringify(APIService.currentMaitresse));
+                    localStorage.setItem('token', JSON.stringify(APIService.token));
 
                     this.router.navigateByUrl(this.return);
                 }
