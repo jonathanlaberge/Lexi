@@ -43,4 +43,10 @@ export class APIService
         this.SetHeader();
         return this.httpClient.post(`${API_URL}compte/connection`, JSON.stringify(maitresse), this.options);
     }
+
+    public Enregistrement(maitresse: Maitresse)
+    {
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}compte/enregistrement`, JSON.stringify(maitresse), this.options);
+    }
 }
