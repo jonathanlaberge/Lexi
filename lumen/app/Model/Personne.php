@@ -3,10 +3,10 @@ namespace App\Model;
 
 class Personne
 {
-	private $prenom;
-    private $nom;
-    private $dateNaissance;
-    private $genre;
+	public $prenom;
+    public $nom;
+    public $dateNaissance;
+    public $genre;
 
     function __construct()
     {
