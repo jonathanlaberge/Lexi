@@ -49,18 +49,6 @@ export class ConnectionComponent implements OnInit {
 
         this.registerForm = this.formBuilder.group({
 
-
-
-            /*
-            	email
-                motdepass
-                prenom
-                nom
-                dateNaissance
-                genre
-
-            */
-
             email: ['', [Validators.required, Validators.email]],
             motdepasse: ['', [Validators.required, Validators.minLength(8)]],
             confirmationmotdepasse: ['', [Validators.required, Validators.minLength(8)]],
@@ -77,7 +65,7 @@ export class ConnectionComponent implements OnInit {
 
 
         this.route.queryParams.subscribe(params => {
-            this.return = params['return'] || '/dashboard';
+            this.return = params['return'] || '/tableaudebord';
             if (RoutingService.isLoggedIn == true)
                 this.router.navigateByUrl(this.return);
         });
@@ -206,15 +194,37 @@ export class ConnectionComponent implements OnInit {
                     //  this.loginForm.value.password;
 
                     console.log(this.registerForm.value);
-                    this.isRegisterModalOpen = !this.isRegisterModalOpen;
 
+
+
+                    var maitresse: Maitresse = new Maitresse();
+                    maitresse.motdepasse = this.loginForm.value.motdepasse as string;
+                    maitresse.email = this.loginForm.value.email as string;
+
+
+
+
+
+                   
+
+           /* this.apiService.Enregistrement(maitresse).subscribe((data: any) => {
+                if (data.code == 200) {
+                    // error credentiel
+                   
+
+
+
+                } else {
+                    
                 }
+   
+            });*/
 
+
+
+                this.isRegisterModalOpen = !this.isRegisterModalOpen;
+                }
             }
-
-
-
-
 
 
 
@@ -226,37 +236,6 @@ export class ConnectionComponent implements OnInit {
             resetRegisterModalForm() {
                 this.registerForm.reset();
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
 
@@ -265,13 +244,15 @@ export function MustMatch(controlName: string, matchingControlName: string) {
         const control = formGroup.controls[controlName];
         const matchingControl = formGroup.controls[matchingControlName];
 
-        if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+        if (matchingControl.errors && !matchingControl.errors.mustMatch)
+        {
             // return if another validator has already found an error on the matchingControl
             return;
         }
 
         // set error on matchingControl if validation fails
-        if (control.value !== matchingControl.value) {
+        if (control.value !== matchingControl.value)
+        {
             matchingControl.setErrors({ mustMatch: true });
         } else {
             matchingControl.setErrors(null);
