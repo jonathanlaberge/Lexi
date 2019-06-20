@@ -98,6 +98,7 @@ export class ConnectionComponent implements OnInit {
     submit() {
         if (this.loginForm.invalid) {
             this.loginClrForm.markAsTouched();
+            console.log("bad value");
         }
 
         else {
@@ -106,8 +107,8 @@ export class ConnectionComponent implements OnInit {
             //  this.loginForm.value.password;
 
             console.log(this.loginForm.value);
-
-
+            console.log(this.loginForm.value.email);
+            console.log(this.loginForm.value.motdepasse);
 
 
 
@@ -121,9 +122,10 @@ export class ConnectionComponent implements OnInit {
 
 
 
-            var maitresse: Maitresse;
-            maitresse.email = this.loginClrForm.value.email;
-                maitresse.motdepasse = this.loginClrForm.value.password;
+            var maitresse: Maitresse = new Maitresse();
+            maitresse.motdepasse = this.loginForm.value.motdepasse as string;
+            maitresse.email = this.loginForm.value.email as string;
+     
 
 
             this.apiService.Connection(maitresse).subscribe((data: any) => {
