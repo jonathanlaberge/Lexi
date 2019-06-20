@@ -4,8 +4,8 @@ import { Subject } from 'rxjs';
 
 export const RouteEleve: RouteInfo[] =
     [
-        { path: 'fiche', title: 'Fiche', icon: 'file', class: '' },
-        { path: 'historique', title: 'Register', icon: 'history', class: '' }
+        { path: 'fiche', title: 'Mes Fiches', icon: 'file', class: '' },
+        { path: 'historique', title: 'Mon historique', icon: 'history', class: '' }
     ];
 
 export const RouteAdmin: RouteInfo[] =
@@ -22,7 +22,7 @@ export class RoutingService
 {
     public static isLoggedIn: boolean = false;
 
-    public static adminMode: boolean = true;
+    public static adminMode: boolean = false;
     public static eleveConnected: boolean = false;
 
     public static routeSubject = new Subject<RouteInfo[]>();
