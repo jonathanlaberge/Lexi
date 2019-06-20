@@ -1,12 +1,9 @@
 .login-wrapper {
-
     background-repeat: no-repeat;
     background-size: 100%;
- 
 }
-
 
     .login-wrapper .login {
         min-height: 100vh;
-        min-width :50%;
+        min-width: 50%;
     }
