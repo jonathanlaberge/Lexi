@@ -32,6 +32,7 @@ import { NavbarModule } from './ui/dashboard/navbar/navbar.module';
 import { FooterModule } from './ui/dashboard/footer/footer.module';
 import { CurseursModule } from './ui/curseurs/curseurs.module';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -62,6 +63,7 @@ import { RouterModule } from '@angular/router';
                 FormsModule,
                 BrowserModule,
                 RouterModule,
+                HttpClientModule,
                 AppRoutingModule,
                 ReactiveFormsModule,
                 BrowserAnimationsModule,

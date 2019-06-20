@@ -23,7 +23,7 @@ export class APIService
 
     }
 
-    private RefreshHeader()
+    private SetHeader()
     {
         if (APIService.token != null)
             this.options =
@@ -40,7 +40,7 @@ export class APIService
 
     public Connection(maitresse: Maitresse)
     {
-        this.RefreshHeader();
+        this.SetHeader();
         return this.httpClient.post(`${API_URL}compte/connection`, JSON.stringify(maitresse), this.options);
     }
 }
