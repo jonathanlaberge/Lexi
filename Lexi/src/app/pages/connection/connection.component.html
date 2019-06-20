@@ -1,19 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="login-wrapper">
 
     <form class="login" clrForm [formGroup]="loginForm" (ngSubmit)="submit()">
@@ -46,12 +31,12 @@
                 <label>Mot de passe</label>
 
                 <span class="label">Mot de passe</span>
-                <input clrInput placeholder="Mot de passe" type="password" formControlName="password" name="password" required />
+                <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
 
 
 
                 <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
-                <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.password.length}} {{loginForm.value.password.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
+                <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.motdepasse.length}} {{loginForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
 
             </clr-input-container>
 
@@ -100,7 +85,7 @@
                     <span class="label">Mot de passe</span>
                     <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
                     <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
-                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.password.length}} {{loginForm.value.password.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
+                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.motdepasse.length}} {{loginForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
                     <clr-control-error *clrIfError="'mustMatch'">Les mot de passe sont different.  </clr-control-error>
 
                 </clr-input-container>
@@ -111,7 +96,7 @@
                     <span class="label">Mot de passe</span>
                     <input clrInput placeholder="Répété le mot de passe" type="password" formControlName="motdepasse" name="confirmationmotdepasse" required />
                     <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
-                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.password.length}} {{loginForm.value.password.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
+                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.motdepasse.length}} {{loginForm.value.confirmationmotdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
                     <clr-control-error *clrIfError="'mustMatch'">Les mot de passe sont different. </clr-control-error>
                 </clr-input-container>
 
