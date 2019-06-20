@@ -12,11 +12,18 @@
         <a *ngIf="!isAdmin && !eleveConnected" [routerLink]="['../tableaudebord']" class="nav-link"><span class="nav-text">Tableau de bord</span></a>
         <a *ngIf="!isAdmin && !eleveConnected" [routerLink]="['../eleve']" class="nav-link active"><span class="nav-text">Portail des élèves</span></a>
 
-        <a *ngIf="eleveConnected" [routerLink]="['../eleve']" class="nav-link"><span class="nav-text">Quitter</span></a>
+        <a *ngIf="eleveConnected" [routerLink]="['../eleve']" class="nav-link"><span class="nav-text">Quitter la session</span></a>
     </div>
     <div class="header-actions">
-        <a href="..." class="nav-link nav-icon">
-            <clr-icon shape="cog"></clr-icon>
-        </a>
+        <clr-dropdown *ngIf="!eleveConnected">
+            <button class="nav-text" clrDropdownTrigger>
+                {{name}}
+                <clr-icon shape="caret down"></clr-icon>
+            </button>
+            <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+                <a (click)="ShowProfile" clrDropdownItem>Profil</a>
+                <a (click)="Logout" clrDropdownItem>Se Déconnecter</a>
+            </clr-dropdown-menu>
+        </clr-dropdown>
     </div>
 </header>
