@@ -4,6 +4,75 @@
     <div class="content-container">
         <div class="content-area">
             <router-outlet></router-outlet>
+            <!------------------------------------------------------------------------------------ -->
+            <!-- <tr *ngFor="let item of elevesList; let index = index">
+        <td  width="256"><img [src]="item.logo" height="256" width="256"/></td>
+        <td>
+            <h2>{{item.name}}</h2>
+            <h3 class="pull-right">$ {{item.sellPrice}}</h3>
+            <p>{{item.description}}</p>
+        </td>
+        <td  width="200">
+            <button *ngIf="item.qtyLeft != 0" class="btn btn-info" (click)="AddToCart(item.idItem)">
+                <i class="ti-plus"></i>
+                Add to cart
+            </button>
+            <h3 *ngIf="item.qtyLeft == 0" class="text-center text-default">Sold Out</h3>
+        </td>
+    </tr>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="clr-row">
+
+
+
+                <div class="" *ngFor="let item of elevesList; let index = index">
+                    <div class="card">
+                        <div class="card-header">
+                            Header
+                        </div>
+                        <div class="card-block">
+                            <div class="card-media-block">
+                                <img src="..." class="card-media-image">
+                                <div class="card-media-description">
+                                    <span class="card-media-title">
+                                        {{item.email}}
+                                    </span>
+                                    <span class="card-media-text">
+                                        Owner: John Doe
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-text">
+                                rrdggdfgefrgdfthgyjukugyefdswazfghjgtfdsfgh
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn btn-primary">Action</a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+
+
+
+            <!------------------------------------------------------------------------------------ -->
         </div>
     </div>
 </div>
