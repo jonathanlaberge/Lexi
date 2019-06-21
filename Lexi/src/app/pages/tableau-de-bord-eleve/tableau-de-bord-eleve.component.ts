@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RoutingService } from 'src/app/service/routing.service';
+import { APIService } from 'src/app/service/api.service';
+import { Eleve } from 'src/app/model/eleve';
+
+
+
 
 @Component(
     {
@@ -9,13 +14,60 @@ import { RoutingService } from 'src/app/service/routing.service';
     })
 export class TableauDeBordEleveComponent implements OnInit
 {
-
-    constructor() { }
-
+    getAllEleve: any;
+    constructor(private apiService: APIService, private ref: ChangeDetectorRef) { }
+    elevesList: Eleve[] = [];
     ngOnInit()
     {
         RoutingService.adminMode = false;
         RoutingService.SetRouteToEleve();
+
+
+
+        ///admin/user / liste / admin / user / liste
+        
+
+
+        this.getAllEleve = this.apiService.GetEleveList().subscribe((data: any) => {
+                if (data != null)
+                    data.forEach(function (value) {
+                        console.log(value);
+
+
+                        this.elevesList.push(value as Eleve);
+                    }.bind(this));
+            this.ref.detectChanges();
+        });
+
+
+
+        }
+    
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
-}
+
+
+
+
+
+
+
+
+
+
+
