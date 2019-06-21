@@ -142,7 +142,7 @@ export class ConnectionComponent implements OnInit
         this.isRegisterModalOpen = true;
     }
 
-    registerModalForm()
+    submitRegister()
     {
         this.errorLoginInvalid = false;
         this.errorLoginServer = false;
