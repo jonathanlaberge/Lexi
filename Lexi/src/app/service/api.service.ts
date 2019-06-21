@@ -43,8 +43,14 @@ export class APIService
 
     public static IsTokenExpired(): boolean
     {
-        APIService.tokenExpired = true;
-        return APIService.jwtHelper.isTokenExpired(APIService.token);
+        var expired = APIService.jwtHelper.isTokenExpired(APIService.token);
+        APIService.tokenExpired = expired;
+        return expired;
+    }
+
+    public static IsTokenInAdminMode(): boolean
+    {
+        return (APIService.jwtHelper.decodeToken(APIService.token).mode == "admin");
     }
 
     public Connection(maitresse: Maitresse)

@@ -48,9 +48,11 @@ export class RoutingService
         RoutingService.EmitRouteSubject();
     }
 
-    public static Logout()
+    public static Logout(clearLocalStorage: boolean = true)
     {
-        localStorage.clear();
+        if (clearLocalStorage)
+            localStorage.clear();
+
         APIService.currentMaitresse = null;
         APIService.currentEleve = null;
         APIService.token = null;

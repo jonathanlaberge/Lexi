@@ -62,7 +62,7 @@ export class ConnectionComponent implements OnInit
             {
                 validator: MustMatch('motdepasse', 'confirmationmotdepasse'),
             });
-
+        
         if (localStorage.getItem('maitresseInfo') != null && localStorage.getItem('token') != null)
         {
             APIService.currentMaitresse = JSON.parse(localStorage.getItem('maitresseInfo')) as Maitresse;
@@ -71,7 +71,7 @@ export class ConnectionComponent implements OnInit
             RoutingService.adminMode = true;
             APIService.token = JSON.parse(localStorage.getItem('token'));
 
-            RoutingService.SetRouteToAdmin
+            RoutingService.SetRouteToAdmin();
         }
 
         this.route.queryParams.subscribe(params =>

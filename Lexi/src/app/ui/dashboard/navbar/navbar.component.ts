@@ -7,8 +7,7 @@ import { Router } from '@angular/router';
 @Component(
     {
         selector: 'dashboard-navbar',
-        templateUrl: './navbar.component.html',
-        styleUrls: ['./navbar.component.css']
+        templateUrl: './navbar.component.html'
     })
 export class NavbarComponent implements OnInit
 {
@@ -37,16 +36,24 @@ export class NavbarComponent implements OnInit
 
     ShowProfile()
     {
-        console.log(APIService.token);
+        console.log(APIService.token); ///////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////
     }
+
     GoToTableauDeBord()
     {
-        if (RoutingService.adminMode)
+        if (APIService.IsTokenInAdminMode())
             this.router.navigate(['/tableaudebord']);
         else
             this.showLoginModal = true;
     }
+
+    SubmitAdminMode()
+    {
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        this.router.navigate(['/tableaudebord']);
+    }
+
     GoToElevePortail()
     {
         this.router.navigate(['/eleve']);

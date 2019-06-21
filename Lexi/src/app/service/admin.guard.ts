@@ -17,7 +17,7 @@ export class AdminGuard implements CanActivate
     {
         if (RoutingService.isLoggedIn == true && !APIService.IsTokenExpired())
         {
-            if (RoutingService.adminMode == true)
+            if (APIService.IsTokenInAdminMode())
                 return true;
             else
             {
@@ -27,7 +27,7 @@ export class AdminGuard implements CanActivate
         }
         else
         {
-            RoutingService.Logout();
+            RoutingService.Logout(false);
             this.router.navigate(['/connection'],
                 {
                     queryParams:

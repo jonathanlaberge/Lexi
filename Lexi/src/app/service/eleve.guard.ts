@@ -22,7 +22,7 @@ export class EleveGuard implements CanActivate
         }
         else
         {
-            RoutingService.Logout();
+            RoutingService.Logout(false);
             this.router.navigate(['/connection'],
                 {
                     queryParams:

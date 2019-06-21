@@ -13,14 +13,21 @@ export class SidebarComponent implements OnInit
 
     routeSubscription: Subscription;
 
+    isAdmin: boolean;
+    eleveConnected: boolean;
+
     constructor() { }
 
     ngOnInit()
     {
+        this.isAdmin = RoutingService.adminMode;
+        this.eleveConnected = RoutingService.eleveConnected;
         this.menuItems = RoutingService.currentRoute.filter(menuItem => menuItem);
 
         this.routeSubscription = RoutingService.routeSubject.subscribe((route: any[]) => 
         {
+            this.isAdmin = RoutingService.adminMode;
+            this.eleveConnected = RoutingService.eleveConnected;
             this.menuItems = route.filter(menuItem => menuItem);
         })
     }
