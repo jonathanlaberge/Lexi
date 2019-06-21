@@ -42,6 +42,18 @@
                     </div>
                 </div>
             </div>
+            <div class="alert alert-warning" role="alert" [hidden]="!warningTokenExpired">
+                <div class="alert-items">
+                    <div class="alert-item static">
+                        <div class="alert-icon-wrapper">
+                            <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                        </div>
+                        <span class="alert-text">
+                            Les informations de votre compte sont expirées. Veuillez vous connecter.
+                        </span>
+                    </div>
+                </div>
+            </div>
             <br />
             <clr-input-container>
                 <label>Utilisateur</label>
@@ -54,7 +66,7 @@
                 <span class="label">Mot de passe</span>
                 <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
                 <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
-                <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.motdepasse.length}} {{loginForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
+                <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.motdepasse.length}} {{loginForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 caractères au minimum. </clr-control-error>
             </clr-input-container>
             <div>
                 <button class="btn btn-primary" type="submit">Se connecter</button>
@@ -110,7 +122,7 @@
                     <span class="label">Mot de passe</span>
                     <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
                     <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
-                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.motdepasse.length}} {{registerForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
+                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.motdepasse.length}} {{registerForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 caractères au minimum. </clr-control-error>
                     <clr-control-error *clrIfError="'mustMatch'">Les mots de passe sont differents. </clr-control-error>
                 </clr-input-container>
                 <clr-input-container>
@@ -118,7 +130,7 @@
                     <span class="label">Mot de passe</span>
                     <input clrInput placeholder="Répété le mot de passe" type="password" formControlName="confirmationmotdepasse" name="confirmationmotdepasse" required />
                     <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
-                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.confirmationmotdepasse.length}} {{registerForm.value.confirmationmotdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 characters au minimum. </clr-control-error>
+                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.confirmationmotdepasse.length}} {{registerForm.value.confirmationmotdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 caractères au minimum. </clr-control-error>
                     <clr-control-error *clrIfError="'mustMatch'">Les mots de passe sont differents. </clr-control-error>
                 </clr-input-container>
                 <clr-input-container>

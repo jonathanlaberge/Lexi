@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Maitresse } from '../model/maitresse';
 import { Eleve } from '../model/eleve';
 
@@ -15,16 +16,18 @@ export class APIService
 
     public static currentMaitresse: Maitresse = null;
     public static currentEleve: Eleve = null;
+
     public static token: string = null;
+    public static tokenExpired: boolean = false;
 
+    private static jwtHelper: JwtHelperService = new JwtHelperService();
 
-    constructor(private httpClient: HttpClient)
-    {
-
-    }
+    constructor(private httpClient: HttpClient) { }
 
     private SetHeader()
     {
+        console.log("Token: " + APIService.token);
+
         if (APIService.token != null)
             this.options =
                 {
@@ -38,7 +41,11 @@ export class APIService
             this.options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
     }
 
-
+    public static IsTokenExpired(): boolean
+    {
+        APIService.tokenExpired = true;
+        return APIService.jwtHelper.isTokenExpired(APIService.token);
+    }
 
     public Connection(maitresse: Maitresse)
     {
@@ -57,12 +64,9 @@ export class APIService
         this.SetHeader();
         return this.httpClient.post(`${API_URL}compte/mode`, JSON.stringify(obj), this.options);
     }
-
-
-
-    public GetEleveList() {
-
-        console.log("is the token null ?? " + APIService.token);
+    
+    public GetEleveList()
+    {
         this.SetHeader();
         return this.httpClient.get(`${API_URL}admin/user/liste`, this.options);
     }

@@ -31,6 +31,11 @@
     <h3 class="modal-title">Reconnection en tant que maitresse</h3>
     <div class="modal-body">
         <p>Veuiller entrer le mot de passe de <b>{{name}}</b> pour continuer.</p>
+        <clr-input-container>
+            <label>Mot de passe</label>
+            <span class="label">Mot de passe</span>
+            <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
+        </clr-input-container>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline" (click)="showLoginModal = false">Annuler</button>

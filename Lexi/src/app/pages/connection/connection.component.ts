@@ -30,6 +30,7 @@ export class ConnectionComponent implements OnInit
     successRegister: boolean = false;
     errorRegisterExist: boolean = false;
     errorRegisterServer: boolean = false;
+    warningTokenExpired: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -39,6 +40,9 @@ export class ConnectionComponent implements OnInit
 
     ngOnInit()
     {
+        this.warningTokenExpired = APIService.tokenExpired;
+        APIService.tokenExpired = false;
+
         this.loginForm = this.formBuilder.group(
             {
                 email: ['', [Validators.required, Validators.email]],

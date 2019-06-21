@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit
 
     routeSubscription: Subscription;
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, private apiService: APIService) { }
 
     ngOnInit()
     {
@@ -37,6 +37,7 @@ export class NavbarComponent implements OnInit
 
     ShowProfile()
     {
+        console.log(APIService.token);
         ///////////////////////////////////////////////////////////////////////////////////////////////
     }
     GoToTableauDeBord()
@@ -48,19 +49,12 @@ export class NavbarComponent implements OnInit
     }
     GoToElevePortail()
     {
-        APIService.token = null;
         this.router.navigate(['/eleve']);
     }
 
     Logout()
     {
-        localStorage.clear();
-        APIService.currentMaitresse = null;
-        APIService.currentEleve = null;
-        APIService.token = null;
-        RoutingService.isLoggedIn = false;
-        RoutingService.adminMode = false;
-        RoutingService.eleveConnected = false;
+        RoutingService.Logout();
 
         this.router.navigate(['/']);
     }

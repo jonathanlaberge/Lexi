@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RouteInfo } from './route-info';
 import { Subject } from 'rxjs';
+import { APIService } from './api.service';
 
 export const RouteEleve: RouteInfo[] =
     [
@@ -45,5 +46,16 @@ export class RoutingService
     {
         this.currentRoute = RouteAdmin;
         RoutingService.EmitRouteSubject();
+    }
+
+    public static Logout()
+    {
+        localStorage.clear();
+        APIService.currentMaitresse = null;
+        APIService.currentEleve = null;
+        APIService.token = null;
+        RoutingService.isLoggedIn = false;
+        RoutingService.adminMode = false;
+        RoutingService.eleveConnected = false;
     }
 }
