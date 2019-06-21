@@ -23,8 +23,11 @@
     "@clr/angular": "^2.0.1",
     "@clr/icons": "^2.0.1",
     "@clr/ui": "^2.0.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@webcomponents/custom-elements": "^1.2.4",
+    "angular-font-awesome": "^3.1.2",
     "core-js": "^3.1.4",
+    "font-awesome": "^4.7.0",
     "rxjs": "~6.5.2",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"

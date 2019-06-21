@@ -11,5 +11,19 @@ export class Eleve {
 
 
 
+    constructor(id: number, prenom: string, nom: string, genre: number, avatar: string) {
+
+        this.idEleve = id;
+        this.prenom = prenom
+        this.nom = nom
+        this.dateNaissance = new Date();
+        this.genre = genre;
+        this.avatar = avatar;
+
+    }
+
+
+
+
 
 }

@@ -36,6 +36,9 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+
+
 @NgModule(
     {
         declarations:
@@ -63,6 +66,7 @@ import { HttpClientModule } from '@angular/common/http';
                 FormsModule,
                 BrowserModule,
                 RouterModule,
+                AngularFontAwesomeModule,
                 HttpClientModule,
                 AppRoutingModule,
                 ReactiveFormsModule,

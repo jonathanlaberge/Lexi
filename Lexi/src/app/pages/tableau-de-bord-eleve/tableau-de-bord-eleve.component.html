@@ -37,35 +37,25 @@
 
 
 
-                <div class="" *ngFor="let item of elevesList; let index = index">
-                    <div class="card">
+                <div class="card2" *ngFor="let item of elevesList; let index = index" >
+
+
+
+                    <a (click)="selectUser(item.idEleve)" class="card clickable">
                         <div class="card-header">
-                            Header
+                            {{item.prenom }}  {{item.nom}}
+                        </div>
+
+
+                        <div class="card-img">
+                            <img [src]="item.avatar" >
                         </div>
                         <div class="card-block">
-                            <div class="card-media-block">
-                                <img src="..." class="card-media-image">
-                                <div class="card-media-description">
-                                    <span class="card-media-title">
-                                        {{item.email}}
-                                    </span>
-                                    <span class="card-media-text">
-                                        Owner: John Doe
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="card-text">
-                                rrdggdfgefrgdfthgyjukugyefdswazfghjgtfdsfgh
-                            </div>
+                            <p class="card-text">
+                                <a class="btn btn-primary">Choisir cette utilisateur</a>
+                            </p>
                         </div>
-                        <div class="card-footer">
-                            <a class="btn btn-primary">Action</a>
-                        </div>
-                    </div>
-                </div>
-
-
-
+                    </a>
 
             </div>
 
