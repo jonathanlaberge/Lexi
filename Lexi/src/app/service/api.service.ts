@@ -33,9 +33,6 @@ export class APIService
                 {
                     headers: new HttpHeaders().set('Content-Type', 'application/json')
                         .append('Authorization', `Bearer ${APIService.token}`)
-                        .append('Access-Control-Allow-Origin', '*')
-                        .append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS')
-
                 };
         else
             this.options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
