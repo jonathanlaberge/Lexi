@@ -11,7 +11,7 @@ export class Eleve
         id: number = null,
         prenom: string = null,
         nom: string = null,
-        dateNaissance: Date = null,
+        dateNaissance: Date = new Date(),
         genre: number = null,
         avatar: string = null)
     {
