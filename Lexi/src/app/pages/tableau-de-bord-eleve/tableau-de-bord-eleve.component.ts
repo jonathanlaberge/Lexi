@@ -88,15 +88,3 @@ export class TableauDeBordEleveComponent implements OnInit
             });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -20,18 +20,20 @@
                 <span *ngIf="!isReady" class="spinner spinner-lg center">
                     Loading...
                 </span>
-                <div class="card-list" *ngFor="let item of elevesList; let index = index">
-                    <a (click)="SelectEleve(item.idEleve)" class="card clickable">
-                        <div class="card-header">
-                            {{item.prenom }} {{item.nom}}
-                        </div>
-                        <div class="card-img">
-                            <img [src]="item.avatar">
-                        </div>
-                        <div class="card-block">
-                            <div class="btn btn-primary center">Choisir cette utilisateur</div>
-                        </div>
-                    </a>
+                <div *ngIf="isReady"  class="clr-row" style="width:100%">
+                    <div class="card-list" *ngFor="let item of elevesList; let index = index">
+                        <a (click)="SelectEleve(item.idEleve)" class="card clickable">
+                            <div class="card-header">
+                                {{item.prenom }} {{item.nom}}
+                            </div>
+                            <div class="card-img">
+                                <img [src]="item.avatar">
+                            </div>
+                            <div class="card-block">
+                                <div class="btn btn-primary center">Choisir cette utilisateur</div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

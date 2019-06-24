@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RoutingService } from 'src/app/service/routing.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component(
     {
@@ -10,12 +11,20 @@ import { RoutingService } from 'src/app/service/routing.service';
 export class TableauDeBordComponent implements OnInit
 {
 
-    constructor() { }
+    constructor(private router: Router, private activeRoute: ActivatedRoute) { }
 
     ngOnInit()
     {
         RoutingService.adminMode = true;
         RoutingService.SetRouteToAdmin();
+
+        this.activeRoute.url.subscribe(() =>
+        {
+            if (this.router.url === '/tableaudebord')
+            {
+                this.router.navigate(['/tableaudebord/eleve']);
+            }
+        });
     }
 
 }
