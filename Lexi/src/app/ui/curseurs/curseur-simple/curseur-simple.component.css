@@ -1,0 +1,9 @@
+.custom-handle {
+    width: 3em !important;
+    height: 1.6em !important;
+    top: 50% !important;
+    margin-top: -.8em !important;
+    margin-left: -1.5em !important;
+    text-align: center !important;
+    line-height: 1.6em !important;
+}

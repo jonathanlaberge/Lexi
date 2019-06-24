@@ -26,11 +26,16 @@
                             "src/styles.css",
                             "node_modules/font-awesome/css/font-awesome.css",
                             "node_modules/@clr/icons/clr-icons.min.css",
-                            "node_modules/@clr/ui/clr-ui-dark.min.css"
+                            "node_modules/@clr/ui/clr-ui-dark.min.css",
+                            "node_modules/jquery-ui-dist/jquery-ui.min.css",
+                            "node_modules/jquery-ui-dist/jquery-ui.structure.min.css",
+                            "node_modules/jquery-ui-dist/jquery-ui.theme.min.css"
                         ],
                         "scripts": [
                             "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
-                            "node_modules/@clr/icons/clr-icons.min.js"
+                            "node_modules/@clr/icons/clr-icons.min.js",
+                            "node_modules/jquery/dist/jquery.min.js",
+                            "node_modules/jquery-ui-dist/jquery-ui.min.js"
                         ],
                         "es5BrowserSupport": true
                     },
