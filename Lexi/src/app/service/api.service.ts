@@ -50,6 +50,12 @@ export class APIService
         return (APIService.jwtHelper.decodeToken(APIService.token).mode == "admin");
     }
 
+    public static IsTokenInEleveMode(): boolean
+    {
+        return (APIService.jwtHelper.decodeToken(APIService.token).mode == "user" &&
+            APIService.jwtHelper.decodeToken(APIService.token).idEleveEnCours > 0);
+    }
+
     public Connection(maitresse: Maitresse)
     {
         this.SetHeader();

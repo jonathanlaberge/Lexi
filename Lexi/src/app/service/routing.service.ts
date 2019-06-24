@@ -31,7 +31,7 @@ export class RoutingService
 
     constructor() { }
     
-    private static EmitRouteSubject()
+    public static EmitRouteSubject()
     {
         RoutingService.routeSubject.next(this.currentRoute.slice());
     }

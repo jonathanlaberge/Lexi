@@ -4,65 +4,36 @@
     <div class="content-container">
         <div class="content-area">
             <router-outlet></router-outlet>
-            <!------------------------------------------------------------------------------------ -->
-            <!-- <tr *ngFor="let item of elevesList; let index = index">
-        <td  width="256"><img [src]="item.logo" height="256" width="256"/></td>
-        <td>
-            <h2>{{item.name}}</h2>
-            <h3 class="pull-right">$ {{item.sellPrice}}</h3>
-            <p>{{item.description}}</p>
-        </td>
-        <td  width="200">
-            <button *ngIf="item.qtyLeft != 0" class="btn btn-info" (click)="AddToCart(item.idItem)">
-                <i class="ti-plus"></i>
-                Add to cart
-            </button>
-            <h3 *ngIf="item.qtyLeft == 0" class="text-center text-default">Sold Out</h3>
-        </td>
-    </tr>-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <div class="clr-row">
-
-
-
-                <div class="card2" *ngFor="let item of elevesList; let index = index" >
-
-
-
-                    <a (click)="selectUser(item.idEleve)" class="card clickable">
-                        <div class="card-header">
-                            {{item.prenom }}  {{item.nom}}
+            <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+                <div class="alert-items">
+                    <div class="alert-item static">
+                        <div class="alert-icon-wrapper">
+                            <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
                         </div>
-
-
+                        <span class="alert-text">
+                            Il y a eu une erreur lors de la connection. Veuillez réessayer plus tard.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="IsShowingPortail()" class="clr-row">
+                <span *ngIf="!isReady" class="spinner spinner-lg center">
+                    Loading...
+                </span>
+                <div class="card-list" *ngFor="let item of elevesList; let index = index">
+                    <a (click)="SelectEleve(item.idEleve)" class="card clickable">
+                        <div class="card-header">
+                            {{item.prenom }} {{item.nom}}
+                        </div>
                         <div class="card-img">
-                            <img [src]="item.avatar" >
+                            <img [src]="item.avatar">
                         </div>
                         <div class="card-block">
-                            <p class="card-text">
-                                <a class="btn btn-primary">Choisir cette utilisateur</a>
-                            </p>
+                            <div class="btn btn-primary center">Choisir cette utilisateur</div>
                         </div>
                     </a>
-
+                </div>
             </div>
-
-
-
-
-            <!------------------------------------------------------------------------------------ -->
         </div>
     </div>
 </div>

@@ -18,14 +18,14 @@
                     </div>
                 </div>
             </div>
-            <div class="alert alert-danger" role="alert" [hidden]="!errorLoginServeur">
+            <div class="alert alert-danger" role="alert" [hidden]="!errorLoginServer">
                 <div class="alert-items">
                     <div class="alert-item static">
                         <div class="alert-icon-wrapper">
                             <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
                         </div>
                         <span class="alert-text">
-                            Il y a une erreur lors de la connection. Veuillez réessayer plus tard.
+                            Il y a eu une erreur lors de la connection. Veuillez réessayer plus tard.
                         </span>
                     </div>
                 </div>
@@ -103,66 +103,64 @@
                         <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
                     </div>
                     <span class="alert-text">
-                        Il y a un erreur avec le serveur.
+                        Il y a eu une erreur lors de la connection. Veuillez réessayer plus tard.
                     </span>
                 </div>
             </div>
         </div>
         <p>Pour s'enregister, remplisser ce formulaire.</p>
         <form class="login" clrForm [formGroup]="registerForm" (ngSubmit)="submitRegister()">
-            <div class="login-group">
-                <clr-input-container>
-                    <label>Utilisateur</label>
-                    <input placeholder="Email de connection" clrInput type="email" formControlName="email" name="Utilisateur" required />
-                    <clr-control-error *clrIfError="'required'">L'email est obligatoire</clr-control-error>
-                    <clr-control-error *clrIfError="'email'">L'email ne contien pas d'arobase (@). </clr-control-error>
-                </clr-input-container>
-                <clr-input-container>
-                    <label>Mot de passe</label>
-                    <span class="label">Mot de passe</span>
-                    <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
-                    <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
-                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.motdepasse.length}} {{registerForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 caractères au minimum. </clr-control-error>
-                    <clr-control-error *clrIfError="'mustMatch'">Les mots de passe sont differents. </clr-control-error>
-                </clr-input-container>
-                <clr-input-container>
-                    <label>Confirmation mot de passe</label>
-                    <span class="label">Mot de passe</span>
-                    <input clrInput placeholder="Répété le mot de passe" type="password" formControlName="confirmationmotdepasse" name="confirmationmotdepasse" required />
-                    <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
-                    <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.confirmationmotdepasse.length}} {{registerForm.value.confirmationmotdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 caractères au minimum. </clr-control-error>
-                    <clr-control-error *clrIfError="'mustMatch'">Les mots de passe sont differents. </clr-control-error>
-                </clr-input-container>
-                <clr-input-container>
-                    <label>Prénom</label>
-                    <input placeholder="Prénom" clrInput type="text" formControlName="prenom" name="Prénom" required />
-                    <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
-                </clr-input-container>
-                <clr-input-container>
-                    <label>Nom</label>
-                    <input placeholder="Nom" clrInput type="text" formControlName="nom" name="Nom" required />
-                    <clr-control-error *clrIfError="'required'">Le nom est obligatoire</clr-control-error>
-                </clr-input-container>
-                <clr-input-container>
-                    <label>Date de Naissance</label>
-                    <input clrInput type="date" formControlName="dateNaissance" name="Date de naissance" />
-                </clr-input-container>
-                <br />
-                <div class="btn-group">
-                    <div class="radio btn">
-                        <input formControlName="genre" value="1" type="radio" name="genre" id="btn-radio-1">
-                        <label for="btn-radio-1">Homme</label>
-                    </div>
-                    <div class="radio btn">
-                        <input formControlName="genre" value="0" type="radio" name="genre" id="btn-radio-2">
-                        <label for="btn-radio-2">Femme</label>
-                    </div>
+            <clr-input-container>
+                <label>Utilisateur</label>
+                <input placeholder="Email de connection" clrInput type="email" formControlName="email" name="Utilisateur" required />
+                <clr-control-error *clrIfError="'required'">L'email est obligatoire</clr-control-error>
+                <clr-control-error *clrIfError="'email'">L'email ne contien pas d'arobase (@). </clr-control-error>
+            </clr-input-container>
+            <clr-input-container>
+                <label>Mot de passe</label>
+                <span class="label">Mot de passe</span>
+                <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
+                <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
+                <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.motdepasse.length}} {{registerForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 caractères au minimum. </clr-control-error>
+                <clr-control-error *clrIfError="'mustMatch'">Les mots de passe sont differents. </clr-control-error>
+            </clr-input-container>
+            <clr-input-container>
+                <label>Confirmation mot de passe</label>
+                <span class="label">Mot de passe</span>
+                <input clrInput placeholder="Répété le mot de passe" type="password" formControlName="confirmationmotdepasse" name="confirmationmotdepasse" required />
+                <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
+                <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.confirmationmotdepasse.length}} {{registerForm.value.confirmationmotdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 caractères au minimum. </clr-control-error>
+                <clr-control-error *clrIfError="'mustMatch'">Les mots de passe sont differents. </clr-control-error>
+            </clr-input-container>
+            <clr-input-container>
+                <label>Prénom</label>
+                <input placeholder="Prénom" clrInput type="text" formControlName="prenom" name="Prénom" required />
+                <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
+            </clr-input-container>
+            <clr-input-container>
+                <label>Nom</label>
+                <input placeholder="Nom" clrInput type="text" formControlName="nom" name="Nom" required />
+                <clr-control-error *clrIfError="'required'">Le nom est obligatoire</clr-control-error>
+            </clr-input-container>
+            <clr-input-container>
+                <label>Date de Naissance</label>
+                <input clrInput type="date" formControlName="dateNaissance" name="Date de naissance" />
+            </clr-input-container>
+            <br />
+            <div class="btn-group">
+                <div class="radio btn">
+                    <input formControlName="genre" value="1" type="radio" name="genre" id="btn-radio-1">
+                    <label for="btn-radio-1">Homme</label>
+                </div>
+                <div class="radio btn">
+                    <input formControlName="genre" value="0" type="radio" name="genre" id="btn-radio-2">
+                    <label for="btn-radio-2">Femme</label>
                 </div>
             </div>
+            <button type="submit" class="btn btn-success">S'enregistrer</button>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="isRegisterModalOpen = false">Annuller</button>
-        <button type="button" class="btn btn-success" (click)="registerModalForm()">S'enregistrer</button>
+        <button type="button" class="btn btn-primary" (click)="isRegisterModalOpen = false">Annuler</button>
     </div>
 </clr-modal>
