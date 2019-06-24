@@ -1,5 +1,5 @@
-export class Eleve {
-
+export class Eleve
+{
     idEleve: number;
     prenom: string;
     nom: string;
@@ -7,32 +7,20 @@ export class Eleve {
     genre: number;
     avatar: string;
 
-
-    constructor();
-
-
-
-    
-
-
-    constructor(id: number = null, prenom: string = null, nom: string = null, genre: number = null, avatar: string = null) {
-
+    constructor(
+        id: number = null,
+        prenom: string = null,
+        nom: string = null,
+        dateNaissance: Date = null,
+        genre: number = null,
+        avatar: string = null)
+    {
         this.idEleve = id;
         this.prenom = prenom
         this.nom = nom
-        this.dateNaissance = new Date();
+        this.dateNaissance = dateNaissance;
         this.genre = genre;
         this.avatar = avatar;
 
     }
-
-
-
-
-
-
-
-
-
-
 }
