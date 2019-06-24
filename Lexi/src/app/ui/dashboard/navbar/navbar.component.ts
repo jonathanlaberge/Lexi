@@ -11,10 +11,17 @@ import { Router } from '@angular/router';
     })
 export class NavbarComponent implements OnInit
 {
-    isAdmin = false;
-    eleveConnected = false;
-    name = null;
-    showLoginModal = false;
+    isAdmin: boolean = false;
+    eleveConnected: boolean = false;
+    showLoginModal: boolean = false;
+
+    errorServer: boolean = false;
+    errorLogin: boolean = false;
+
+    name: string = null;
+
+    loginPassword: string = null;
+    loginIsReady: boolean = false;
 
     routeSubscription: Subscription;
 
@@ -26,7 +33,7 @@ export class NavbarComponent implements OnInit
         this.eleveConnected = RoutingService.eleveConnected;
         this.name = `${APIService.currentMaitresse.prenom} ${APIService.currentMaitresse.nom}`;
 
-        this.routeSubscription = RoutingService.routeSubject.subscribe((/*route: any[]*/) => 
+        this.routeSubscription = RoutingService.routeSubject.subscribe(() => 
         {
             this.isAdmin = RoutingService.adminMode;
             this.eleveConnected = RoutingService.eleveConnected;
@@ -50,8 +57,38 @@ export class NavbarComponent implements OnInit
 
     SubmitAdminMode()
     {
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-        this.router.navigate(['/tableaudebord']);
+        var args = { motdepasse: this.loginPassword };
+
+        this.apiService.Mode(args).subscribe(
+            (data: any) =>
+            {
+                if (data.token != null)
+                {
+                    APIService.token = data.token;
+                    localStorage.setItem('token', JSON.stringify(APIService.token));
+                    RoutingService.adminMode = true;
+                    RoutingService.eleveConnected = false;
+                    RoutingService.SetRouteToAdmin();
+                    this.errorServer = false;
+                    this.loginIsReady = true;
+                    this.router.navigate(['/tableaudebord']);
+                }
+                else
+                {
+                    this.errorServer = true;
+                    this.loginIsReady = true;
+                }
+                
+            },
+            error =>
+            {
+                if (error.status == 401)
+                    this.errorLogin = true;
+                else
+                    this.errorServer = true;
+
+                this.loginIsReady = true;
+            });
     }
 
     GoToElevePortail()

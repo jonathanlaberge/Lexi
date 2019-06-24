@@ -109,7 +109,7 @@
             </div>
         </div>
         <p>Pour s'enregister, remplisser ce formulaire.</p>
-        <form class="login" clrForm [formGroup]="registerForm" (ngSubmit)="submitRegister()">
+        <form class="login" clrForm [formGroup]="registerForm">
             <clr-input-container>
                 <label>Utilisateur</label>
                 <input placeholder="Email de connection" clrInput type="email" formControlName="email" name="Utilisateur" required />
@@ -157,10 +157,11 @@
                     <label for="btn-radio-2">Femme</label>
                 </div>
             </div>
-            <button type="submit" class="btn btn-success">S'enregistrer</button>
         </form>
+        <br />
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="isRegisterModalOpen = false">Annuler</button>
+        <button type="button" class="btn" (click)="isRegisterModalOpen = false">Annuler</button>
+        <button type="submit" class="btn btn-success" (click)="submitRegister()">S'enregistrer</button>
     </div>
 </clr-modal>

@@ -25,16 +25,44 @@
                 <a (click)="Logout()" clrDropdownItem>Se Déconnecter</a>
             </clr-dropdown-menu>
         </clr-dropdown>
+        <div *ngIf="eleveConnected">
+            {{name}}
+        </div>
     </div>
 </header>
 <clr-modal [(clrModalOpen)]="showLoginModal">
     <h3 class="modal-title">Reconnection en tant que maitresse</h3>
     <div class="modal-body">
-        <p>Veuiller entrer le mot de passe de <b>{{name}}</b> pour continuer.</p>
-        <clr-input-container>
-            <span class="label">Mot de passe</span>
-            <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
-        </clr-input-container>
+        <div class="alert alert-danger" role="alert" [hidden]="!errorLogin">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Le mot de passe ou le email est éronné.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Il y a eu une erreur lors de la connection. Veuillez réessayer plus tard.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <span>Veuiller entrer le mot de passe de <b>{{name}}</b> pour continuer.</span>
+            <clr-input-container>
+                <span class="label">Mot de passe</span>
+                <input clrInput placeholder="Mot de passe" type="password" [(ngModel)]="loginPassword" name="motdepasse" autocomplete="off" />
+            </clr-input-container>
+        <br />
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline" (click)="showLoginModal = false">Annuler</button>

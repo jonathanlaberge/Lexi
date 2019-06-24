@@ -4,6 +4,7 @@ import { NavbarComponent } from './navbar.component';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from '@clr/angular';
+import { FormsModule } from '@angular/forms';
 
 @NgModule(
     {
@@ -13,6 +14,7 @@ import { ClarityModule } from '@clr/angular';
             CommonModule,
             BrowserAnimationsModule,
             ClarityModule,
+            FormsModule
         ],
         exports: [NavbarComponent]
     })
