@@ -12,6 +12,7 @@ export const API_URL = "http://lexi.jolab.me/v1/";
     })
 export class APIService
 {
+
     private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
 
     public static currentMaitresse: Maitresse = null;
@@ -90,8 +91,11 @@ export class APIService
     }
 
 
+    AddEleve(eleve: Eleve) {
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}admin/user/creation`, JSON.stringify(eleve), this.options);
 
-
+    }
 
 
 
