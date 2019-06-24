@@ -1,0 +1,12 @@
+
+
+    /* Style the links inside the navigation bar */
+    .topright button {
+        float: right;
+        text-align: center;
+
+    }
+
+.card-media-block {
+    height: 64px;
+}

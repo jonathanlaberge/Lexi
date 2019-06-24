@@ -81,6 +81,13 @@ export class APIService
     }
 
 
+    public EditEleve(eleve: Eleve) {
+
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}admin/user/${eleve.idEleve}`, JSON.stringify(eleve), this.options);
+
+
+    }
 
 
 

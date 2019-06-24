@@ -1,3 +1,140 @@
-<p>
-  eleve works!
-</p>
+
+
+<router-outlet></router-outlet>
+
+
+<div class="topright">
+    <button class="btn btn-success content" [routerLink]="['creation']">Ajouter un élève.</button>
+    <h1>Liste des élèves</h1>
+
+
+</div>
+
+
+
+
+
+
+
+
+<clr-datagrid>
+    <clr-dg-column>Action</clr-dg-column>
+    <clr-dg-column>ID de l'élève</clr-dg-column>
+    <clr-dg-column>Prenom</clr-dg-column>
+    <clr-dg-column>Nom</clr-dg-column>
+    <clr-dg-column>Date de naissance</clr-dg-column>
+    <clr-dg-column>Genre</clr-dg-column>
+    <clr-dg-column>Avatar</clr-dg-column>
+
+
+    <clr-dg-row *clrDgItems="let item of elevesList; let index = index">
+
+
+        <clr-dg-cell>
+
+
+            <clr-button-group class="btn-primary btn-icon">
+
+
+
+                <clr-button [clrInMenu]="true" (click)="onEdit(item)">Modifier</clr-button>
+                <clr-button [clrInMenu]="true" (click)="onDelete(item)">Effacer</clr-button>
+                <clr-button [clrInMenu]="true" (click)="history(item)">Historique</clr-button>
+                <clr-button [clrInMenu]="true" (click)="pickPlayList(item)">Choisir liste de questions</clr-button>
+
+
+
+            </clr-button-group>
+
+
+
+
+
+
+
+
+        </clr-dg-cell>
+        <clr-dg-cell>{{item.idEleve}}</clr-dg-cell>
+        <clr-dg-cell>{{item.prenom}}</clr-dg-cell>
+        <clr-dg-cell>{{item.nom }}</clr-dg-cell>
+        <clr-dg-cell>{{item.dateNaissance | date}}</clr-dg-cell>
+        <clr-dg-cell>{{item.genre == 1 ? "Homme" : "Femme"}}</clr-dg-cell>
+        <clr-dg-cell><img class="card-media-block" [src]="item.avatar"></clr-dg-cell>
+
+    </clr-dg-row>
+
+    <clr-dg-footer>
+
+
+
+        <clr-dg-pagination #pagination [clrDgPageSize]="10">
+            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Élèves par page</clr-dg-page-size>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+            of {{pagination.totalItems}} élèves
+        </clr-dg-pagination>
+
+
+
+    </clr-dg-footer>
+</clr-datagrid>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<clr-modal [(clrModalOpen)]="isEditModalOpen" *ngIf="selectedEleve != null">
+    <h3 class="modal-title">Modification de {{selectedEleve.prenom}} {{selectedEleve.nom}}</h3>
+    <div class="modal-body">
+
+        <p>Pour s'enregister, remplisser ce formulaire.</p>
+        <form class="login" clrForm [formGroup]="modifyForm" (ngSubmit)="submitRegister()">
+            <div class="login-group">
+                <clr-input-container>
+                    <label>Prenom</label>
+                    <input clrInput type="text" formControlName="prenom" name="Prenom" value="{{selectedEleve.prenom}}" required />
+                    <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
+                </clr-input-container>
+
+                <clr-input-container>
+                    <label>Nom</label>
+                    <input clrInput type="text" formControlName="nom" name="Nom" value="{{selectedEleve.nom}}" required />
+                    <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
+                </clr-input-container>
+
+                <clr-input-container>
+                    <label>Date de Naissance</label>
+                    <input clrInput type="date" formControlName="dateNaissance" name="Date de naissance" />
+                </clr-input-container>
+
+
+                <br />
+                <div class="btn-group">
+                    <div class="radio btn">
+                        <input formControlName="genre" value="1" type="radio" name="genre" id="btn-radio-1" [checked]="selectedEleve.genre === 1">
+                        <label for="btn-radio-1">Homme</label>
+                    </div>
+                    <div class="radio btn">
+                        <input formControlName="genre" value="0" type="radio" name="genre" id="btn-radio-2" [checked]="selectedEleve.genre === 0">
+                        <label for="btn-radio-2">Femme</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="isEditModalOpen = false">Annuller</button>
+        <button type="button" class="btn btn-success" (click)="modifyForm()">Modifier</button>
+    </div>
+</clr-modal>

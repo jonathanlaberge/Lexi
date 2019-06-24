@@ -8,10 +8,14 @@ export class Eleve {
     avatar: string;
 
 
+    constructor();
 
 
 
-    constructor(id: number, prenom: string, nom: string, genre: number, avatar: string) {
+    
+
+
+    constructor(id: number = null, prenom: string = null, nom: string = null, genre: number = null, avatar: string = null) {
 
         this.idEleve = id;
         this.prenom = prenom
@@ -21,6 +25,11 @@ export class Eleve {
         this.avatar = avatar;
 
     }
+
+
+
+
+
 
 
 
