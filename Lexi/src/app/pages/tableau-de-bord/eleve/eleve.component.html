@@ -1,20 +1,10 @@
 
-
 <router-outlet></router-outlet>
-
 
 <div class="topright">
     <button class="btn btn-success content" [routerLink]="['creation']">Ajouter un élève.</button>
     <h1>Liste des élèves</h1>
-
-
 </div>
-
-
-
-
-
-
 
 
 <clr-datagrid>
@@ -28,31 +18,13 @@
 
 
     <clr-dg-row *clrDgItems="let item of elevesList; let index = index">
-
-
         <clr-dg-cell>
-
-
             <clr-button-group class="btn-primary btn-icon">
-
-
-
                 <clr-button [clrInMenu]="true" (click)="onEdit(item)">Modifier</clr-button>
                 <clr-button [clrInMenu]="true" (click)="onDelete(item)">Effacer</clr-button>
                 <clr-button [clrInMenu]="true" (click)="history(item)">Historique</clr-button>
                 <clr-button [clrInMenu]="true" (click)="pickPlayList(item)">Choisir liste de questions</clr-button>
-
-
-
             </clr-button-group>
-
-
-
-
-
-
-
-
         </clr-dg-cell>
         <clr-dg-cell>{{item.idEleve}}</clr-dg-cell>
         <clr-dg-cell>{{item.prenom}}</clr-dg-cell>
@@ -60,37 +32,15 @@
         <clr-dg-cell>{{item.dateNaissance | date}}</clr-dg-cell>
         <clr-dg-cell>{{item.genre == 1 ? "Homme" : "Femme"}}</clr-dg-cell>
         <clr-dg-cell><img class="card-media-block" [src]="item.avatar"></clr-dg-cell>
-
     </clr-dg-row>
-
     <clr-dg-footer>
-
-
-
         <clr-dg-pagination #pagination [clrDgPageSize]="10">
             <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Élèves par page</clr-dg-page-size>
             {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
             of {{pagination.totalItems}} élèves
         </clr-dg-pagination>
-
-
-
     </clr-dg-footer>
 </clr-datagrid>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -142,5 +92,19 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="isEditModalOpen = false">Annuller</button>
         <button type="button" class="btn btn-success" (click)="editEleve()">Modifier</button>
+    </div>
+</clr-modal>
+
+
+
+
+<clr-modal [(clrModalOpen)]="isDeleteModalOpen" *ngIf="selectedEleve != null">
+    <h3 class="modal-title">Éffacer</h3>
+    <div class="modal-body">
+        <p>Vouler-vous vraiment éffacer {{selectedEleve.prenom}} {{selectedEleve.nom}} ? </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="isDeleteModalOpen = false">Annuler</button>
+        <button type="button" class="btn btn-primary" (click)="deleteEleve(selectedEleve.idEleve)">Effacer</button>
     </div>
 </clr-modal>

@@ -37,12 +37,13 @@ export class EleveComponent implements OnInit {
     elevesList: Eleve[] = [];
 
     isEditModalOpen: boolean = false;
-
+    isDeleteModalOpen: boolean = false;
 
     modifyForm: FormGroup;
 
     
-    successRegister: boolean = false;
+    successEdit: boolean = false;
+    successDelete: boolean = false;
 
     errorRegisterServer: boolean = false;
    
@@ -123,7 +124,7 @@ export class EleveComponent implements OnInit {
             this.apiService.EditEleve(eleve).subscribe(
                 (data: any) => {
                     if (data.code == 200) {
-                        this.successRegister = true;
+                        this.successEdit = true;
                         this.isEditModalOpen = false;
                     }
                     else
@@ -147,13 +148,53 @@ export class EleveComponent implements OnInit {
 
 
 
+
+
     onDelete(user: Eleve) {
 
-        
+        this.selectedEleve = user;
+        this.isDeleteModalOpen = true;
         console.log("id selectionné delete " + user.idEleve);
+
+    }
+
+
+
+    deleteEleve(idEleve: number) {
+
+        this.apiService.DeleteEleve(idEleve).subscribe(
+            (data: any) => {
+                if (data.code == 200) {
+                    this.successDelete = true;
+                    this.isDeleteModalOpen = false;
+                }
+                else
+                    this.errorRegisterServer = true;
+            },
+            error => {
+                if (error.status == 401)
+                    this.errorRegisterServer = true;
+                else
+                    this.errorRegisterServer = true;
+            });
+
+
+
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
        onHistory(user: Eleve) {
 
 
