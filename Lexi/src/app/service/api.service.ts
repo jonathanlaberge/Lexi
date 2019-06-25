@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Maitresse } from '../model/maitresse';
 import { Eleve } from '../model/eleve';
+import { Categorie } from '../model/categorie';
 
 export const API_URL = "http://lexi.jolab.me/v1/";
 
@@ -12,6 +13,8 @@ export const API_URL = "http://lexi.jolab.me/v1/";
     })
 export class APIService
 {
+    
+
 
 
     private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
@@ -75,7 +78,8 @@ export class APIService
         this.SetHeader();
         return this.httpClient.post(`${API_URL}compte/mode`, JSON.stringify(obj), this.options);
     }
-    
+
+    // ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES
     public GetEleveList()
     {
         this.SetHeader();
@@ -106,4 +110,25 @@ export class APIService
     }
 
 
+
+    /// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES
+
+
+
+    public GetCategorieList() {
+        this.SetHeader();
+        return this.httpClient.get(`${API_URL}admin/categorie/liste`, this.options);
+    }
+
+
+    EditCategorie(categorie: Categorie) {
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}admin/categorie/${categorie.idCategorie}`, JSON.stringify(categorie), this.options);
+    }
+
+
+    DeleteCategorie(idCategorie: number) {
+        this.SetHeader();
+        return this.httpClient.delete(`${API_URL}admin/categorie/${idCategorie}`, this.options);
+    }
 }
