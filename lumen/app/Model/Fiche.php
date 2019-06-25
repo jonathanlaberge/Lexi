@@ -6,6 +6,9 @@ class Fiche
     public $idFiche;
     public $idCategorie;
     public $idMaitresseCreatrice;
+    public $estPublic;
+    public $maitresseNom;
+    public $maitressePrenom;
 
     public $titre;
     public $dateCreation;
@@ -13,25 +16,25 @@ class Fiche
     //public $listeEleve;
 	public $listeQuestion;
 
-    
+
 	function __construct()
 	{
 	}
 
-	public function __set($property, $value)  
-	{  
+	public function __set($property, $value)
+	{
 		if (property_exists($this, $property))
-		{  
-			$this->$property = $value;  
-		}  
+		{
+			$this->$property = $value;
+		}
 	}
 
-	public function __get($property)  
-	{  
+	public function __get($property)
+	{
 		if (property_exists($this, $property))
-		{  
-			return $this->$property;  
-		}  
+		{
+			return $this->$property;
+		}
 	}
  }
 

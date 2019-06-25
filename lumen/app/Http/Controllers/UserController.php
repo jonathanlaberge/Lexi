@@ -5,6 +5,7 @@ use App\Model\Fiche;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -12,31 +13,29 @@ class UserController extends Controller
     {
 		$this->middleware('auth');
     }
-    
+
     public function FicheValidation(Request $request)
     {
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////historique
-		if (!$request->has(['idFiche', 'idCategorie', 'listeQuestion']))
-			return response()->json(["code" => "400", "message" => "Missing Parameter"], 400);
-		
-		if (!$request->filled(['idFiche', 'idCategorie', 'listeQuestion']))
-			return response()->json(["code" => "400", "message" => "Unfilled Parameter"], 400);
-		
-		$idCategorie = $request->input('idCategorie');
-		$IdFiche = $request->input('IdFiche') ;
-		$questionACorriger = json_decode($request->input('listeQuestion'));
-		
+        $body = json_decode($request->getContent());
+
+        $idEleve = JWTAuth::parseToken()->getPayload()["IdEleveEnCours"];
+
+		if(!isset($body->idFiche, $body->idCategorie, $body->listeQuestion))
+            return response()->json(['code' => 400 ,'message' => 'Invalid Parameter'], 400);
+
+		$questionACorriger = $body->listeQuestion;
+
 		$questions = DB::select('
-			SELECT idQuestion, bonneReponse 
-			FROM question 
-			JOIN fiche ON question.idFiche = fiche.idFiche AND 
-			question.idCategorie = fiche.idCategorie 
+			SELECT idQuestion, bonneReponse
+			FROM question
+			JOIN fiche ON question.idFiche = fiche.idFiche AND
+			question.idCategorie = fiche.idCategorie
 			WHERE  question.idFiche = ? AND
-			question.idCategorie = ?', [$IdFiche,$idCategorie]);
+			question.idCategorie = ?', [$body->idFiche,$body->idCategorie]);
 
 
 		$bonnesReponses = array();
-		foreach ($questions as $question) 
+		foreach ($questions as $question)
 		{
 			$bonnesReponses[$question->idQuestion] = $question->bonneReponse;
 		}
@@ -47,10 +46,8 @@ class UserController extends Controller
 
 		if (count($questionACorriger) <= count($questions))
 		{
-			for ($i = 0; $i < count($questionACorriger); $i++) 
+			for ($i = 0; $i < count($questionACorriger); $i++)
 			{
-			
-
 				if (questionACorriger[$i] == $questions[$i]->bonneReponse)
 				{
 					$reponseBool[$i] = true;
@@ -60,7 +57,43 @@ class UserController extends Controller
 					$nombreErreur++;
 					$reponseBool[$i] = false;
 				}
-			}
+            }
+
+        $historique = DB::select('
+            SELECT `nombreTentative`, `erreurMax`, `erreurMin`
+            FROM `historique`
+            WHERE idFiche =? AND
+            idCategorie =? AND
+            idEleve =?', [$body->idFiche, $body->idCategorie, $idEleve]);
+
+            if ($historique != null)
+            {
+                DB::update('
+                    UPDATE `historique` SET
+                    `nombreTentative`=?,`erreurMax`=?,`erreurMin`=?
+                    WHERE idFiche =? AND
+                    idCategorie =? AND
+                    idEleve =?', [
+                        $historique[0]->nombreTentative + 1,
+                        max($historique[0]->erreurMax, $nombreErreur),
+                        min($historique[0]->erreurMin, $nombreErreur),
+                        $body->idFiche,
+                        $body->idCategorie,
+                        $idEleve]);
+            }
+            else
+            {
+                DB::update('
+                    INSERT INTO `historique`
+                    (`idEleve`, `idFiche`, `idCategorie`, `nombreTentative`, `erreurMax`, `erreurMin`)
+                    VALUES (?,?,?,?,?,?)', [
+                        $idEleve,
+                        $body->idFiche,
+                        $body->idCategorie,
+                        1,
+                        $nombreErreur,
+                        $nombreErreur]);
+            }
 
 			return response()->json(
 				['correction' => $reponseBool],
@@ -69,33 +102,41 @@ class UserController extends Controller
 		}
 		else
 		{
-			return response()->json(["code" => "400", "message" => "Le nombre de réponse nest pas équivalent"], 400);
+			return response()->json(["code" => "400", "message" => "Answer Number Mismatch"], 400);
 		}
     }
-    
+
     public function FicheGet(Request $request, $idCategorie, $idFiche)
     {
         if (!$this->IsValidID($idCategorie) || !$this->IsValidID($idFiche))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
-		
-		//////////////////////////////////////SELON LELEVE PLAYLIST
+
+        $idEleve = JWTAuth::parseToken()->getPayload()["IdEleveEnCours"];
+        $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
+
 		$fiche = new Fiche();
-		
+
 		$result = DB::select('
-			SELECT * FROM `fiche`
-			where `idFiche` = ? AND
-			`idCategorie` = ?',[$idFiche ,$idCategorie]);
-		
-		if ($result == null) 
+            SELECT `fiche`.`idFiche`, `fiche`.`idCategorie`, `titre`, `dateCreation`, `estPublic`, `maitresse`.`prenom`, `maitresse`.`nom` FROM `fiche`
+            JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
+            JOIN `fiche_a_remplir` ON `fiche_a_remplir`.`idFiche` = `fiche`.`idFiche` AND `fiche_a_remplir`.`idCategorie` = `fiche`.`idCategorie`
+			WHERE `fiche`.`idFiche` =? AND
+            `fiche`.`idCategorie` =? AND
+            `fiche_a_remplir`.`idEleve` =? AND
+            `fiche_a_remplir`.`idMaitresse` =?',[$idFiche ,$idCategorie, $idEleve, $idMaitresse]);
+
+		if ($result == null)
 		{
 			return response()->json(["code" => "404", "message" => "Data Not Found"], 404);
 		}
-		
+
 		$fiche->idFiche = $result[0]->idFiche;
 		$fiche->idCategorie = $result[0]->idCategorie;
 		$fiche->titre = $result[0]->titre;
 		$fiche->dateCreation = $result[0]->dateCreation;
-		$fiche->idMaitresseCreatrice = $result[0]->idMaitresseCreatrice;
+		$fiche->estPublic = $result[0]->estPublic;
+		$fiche->maitresseNom = $result[0]->nom;
+		$fiche->maitressePrenom = $result[0]->prenom;
 
 
 		$fiche->listeQuestion = DB::select("
@@ -103,45 +144,46 @@ class UserController extends Controller
 			FROM `question`
 			WHERE `idFiche`=? AND
 			`idCategorie`=?", [$idFiche ,$idCategorie]);
-			
+
 		 return response()->json($fiche, 200);
     }
-    
-    public function FicheGetList(Request $request, $page = null)
+
+    public function FicheGetList(Request $request, $page = 1)
     {
 		if (!$this->IsValidID($page))
-			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
-		
-		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
+            return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
-		//////////////////////////////////////SELON LELEVE PLAYLIST
+		$idEleve = JWTAuth::parseToken()->getPayload()["IdEleveEnCours"];
+        $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 
 		return response()->json(DB::select('
-			SELECT * 
-			FROM `fiche` 
-			WHERE wwwwwwwwwwwwwwwww//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			LIMIT ?,30',[($page * 30) - 30]), 200);
+			SELECT `fiche`.`idFiche`, `fiche`.`idCategorie`, `titre`, `dateCreation`, `estPublic`, `maitresse`.`prenom`, `maitresse`.`nom` FROM `fiche`
+            JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
+            JOIN `fiche_a_remplir` ON `fiche_a_remplir`.`idFiche` = `fiche`.`idFiche` AND `fiche_a_remplir`.`idCategorie` = `fiche`.`idCategorie`
+			WHERE `fiche_a_remplir`.`idEleve` =? AND
+            `fiche_a_remplir`.`idMaitresse` =?
+			LIMIT ?,30',[$idEleve, $idMaitresse, ($page * 30) - 30]), 200);
     }
-    
-    public function Historique(Request $request, $page = null)
+
+    public function Historique(Request $request, $page = 1)
     {
 		$idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
-		
+
 		if ($idEleve == 0)
 			return response()->json(["code" => "403", "message" => "No student selected"], 403);
-		
+
 		if (!$this->IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		return response()->json(DB::select('SELECT * FROM `historique` WHERE idEleve = ? LIMIT ?,30',[$idEleve, ($page * 30) - 30]), 200);
-		
+
     }
-    
+
 	private function IsValidID($var)
     {
 		if ($var <= 0 || $var > 2147483647 || $var == null)
 			return false;
 
-		return true; 
+		return true;
     }
 }

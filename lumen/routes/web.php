@@ -12,14 +12,14 @@
 */
 use Illuminate\Http\Response;
 
-$router->get('/', function () use ($router) 
+$router->get('/', function () use ($router)
 {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'v1'], function () use ($router) 
+$router->group(['prefix' => 'v1'], function () use ($router)
 {
-    $router->group(['prefix' => 'compte'], function () use ($router) 
+    $router->group(['prefix' => 'compte'], function () use ($router)
 	{
 		$router->post('connection', 'AccountController@Connection');
 		$router->post('enregistrement', 'AccountController@Enregistrement');
@@ -27,10 +27,10 @@ $router->group(['prefix' => 'v1'], function () use ($router)
 		$router->get('profil[/{idMaitresse:[0-9]+}]', 'AccountController@ProfilGet');
 		$router->post('profil', 'AccountController@ProfilUpdate');
 	});
-	
-    $router->group(['prefix' => 'admin'], function () use ($router) 
+
+    $router->group(['prefix' => 'admin'], function () use ($router)
 	{
-		$router->group(['prefix' => 'fiches'], function () use ($router) 
+		$router->group(['prefix' => 'fiches'], function () use ($router)
 		{
 			$router->post('creation', 'AdminController@FicheCreation');
 			$router->delete('{idCategorie:[0-9]+}/{idFiche:[0-9+]}', 'AdminController@FicheDelete');
@@ -39,7 +39,7 @@ $router->group(['prefix' => 'v1'], function () use ($router)
 			$router->get('liste[/{page:[0-9]+}]', 'AdminController@FicheGetList');
 			$router->get('liste/{page:[0-9]+}/parcategorie/{idCategorie:[0-9]+}', 'AdminController@FicheGetListCategorie');
 		});
-		$router->group(['prefix' => 'categorie'], function () use ($router) 
+		$router->group(['prefix' => 'categorie'], function () use ($router)
 		{
 			$router->post('creation', 'AdminController@CategorieCreation');
 			$router->delete('{idCategorie:[0-9]+}', 'AdminController@CategorieDelete');
@@ -47,7 +47,7 @@ $router->group(['prefix' => 'v1'], function () use ($router)
 			$router->post('{idCategorie:[0-9]+}', 'AdminController@CategorieSet');
 			$router->get('liste[/{page:[0-9]+}]', 'AdminController@CategorieGetList');
 		});
-		$router->group(['prefix' => 'user'], function () use ($router) 
+		$router->group(['prefix' => 'user'], function () use ($router)
 		{
 			$router->post('creation', 'AdminController@UserCreation');
 			$router->delete('{idEleve:[0-9]+}', 'AdminController@UserDelete');
@@ -59,16 +59,15 @@ $router->group(['prefix' => 'v1'], function () use ($router)
 		});
 		$router->get('historique[/{page:[0-9]+}]', 'AdminController@Historique');
 	});
-	
-    $router->group(['prefix' => 'eleve'], function () use ($router) 
+
+    $router->group(['prefix' => 'eleve'], function () use ($router)
 	{
-		$router->group(['prefix' => 'fiches'], function () use ($router) 
+		$router->group(['prefix' => 'fiches'], function () use ($router)
 		{
 			$router->post('validation', 'UserController@FicheValidation');
 			$router->get('{idCategorie:[0-9]+}/{idFiche:[0-9]+}', 'UserController@FicheGet');
 			$router->get('liste[/{page:[0-9]+}]', 'UserController@FicheGetList');
 			//$router->get('liste/{page:[0-9]+}/parcategorie/{idCategorie:[0-9]+}', 'UserController@FicheGetListCategorie');
-			//$router->get('listedestaches[/{page:[0-9]+}]', 'UserController@FicheGetTODOList');
 		});
 		$router->get('historique[/{page:[0-9]+}]', 'UserController@Historique');
 	});
