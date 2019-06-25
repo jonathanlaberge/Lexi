@@ -99,7 +99,7 @@
     <div class="modal-body">
 
         <p>Pour s'enregister, remplisser ce formulaire.</p>
-        <form class="login" clrForm [formGroup]="modifyForm" (ngSubmit)="submitRegister()">
+        <form class="login" clrForm [formGroup]="modifyForm" (ngSubmit)="editEleve()">
             <div class="login-group">
                 <clr-input-container>
                     <label>Prenom</label>
@@ -115,7 +115,13 @@
 
                 <clr-input-container>
                     <label>Date de Naissance</label>
-                    <input clrInput type="date" formControlName="dateNaissance" name="Date de naissance" />
+                    <input clrInput type="date" formControlName="dateNaissance" name="Date de naissance" [ngModel]="selectedEleve.dateNaissance | date:'yyyy-MM-dd'" />
+                </clr-input-container>
+
+
+                <clr-input-container>
+                    <label>Avatar</label>
+                    <input clrInput type="text" formControlName="avatar" name="Avatar" value="{{selectedEleve.avatar}}"  />
                 </clr-input-container>
 
 
@@ -135,6 +141,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="isEditModalOpen = false">Annuller</button>
-        <button type="button" class="btn btn-success" (click)="modifyForm()">Modifier</button>
+        <button type="button" class="btn btn-success" (click)="editEleve()">Modifier</button>
     </div>
 </clr-modal>

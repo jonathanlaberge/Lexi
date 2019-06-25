@@ -12,15 +12,24 @@ import { Router, ActivatedRoute } from '@angular/router';
     styleUrls: ['./eleve.component.css']
 })
 export class EleveComponent implements OnInit {
-    @ViewChild(ClrForm, { static: true }) editForm;
+
+
+    @ViewChild(ClrForm, { static: true }) editFormValidator;
+
+
+
+
+
     selectedEleve: Eleve = null;
+    isReady: boolean = false;
 
 
     constructor(
         private apiService: APIService,
         private ref: ChangeDetectorRef,
         private formBuilder: FormBuilder,
-        private router: Router
+        private router: Router,
+        private activeRoute: ActivatedRoute
     
     ) { }
 
@@ -48,16 +57,33 @@ export class EleveComponent implements OnInit {
                 prenom: ['', [Validators.required]],
                 nom: ['', [Validators.required]],
                 genre: ['', [Validators.required]],
-                email: ['', [Validators.required, Validators.email]],
-                dateNaissance: ['', []], 
-                motdepasse: ['', [Validators.required, Validators.minLength(8)]]
+                dateNaissance: ['', []],
+                avatar: ['', []]
+               
             });
 
 
-        this.elevesList.push(new Eleve(1, "asd", "arghry", new Date(), 0, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1aSBpq2L6B0P-oKEYFxqF7XvLWVxy2HMYwgxI82A0VQYsiTvB"));
-        this.elevesList.push(new Eleve(2, "sdfga", "aerghrht", new Date(), 1, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmxFiLRiD38eqgv3b72f0ZSCRVU8sLZ8BJdgLPGF7ARcptbBVI"));
-        this.elevesList.push(new Eleve(3, "t4qt4e", "eratghys", new Date(), 0, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFkS-2H6DXvajDpXgKXahuEsel17VoH8-CY38_3NqurBV3T8yQcg"));
-        this.elevesList.push(new Eleve(4, "a4e3t5yrt6u", "earty", new Date(), 1, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcVgREP74Z_WMOP-WhwvyVmz768vqudI8q9PNhEGvPqejPlI38Ig"));
+
+        RoutingService.adminMode = false;
+        RoutingService.SetRouteToEleve();
+
+        this.activeRoute.url.subscribe(() => {
+            if (this.router.url === '/eleve') {
+                RoutingService.eleveConnected = false;
+            }
+            RoutingService.EmitRouteSubject();
+            this.ref.detectChanges();
+        });
+
+        this.apiService.GetEleveList().subscribe((data: any) => {
+            if (data != null)
+                data.forEach(function (value) {
+                    this.elevesList.push(value as Eleve);
+                }.bind(this));
+
+            this.isReady = true;
+            this.ref.detectChanges();
+        });
 
 
     }
@@ -75,18 +101,8 @@ export class EleveComponent implements OnInit {
 
 
     onEdit(user: Eleve) {
-
-
-
-
         this.selectedEleve = user;
-
-        this.modifyForm.value.dateNaissance = user.dateNaissance;
         this.isEditModalOpen = true;
-
-
-
-
         console.log("id selectionné onEdit " + user.idEleve);
  
         }
@@ -94,30 +110,18 @@ export class EleveComponent implements OnInit {
 
 
 
-
-
-
-
-
-
-    modifier() {
-
-
-
-
-
-
-
+    
+    editEleve() {
 
 
         if (this.modifyForm.invalid) {
-            this.editForm.markAsTouched();
+            this.editFormValidator.markAsTouched();
         }
         else {
             var eleve: Eleve = new Eleve();
 
 
-            eleve.idEleve = this.modifyForm.value.idEleve;
+            eleve.idEleve = this.selectedEleve.idEleve;
             eleve.prenom = this.modifyForm.value.prenom;
             eleve.nom = this.modifyForm.value.nom;
             eleve.dateNaissance = this.modifyForm.value.dateNaissance;

@@ -11,8 +11,8 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./eleve-creation.component.css']
 })
 export class EleveCreationComponent implements OnInit {
-    @ViewChild(ClrForm, { static: true }) editForm;
 
+    @ViewChild(ClrForm, { static: true }) addFormValidator;
 
     isAddModalOpen: boolean = true;
 
@@ -75,21 +75,14 @@ export class EleveCreationComponent implements OnInit {
     submitAddForm() {
 
 
-
-
-
-
-
-
-
         if (this.addForm.invalid) {
-            this.editForm.markAsTouched();
+            this.addFormValidator.markAsTouched();
         }
         else {
             var eleve: Eleve = new Eleve();
 
 
-            //eleve.idEleve = this.addForm.value.idEleve;
+          
             eleve.prenom = this.addForm.value.prenom;
             eleve.nom = this.addForm.value.nom;
             eleve.dateNaissance = this.addForm.value.dateNaissance;
