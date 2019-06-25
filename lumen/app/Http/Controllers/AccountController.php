@@ -137,7 +137,7 @@ class AccountController extends Controller
 		DB::insert("
 			INSERT INTO `maitresse`
 			(`email`, `motdepasse`, `prenom`, `nom`)
-			VALUES (?,?,?,?,?,?)",
+			VALUES (?,?,?,?)",
 			[$body->email, $hashed, $body->prenom, $body->nom]);
 
         if(!isset($body->dateNaissance))
