@@ -64,16 +64,7 @@ export class EleveComponent implements OnInit {
 
 
 
-        RoutingService.adminMode = false;
-        RoutingService.SetRouteToEleve();
 
-        this.activeRoute.url.subscribe(() => {
-            if (this.router.url === '/eleve') {
-                RoutingService.eleveConnected = false;
-            }
-            RoutingService.EmitRouteSubject();
-            this.ref.detectChanges();
-        });
 
         this.apiService.GetEleveList().subscribe((data: any) => {
             if (data != null)
