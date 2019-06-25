@@ -5,6 +5,7 @@ use App\Model\Fiche;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -22,9 +23,7 @@ class UserController extends Controller
 		if(!isset($body->idFiche, $body->idCategorie, $body->listeQuestion))
             return response()->json(['code' => 400 ,'message' => 'Invalid Parameter'], 400);
 
-		$idCategorie = $request->input('idCategorie');
-		$idFiche = $request->input('IdFiche') ;
-		$questionACorriger = $body->listeQuestion);
+		$questionACorriger = $body->listeQuestion;
 
 		$questions = DB::select('
 			SELECT idQuestion, bonneReponse
@@ -121,10 +120,10 @@ class UserController extends Controller
             SELECT `fiche`.`idFiche`, `fiche`.`idCategorie`, `titre`, `dateCreation`, `estPublic`, `maitresse`.`prenom`, `maitresse`.`nom` FROM `fiche`
             JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
             JOIN `fiche_a_remplir` ON `fiche_a_remplir`.`idFiche` = `fiche`.`idFiche` AND `fiche_a_remplir`.`idCategorie` = `fiche`.`idCategorie`
-			WHERE `fiche`.`idFiche` = ? AND
-            `fiche`.`idCategorie` = ? AND
-            `fiche_a_remplir`.`idEleve` = ? AND
-            `fiche_a_remplir`.`idMaitresse` = ?',[$idFiche ,$idCategorie, $idEleve, $idMaitresse]);
+			WHERE `fiche`.`idFiche` =? AND
+            `fiche`.`idCategorie` =? AND
+            `fiche_a_remplir`.`idEleve` =? AND
+            `fiche_a_remplir`.`idMaitresse` =?',[$idFiche ,$idCategorie, $idEleve, $idMaitresse]);
 
 		if ($result == null)
 		{
@@ -149,7 +148,7 @@ class UserController extends Controller
 		 return response()->json($fiche, 200);
     }
 
-    public function FicheGetList(Request $request, $page = null)
+    public function FicheGetList(Request $request, $page = 1)
     {
 		if (!$this->IsValidID($page))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
@@ -161,12 +160,12 @@ class UserController extends Controller
 			SELECT `fiche`.`idFiche`, `fiche`.`idCategorie`, `titre`, `dateCreation`, `estPublic`, `maitresse`.`prenom`, `maitresse`.`nom` FROM `fiche`
             JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
             JOIN `fiche_a_remplir` ON `fiche_a_remplir`.`idFiche` = `fiche`.`idFiche` AND `fiche_a_remplir`.`idCategorie` = `fiche`.`idCategorie`
-			WHERE `fiche_a_remplir`.`idEleve` = ? AND
-            `fiche_a_remplir`.`idMaitresse` = ?
+			WHERE `fiche_a_remplir`.`idEleve` =? AND
+            `fiche_a_remplir`.`idMaitresse` =?
 			LIMIT ?,30',[$idEleve, $idMaitresse, ($page * 30) - 30]), 200);
     }
 
-    public function Historique(Request $request, $page = null)
+    public function Historique(Request $request, $page = 1)
     {
 		$idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
 
