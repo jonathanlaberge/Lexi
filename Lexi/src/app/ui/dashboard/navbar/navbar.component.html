@@ -25,9 +25,9 @@
                 <a (click)="Logout()" clrDropdownItem>Se Déconnecter</a>
             </clr-dropdown-menu>
         </clr-dropdown>
-        <div *ngIf="eleveConnected">
-            {{name}}
-        </div>
+        <a *ngIf="eleveConnected" class="nav-link">
+            <span class="nav-text">{{name}}</span>
+        </a>
     </div>
 </header>
 <clr-modal [(clrModalOpen)]="showLoginModal">

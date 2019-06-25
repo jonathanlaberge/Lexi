@@ -1,6 +1,19 @@
-<div class="card-body">
-    <h5 class="card-title">Question 1</h5>
-    <div id="picker1">
-        <div id="pickerNumber1" class="ui-slider-handle custom-handle"></div>
+<div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
+    <div class="card">
+        <div class="card-header">
+            <span class="label label-info">{{curseurID}}</span>
+            {{question}}
+        </div>
+        <div *ngIf="answers.length != 0" class="card-block">
+            <div *ngFor="let answer of answers; let index = index" class="card-text">
+                <span class="badge badge-primary">{{index + 1}}</span>{{answer}}
+                <hr *ngIf="answers.length != (index + 1)" />
+            </div>
+        </div>
+        <div class="card-footer">
+            <div [attr.id]="'picker' + curseurID">
+                <div [attr.id]="'pickerNumber' + curseurID" class="ui-slider-handle custom-handle"></div>
+            </div>
+        </div>
     </div>
 </div>
