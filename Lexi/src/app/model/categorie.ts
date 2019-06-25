@@ -10,4 +10,10 @@ export class Categorie {
 
 
 
+
+
+
+    constructor() {  }
+
+
 }

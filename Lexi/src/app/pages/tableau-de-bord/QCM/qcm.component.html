@@ -1,3 +1,248 @@
-<p>
-  qcm works!
-</p>
+
+<clr-datagrid>
+    <clr-dg-column>Action</clr-dg-column>
+
+    <clr-dg-column>Nom</clr-dg-column>
+    <clr-dg-column>Matière</clr-dg-column>
+    <clr-dg-column>Niveau</clr-dg-column>
+    <clr-dg-column>Est privé</clr-dg-column>
+    <clr-dg-column>Créé par</clr-dg-column>
+
+
+    <clr-dg-row *clrDgItems="let item of categoryList; let index = index">
+        <clr-dg-cell>
+            <clr-button-group class="btn-primary btn-icon">
+                <clr-button [clrInMenu]="true" (click)="onEdit(item)">Modifier</clr-button>
+                <clr-button [clrInMenu]="true" (click)="onDelete(item)">Effacer</clr-button>
+
+            </clr-button-group>
+        </clr-dg-cell>
+
+        <clr-dg-cell>{{item.nom}}</clr-dg-cell>
+        <clr-dg-cell>{{item.matiere }}</clr-dg-cell>
+        <clr-dg-cell>{{item.niveau}}</clr-dg-cell>
+        <clr-dg-cell>{{item.estPublic == 1 ? "Oui" : "Non"}}</clr-dg-cell>
+        <clr-dg-cell>{{item.idMaitresseCreatrice}}</clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>
+        <clr-dg-pagination #pagination [clrDgPageSize]="10">
+            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Catégories par page</clr-dg-page-size>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+            of {{pagination.totalItems}} {{pagination.totalItems == 1 ? "catégorie" : "catégories"}}
+        </clr-dg-pagination>
+    </clr-dg-footer>
+</clr-datagrid>
+
+
+
+
+
+
+
+
+<!-- --- modal de edit -->
+<clr-modal [(clrModalOpen)]="isEditModalOpen" *ngIf="selectedCategorie != null">
+    <h3 class="modal-title">Modification de {{selectedCategorie.nom}}</h3>
+    <div class="modal-body">
+
+
+        <form clrForm clrForm [formGroup]="modifyCategorieForm">
+            
+                <clr-input-container>
+                    <label>nom</label>
+                    <input clrInput type="text" formControlName="nom" name="Nom" value="{{selectedCategorie.nom}}" required />
+                    <clr-control-error *clrIfError="'required'">Le nom est obligatoire</clr-control-error>
+                </clr-input-container>
+
+                <clr-input-container>
+                    <label>Matiere</label>
+                    <input clrInput type="text" formControlName="matiere" name="Matiere" value="{{selectedCategorie.matiere}}"  />
+                </clr-input-container>
+
+                <clr-input-container>
+                    <label>Niveau</label>
+                    <input clrInput type="text" formControlName="niveau" name="Niveau" value="{{selectedCategorie.niveau}}" />
+                </clr-input-container>
+
+
+
+                <div class="btn-group">
+                <div class="radio btn">
+                    <input formControlName="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1" [checked]="selectedCategorie.estPublic === 1">
+                    <label for="btn-radio-1">Oui</label>
+                </div>
+                <div class="radio btn">
+                    <input formControlName="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2" [checked]="selectedCategorie.estPublic === 0">
+                    <label for="btn-radio-2">Non</label>
+                </div>
+            </div>
+
+
+
+
+
+            
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="isEditModalOpen = false">Annuller</button>
+        <button type="button" class="btn btn-success" (click)="editCategorie()">Modifier</button>
+    </div>
+</clr-modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<clr-modal [(clrModalOpen)]="isDeleteModalOpen" *ngIf="selectedCategorie != null">
+    <h3 class="modal-title">Éffacer</h3>
+    <div class="modal-body">
+        <p>Vouler-vous vraiment éffacer ?
+        <br>
+        Cette action n'est pas reversible et supprimera tous les qurestions associés à cette categorie.? </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="isDeleteModalOpen = false">Annuler</button>
+        <button type="button" class="btn btn-primary" (click)="deleteCategorie()">Effacer</button>
+    </div>
+</clr-modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<clr-datagrid>
+    <clr-dg-column>Action</clr-dg-column>
+    <clr-dg-column>ID de l'élève</clr-dg-column>
+    <clr-dg-column>Prenom</clr-dg-column>
+    <clr-dg-column>Nom</clr-dg-column>
+    <clr-dg-column>Date de naissance</clr-dg-column>
+    <clr-dg-column>Genre</clr-dg-column>
+    <clr-dg-column>Avatar</clr-dg-column>
+
+
+    <clr-dg-row *clrDgItems="let item of elevesList; let index = index">
+        <clr-dg-cell>
+            <clr-button-group class="btn-primary btn-icon">
+                <clr-button [clrInMenu]="true" (click)="onEdit(item)">Modifier</clr-button>
+                <clr-button [clrInMenu]="true" (click)="onDelete(item)">Effacer</clr-button>
+                <clr-button [clrInMenu]="true" (click)="history(item)">Historique</clr-button>
+                <clr-button [clrInMenu]="true" (click)="pickPlayList(item)">Choisir liste de questions</clr-button>
+            </clr-button-group>
+        </clr-dg-cell>
+        <clr-dg-cell>{{item.idEleve}}</clr-dg-cell>
+        <clr-dg-cell>{{item.prenom}}</clr-dg-cell>
+        <clr-dg-cell>{{item.nom }}</clr-dg-cell>
+        <clr-dg-cell>{{item.dateNaissance | date}}</clr-dg-cell>
+        <clr-dg-cell>{{item.genre == 1 ? "Homme" : "Femme"}}</clr-dg-cell>
+        <clr-dg-cell><img class="card-media-block" [src]="item.avatar"></clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>
+        <clr-dg-pagination #pagination [clrDgPageSize]="10">
+            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Élèves par page</clr-dg-page-size>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+            of {{pagination.totalItems}} élèves
+        </clr-dg-pagination>
+    </clr-dg-footer>
+</clr-datagrid>
+    -->
