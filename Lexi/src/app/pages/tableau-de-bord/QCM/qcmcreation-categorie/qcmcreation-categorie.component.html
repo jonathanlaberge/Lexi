@@ -1,3 +1,59 @@
-<p>
-  qcmcreation-categorie works!
-</p>
+
+<div class="modal">
+    <div class="modal-dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="Close" class="close" type="button">
+                    <clr-icon aria-hidden="true" shape="close"></clr-icon>
+                </button>
+                <h3 class="modal-title">Création d'élève</h3>
+                <div class="modal-body">
+
+                    <p>Ajouter une catégorie</p>
+                    <form class="login" clrForm [formGroup]="addCategorieForm" (ngSubmit)="submitAddCategorieForm()">
+                        <div class="login-group">
+                            <clr-input-container>
+
+
+                                <clr-input-container>
+                                    <label>Nom</label>
+                                    <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
+                                    <clr-control-error *clrIfError="'required'">Le nom est obligatoire</clr-control-error>
+                                </clr-input-container>
+
+
+                                <clr-input-container>
+                                    <label>Matiere</label>
+                                    <input clrInput type="text" formControlName="matiere" name="Matiere" placeholder="Matiere" required />
+                                    <clr-control-error *clrIfError="'required'">La matière est obligatoire</clr-control-error>
+                                </clr-input-container>
+
+
+
+
+                                <clr-input-container>
+                                    <label>Niveau</label>
+                                    <input clrInput type="text" formControlName="niveau" name="Niveau" placeholder="Niveau" />
+à
+                                </clr-input-container>
+
+                                <clr-input-container>
+                                    <label>Publique</label>
+                                    <input clrInput type="text" formControlName="estPublic" name="Public" placeholder="Public" required />
+                                    <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
+                                </clr-input-container>
+
+à
+</div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="cancel()">Annuler</button>
+                    <button type="button" class="btn btn-success" (click)="submitAddCategorieForm()">Ajouter</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

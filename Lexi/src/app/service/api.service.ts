@@ -13,6 +13,7 @@ export const API_URL = "http://lexi.jolab.me/v1/";
     })
 export class APIService
 {
+
     
 
 
@@ -131,4 +132,16 @@ export class APIService
         this.SetHeader();
         return this.httpClient.delete(`${API_URL}admin/categorie/${idCategorie}`, this.options);
     }
+
+    GetFicheList(idCategorie: number) {
+        this.SetHeader();
+        return this.httpClient.get(`${API_URL}admin/fiches/liste/1/parcategorie/${idCategorie}`, this.options);
+    }
+
+
+
+
+
+
+
 }

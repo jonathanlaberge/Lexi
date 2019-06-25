@@ -4,6 +4,7 @@ import { APIService } from 'src/app/service/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClrForm } from '@clr/angular';
+import { Fiche } from 'src/app/model/fiche';
 
 @Component({
     selector: 'app-qcm',
@@ -15,15 +16,24 @@ export class QCMComponent implements OnInit {
 
 
     selectedCategorie: Categorie = null;
+    selectedFiche: Fiche = null;
 
-
+    fichesList: Fiche[] = [];
     categoryList: Categorie[] = [];
-
+    selectedCategorieRow: Categorie = null;
 
     isReady: boolean = false;
     isEditModalOpen: boolean = false;
     isDeleteModalOpen: boolean = false;
 
+
+
+    isFicheEditModalOpen: boolean = false;
+    isFicheDeleteModalOpen: boolean = false;
+
+
+
+    modifyFicheForm: FormGroup;
     modifyCategorieForm: FormGroup;
 
 
@@ -33,8 +43,7 @@ export class QCMComponent implements OnInit {
 
 
 
-
-
+    
 
 
     constructor(
@@ -46,12 +55,7 @@ export class QCMComponent implements OnInit {
     ) { }
 
     // liste des qcm du prof dispinibe
-
-
-
-
-
-
+    
 
     ngOnInit() {
 
@@ -66,7 +70,7 @@ export class QCMComponent implements OnInit {
             this.ref.detectChanges();
         });
 
-
+        
 
 
         this.modifyCategorieForm = this.formBuilder.group(
@@ -82,21 +86,30 @@ export class QCMComponent implements OnInit {
 
 
 
+    setSelectedselectedCategorieRow(item: Categorie) {
 
+        this.selectedCategorieRow = item;
+        console.log(item.idCategorie);
+
+
+        this.apiService.GetFicheList(/* numeros de page, */item.idCategorie).subscribe((data: any) => {
+            if (data != null)
+                data.forEach(function (value) {
+         
+                    this.fichesList.push(value as Categorie);
+                }.bind(this));
+
+            this.isReady = true;
+            this.ref.detectChanges();
+        });
+    }
 
 
 
     onEdit(categorie: Categorie) {
-
-
         console.log("GetCategorieList ", categorie.idCategorie);
-
-
-
         this.selectedCategorie = categorie;
-
         this.isEditModalOpen = true;
-
     }
 
 
@@ -180,12 +193,20 @@ export class QCMComponent implements OnInit {
                 else
                     this.errorRegisterServer = true;
             });
-
-
-
-
-
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
