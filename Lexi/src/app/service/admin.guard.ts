@@ -33,13 +33,14 @@ export class AdminGuard implements CanActivate
                 APIService.currentMaitresse = JSON.parse(localStorage.getItem('maitresseInfo')) as Maitresse;
                 APIService.token = JSON.parse(localStorage.getItem('token'));
 
-                if (APIService.IsTokenInAdminMode())
-                {
-                    RoutingService.isLoggedIn = true;
-                    RoutingService.adminMode = true;
-                    RoutingService.SetRouteToAdmin();
-                    return true;
-                }
+                if (!APIService.IsTokenExpired())
+                    if (APIService.IsTokenInAdminMode())
+                    {
+                        RoutingService.isLoggedIn = true;
+                        RoutingService.adminMode = true;
+                        RoutingService.SetRouteToAdmin();
+                        return true;
+                    }
             }
 
             RoutingService.Logout(false);

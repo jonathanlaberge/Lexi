@@ -19,13 +19,7 @@ export class EleveGuard implements CanActivate
     {
         if (RoutingService.isLoggedIn == true && !APIService.IsTokenExpired())
         {
-            if (APIService.IsTokenInEleveMode())
-                return true;
-            else
-            {
-                this.router.navigate(['/tableaudebord']);
-                return false;
-            }
+            return true;
         }
         else
         {
@@ -34,40 +28,41 @@ export class EleveGuard implements CanActivate
                 APIService.currentMaitresse = JSON.parse(localStorage.getItem('maitresseInfo')) as Maitresse;
                 APIService.token = JSON.parse(localStorage.getItem('token'));
 
-                if (APIService.IsTokenInEleveMode())
+                if (!APIService.IsTokenExpired())
                 {
-                    RoutingService.isLoggedIn = true;
-                    RoutingService.adminMode = false;
-                    RoutingService.SetRouteToEleve();
-
-                    this.activeRoute.url.subscribe(() =>
+                    if (APIService.IsTokenInEleveMode())
                     {
-                        if (this.router.url != '/eleve')
-                        {
-                            RoutingService.eleveConnected = true;
-                        }
-                    });
+                        RoutingService.isLoggedIn = true;
+                        RoutingService.adminMode = false;
+                        RoutingService.SetRouteToEleve();
 
-                    return true;
-                }
-                else
-                {
-                    this.router.navigate(['/tableaudebord']);
-                    return false;
+                        this.activeRoute.url.subscribe(() =>
+                        {
+                            if (this.router.url != '/eleve')
+                            {
+                                RoutingService.eleveConnected = true;
+                            }
+                        });
+
+                        return true;
+                    }
+                    else
+                    {
+                        this.router.navigate(['/tableaudebord']);
+                        return false;
+                    }
                 }
             }
-            else
-            {
-                RoutingService.Logout(false);
-                this.router.navigate(['/connection'],
+
+            RoutingService.Logout(false);
+            this.router.navigate(['/connection'],
+                {
+                    queryParams:
                     {
-                        queryParams:
-                        {
-                            return: state.url
-                        }
-                    });
-                return false;
-            }
+                        return: state.url
+                    }
+                });
+            return false;
         }
     }
 
