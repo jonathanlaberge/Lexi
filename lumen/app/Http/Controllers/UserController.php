@@ -33,7 +33,7 @@ class UserController extends Controller
 			question.idCategorie = fiche.idCategorie
 			WHERE  question.idFiche =? AND
 			question.idCategorie =?', [$body->idFiche,$body->idCategorie]);
-			
+
 		if ($questions == null)
 			return response()->json(["code" => "404", "message" => "Data Not Found"], 404);
 
@@ -97,11 +97,11 @@ class UserController extends Controller
                         $nombreErreur,
                         $nombreErreur]);
             }
-			
+
 			if ($nombreErreur == 0)
 				DB::delete('
 					DELETE FROM `fiche_a_remplir`
-					WHERE `idFiche` =? AND `idCategorie` =? AND `idMaitresse` =? AND `idEleve` =? ', 
+					WHERE `idFiche` =? AND `idCategorie` =? AND `idMaitresse` =? AND `idEleve` =? ',
 					[$body->idFiche, $body->idCategorie, $idMaitresse, $idEleve]);
 
 			return response()->json(
@@ -154,7 +154,7 @@ class UserController extends Controller
 			WHERE `idFiche`=? AND
 			`idCategorie`=?", [$idFiche ,$idCategorie]);
 
-		 return response()->json($fiche, 200);
+		return response()->json($fiche, 200);
     }
 
     public function FicheGetList(Request $request, $page = 1)
@@ -173,7 +173,7 @@ class UserController extends Controller
             `fiche_a_remplir`.`idMaitresse` =?
 			LIMIT ?,30',[$idEleve, $idMaitresse, ($page * 30) - 30]), 200);
     }
-	
+
     public function FicheGetListCategorie(Request $request, $page, $idCategorie)
     {
 		if (!$this->IsValidID($page) || !$this->IsValidID($idCategorie))

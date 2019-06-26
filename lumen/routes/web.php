@@ -47,15 +47,15 @@ $router->group(['prefix' => 'v1'], function () use ($router)
 			$router->post('{idCategorie:[0-9]+}', 'AdminController@CategorieSet');
 			$router->get('liste[/{page:[0-9]+}]', 'AdminController@CategorieGetList');
 		});
-		$router->group(['prefix' => 'user'], function () use ($router)
+		$router->group(['prefix' => 'eleve'], function () use ($router)
 		{
 			$router->post('creation', 'AdminController@UserCreation');
 			$router->delete('{idEleve:[0-9]+}', 'AdminController@UserDelete');
 			$router->get('{idEleve:[0-9]+}', 'AdminController@UserGet');
-			//$router->post('{idEleve:[0-9]+}', 'AdminController@UserSet');
+			$router->post('{idEleve:[0-9]+}', 'AdminController@UserSet');
 			$router->get('liste[/{page:[0-9]+}]', 'AdminController@UserGetList');
-			//$router->get('{idEleve:[0-9]+}/listedestaches', 'AdminController@FicheGetTODOList');
-			//$router->post('{idEleve:[0-9]+}/listedestaches', 'AdminController@FicheSetTODOList');
+			$router->get('{idEleve:[0-9]+}/listeafaire', 'AdminController@UserGetTODOList');
+			$router->post('{idEleve:[0-9]+}/listeafaire', 'AdminController@UserSetTODOList');
 		});
 		$router->get('historique[/{page:[0-9]+}]', 'AdminController@Historique');
 	});
