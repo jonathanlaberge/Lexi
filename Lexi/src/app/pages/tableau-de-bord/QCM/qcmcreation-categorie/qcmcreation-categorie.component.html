@@ -12,7 +12,7 @@
                     <p>Ajouter une catégorie</p>
                     <form class="login" clrForm [formGroup]="addCategorieForm" (ngSubmit)="submitAddCategorieForm()">
                         <div class="login-group">
-                            <clr-input-container>
+                            
 
 
                                 <clr-input-container>
@@ -34,7 +34,7 @@
                                 <clr-input-container>
                                     <label>Niveau</label>
                                     <input clrInput type="text" formControlName="niveau" name="Niveau" placeholder="Niveau" />
-à
+                                    
                                 </clr-input-container>
 
                                 <clr-input-container>
@@ -43,8 +43,7 @@
                                     <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
                                 </clr-input-container>
 
-à
-</div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
