@@ -19,6 +19,7 @@ class UserController extends Controller
         $body = json_decode($request->getContent());
 
         $idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
+        $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 
 		if(!isset($body->idFiche, $body->idCategorie, $body->listeQuestion))
             return response()->json(['code' => 400 ,'message' => 'Invalid Parameter'], 400);
@@ -96,6 +97,12 @@ class UserController extends Controller
                         $nombreErreur,
                         $nombreErreur]);
             }
+			
+			if ($nombreErreur == 0)
+				DB::delete('
+					DELETE FROM `fiche_a_remplir`
+					WHERE `idFiche` =? AND `idCategorie` =? AND `idMaitresse` =? AND `idEleve` =? ', 
+					[$body->idFiche, $body->idCategorie, $idMaitresse, $idEleve]);
 
 			return response()->json(
 				['correction' => $reponseBool,
@@ -165,6 +172,24 @@ class UserController extends Controller
 			WHERE `fiche_a_remplir`.`idEleve` =? AND
             `fiche_a_remplir`.`idMaitresse` =?
 			LIMIT ?,30',[$idEleve, $idMaitresse, ($page * 30) - 30]), 200);
+    }
+	
+    public function FicheGetListCategorie(Request $request, $page, $idCategorie)
+    {
+		if (!$this->IsValidID($page) || !$this->IsValidID($idCategorie))
+            return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
+
+		$idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
+        $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
+
+		return response()->json(DB::select('
+			SELECT `fiche`.`idFiche`, `fiche`.`idCategorie`, `titre`, `dateCreation`, `estPublic`, `maitresse`.`prenom`, `maitresse`.`nom` FROM `fiche`
+            JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
+            JOIN `fiche_a_remplir` ON `fiche_a_remplir`.`idFiche` = `fiche`.`idFiche` AND `fiche_a_remplir`.`idCategorie` = `fiche`.`idCategorie`
+			WHERE `fiche_a_remplir`.`idEleve` =? AND
+            `fiche_a_remplir`.`idMaitresse` =? AND
+			`fiche`.`idCategorie` =?
+			LIMIT ?,30',[$idEleve, $idMaitresse, $idCategorie, ($page * 30) - 30]), 200);
     }
 
     public function Historique(Request $request, $page = 1)
