@@ -1,1 +1,27 @@
+<clr-datagrid>
 
+    <clr-dg-column>Titre</clr-dg-column>
+    <clr-dg-column>Date de création</clr-dg-column>
+    <clr-dg-column>Nom de maitressse</clr-dg-column>
+    <clr-dg-column></clr-dg-column>
+
+
+    <clr-dg-row *clrDgItems="let item of ficheList; let index = index"  (click)="setSelectedFiche(item)">
+
+
+        <clr-dg-cell>{{item.titre}} <clr-icon shape="tasks" class="has-alert is-solid"></clr-icon></clr-dg-cell>
+        <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell>
+        <clr-dg-cell>{{item.prenom}} {{item.nom}}</clr-dg-cell>
+        <clr-dg-cell>
+            <clr-icon style="transform: rotate(90deg); width: 36px; height: 36px;" shape="circle-arrow" class="is-solid  is-success "></clr-icon>
+        </clr-dg-cell>
+
+    </clr-dg-row>
+    <clr-dg-footer>
+        <clr-dg-pagination #pagination [clrDgPageSize]="10">
+            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Élèves par page</clr-dg-page-size>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+            of {{pagination.totalItems}} {{pagination.totalItems == 1 ? "élève" : "élèves"}}
+        </clr-dg-pagination>
+    </clr-dg-footer>
+</clr-datagrid>
