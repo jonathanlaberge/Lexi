@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         $body = json_decode($request->getContent());
 
-        $idEleve = JWTAuth::parseToken()->getPayload()["IdEleveEnCours"];
+        $idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
 
 		if(!isset($body->idFiche, $body->idCategorie, $body->listeQuestion))
             return response()->json(['code' => 400 ,'message' => 'Invalid Parameter'], 400);
@@ -30,9 +30,11 @@ class UserController extends Controller
 			FROM question
 			JOIN fiche ON question.idFiche = fiche.idFiche AND
 			question.idCategorie = fiche.idCategorie
-			WHERE  question.idFiche = ? AND
-			question.idCategorie = ?', [$body->idFiche,$body->idCategorie]);
-
+			WHERE  question.idFiche =? AND
+			question.idCategorie =?', [$body->idFiche,$body->idCategorie]);
+			
+		if ($questions == null)
+			return response()->json(["code" => "404", "message" => "Data Not Found"], 404);
 
 		$bonnesReponses = array();
 		foreach ($questions as $question)
@@ -48,7 +50,7 @@ class UserController extends Controller
 		{
 			for ($i = 0; $i < count($questionACorriger); $i++)
 			{
-				if (questionACorriger[$i] == $questions[$i]->bonneReponse)
+				if ($questionACorriger[$i] == $questions[$i]->bonneReponse)
 				{
 					$reponseBool[$i] = true;
 				}
@@ -59,12 +61,12 @@ class UserController extends Controller
 				}
             }
 
-        $historique = DB::select('
-            SELECT `nombreTentative`, `erreurMax`, `erreurMin`
-            FROM `historique`
-            WHERE idFiche =? AND
-            idCategorie =? AND
-            idEleve =?', [$body->idFiche, $body->idCategorie, $idEleve]);
+			$historique = DB::select('
+				SELECT `nombreTentative`, `erreurMax`, `erreurMin`
+				FROM `historique`
+				WHERE idFiche =? AND
+				idCategorie =? AND
+				idEleve =?', [$body->idFiche, $body->idCategorie, $idEleve]);
 
             if ($historique != null)
             {
@@ -96,9 +98,9 @@ class UserController extends Controller
             }
 
 			return response()->json(
-				['correction' => $reponseBool],
-				['nombreErreur'=> $nombreErreur],
-				['bonnesReponses'=> $bonnesReponses], 200);
+				['correction' => $reponseBool,
+				'nombreErreur'=> $nombreErreur,
+				'bonnesReponses'=> $bonnesReponses], 200);
 		}
 		else
 		{
@@ -111,7 +113,7 @@ class UserController extends Controller
         if (!$this->IsValidID($idCategorie) || !$this->IsValidID($idFiche))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
-        $idEleve = JWTAuth::parseToken()->getPayload()["IdEleveEnCours"];
+        $idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
         $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 
 		$fiche = new Fiche();
@@ -153,7 +155,7 @@ class UserController extends Controller
 		if (!$this->IsValidID($page))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
-		$idEleve = JWTAuth::parseToken()->getPayload()["IdEleveEnCours"];
+		$idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
         $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 
 		return response()->json(DB::select('

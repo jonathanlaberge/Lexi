@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, AfterViewIni
 import $ from 'jquery';
 import 'jquery-ui-dist/jquery-ui';
 import { DomSanitizer } from '@angular/platform-browser';
+import { QCMColor } from 'src/app/model/qcm-color.enum';
 
 @Component(
     {
@@ -12,10 +13,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class CurseurSimpleComponent implements OnInit, OnDestroy, AfterViewInit
 {
     @Input()
-    curseurID: number = 1;
+    curseurID: number = 1; //TODO: Cannot change after view init.
 
     @Input()
-    answerMax: number = 3;
+    answerMax: number = 3; //TODO: Cannot change after view init.
 
     @Input()
     useDots: boolean = false;
@@ -24,10 +25,50 @@ export class CurseurSimpleComponent implements OnInit, OnDestroy, AfterViewInit
     question: string = null;
 
     @Input()
-    answers: string[] = [];
-
+    answers: string[] = []; //TODO: Cannot change after view init.
+    
     @Output()
     valueChanged = new EventEmitter<number>();
+
+    @Input()
+    set color(color: QCMColor)
+    {
+        switch (color)
+        {
+            case QCMColor.Green:
+                $("#picker"+ this.curseurID).css("background-color", "green");
+                $("#pickerNumber"+ this.curseurID).css("border-color", "green");
+                $("#pickerNumber"+ this.curseurID).css("color", "green");
+                break;
+
+            case QCMColor.Red:
+                $("#picker"+ this.curseurID).css("background-color", "red");
+                $("#pickerNumber"+ this.curseurID).css("border-color", "red");
+                $("#pickerNumber"+ this.curseurID).css("color", "red");
+                break;
+
+            default:
+                $("#picker"+ this.curseurID).css("background-color", "black");
+                $("#pickerNumber"+ this.curseurID).css("border-color", "black");
+                $("#pickerNumber"+ this.curseurID).css("color", "black");
+                break;
+        }
+    }
+
+    @Input()
+    set disable(isDisabled: boolean)
+    {
+        switch (isDisabled)
+        {
+            case true:
+                $("#picker" + this.curseurID).slider("disable");
+                break;
+
+            default:
+                $("#picker" + this.curseurID).slider("enable");
+                break;
+        }
+    }
 
     constructor(private sanitizer: DomSanitizer) { }
 
