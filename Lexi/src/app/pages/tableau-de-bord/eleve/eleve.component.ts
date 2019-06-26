@@ -38,9 +38,9 @@ export class EleveComponent implements OnInit
     {
         this.editForm = this.formBuilder.group(
             {
-                prenom: ['', [Validators.required]],
-                nom: ['', [Validators.required]],
-                genre: ['', [Validators.required]],
+                prenom: [ [Validators.required]],
+                nom: [ [Validators.required]],
+                genre: [ [Validators.required]],
                 dateNaissance: ['', []],
                 avatar: ['', []]
 
