@@ -3,6 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Rout
 import { Observable } from 'rxjs';
 import { RoutingService } from './routing.service';
 import { APIService } from './api.service';
+import { Maitresse } from '../model/maitresse';
 
 @Injectable({
     providedIn: 'root'
@@ -27,6 +28,20 @@ export class AdminGuard implements CanActivate
         }
         else
         {
+            if (localStorage.getItem('maitresseInfo') != null && localStorage.getItem('token') != null)
+            {
+                APIService.currentMaitresse = JSON.parse(localStorage.getItem('maitresseInfo')) as Maitresse;
+                APIService.token = JSON.parse(localStorage.getItem('token'));
+
+                if (APIService.IsTokenInAdminMode())
+                {
+                    RoutingService.isLoggedIn = true;
+                    RoutingService.adminMode = true;
+                    RoutingService.SetRouteToAdmin();
+                    return true;
+                }
+            }
+
             RoutingService.Logout(false);
             this.router.navigate(['/connection'],
                 {

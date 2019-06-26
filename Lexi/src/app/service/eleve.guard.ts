@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { RoutingService } from './routing.service';
 import { APIService } from './api.service';
+import { Maitresse } from '../model/maitresse';
 
 @Injectable(
     {
@@ -10,7 +11,7 @@ import { APIService } from './api.service';
     })
 export class EleveGuard implements CanActivate
 {
-    constructor(private router: Router) { }
+    constructor(private router: Router, private activeRoute: ActivatedRoute) { }
 
     canActivate(
         next: ActivatedRouteSnapshot,
@@ -18,19 +19,55 @@ export class EleveGuard implements CanActivate
     {
         if (RoutingService.isLoggedIn == true && !APIService.IsTokenExpired())
         {
-            return true;
+            if (APIService.IsTokenInEleveMode())
+                return true;
+            else
+            {
+                this.router.navigate(['/tableaudebord']);
+                return false;
+            }
         }
         else
         {
-            RoutingService.Logout(false);
-            this.router.navigate(['/connection'],
+            if (localStorage.getItem('maitresseInfo') != null && localStorage.getItem('token') != null)
+            {
+                APIService.currentMaitresse = JSON.parse(localStorage.getItem('maitresseInfo')) as Maitresse;
+                APIService.token = JSON.parse(localStorage.getItem('token'));
+
+                if (APIService.IsTokenInEleveMode())
                 {
-                    queryParams:
+                    RoutingService.isLoggedIn = true;
+                    RoutingService.adminMode = false;
+                    RoutingService.SetRouteToEleve();
+
+                    this.activeRoute.url.subscribe(() =>
                     {
-                        return: state.url
-                    }
-                });
-            return false;
+                        if (this.router.url != '/eleve')
+                        {
+                            RoutingService.eleveConnected = true;
+                        }
+                    });
+
+                    return true;
+                }
+                else
+                {
+                    this.router.navigate(['/tableaudebord']);
+                    return false;
+                }
+            }
+            else
+            {
+                RoutingService.Logout(false);
+                this.router.navigate(['/connection'],
+                    {
+                        queryParams:
+                        {
+                            return: state.url
+                        }
+                    });
+                return false;
+            }
         }
     }
 
