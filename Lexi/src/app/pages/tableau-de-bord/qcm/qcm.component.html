@@ -1,4 +1,13 @@
 
+
+<router-outlet></router-outlet>
+
+
+
+
+
+
+
 <div class="topright">
     <button class="btn btn-success content" [routerLink]="['creationcategorie']">Ajouter une categorie.</button>
     <h1>Gestion des questionnaires</h1>
@@ -17,8 +26,7 @@
 
 
     <clr-dg-row *clrDgItems="let item of categoryList; let index = index"
-                (click)="setSelectedselectedCategorieRow(item)"
-               >
+                (click)="setSelectedselectedCategorieRow(item)">
         <clr-dg-cell>
             <clr-button-group class="btn-primary btn-icon">
                 <clr-button [clrInMenu]="true" (click)="onEdit(item)">Modifier</clr-button>
@@ -154,5 +162,5 @@
                 of {{pagination.totalItems}} {{pagination.totalItems == 1 ? "fiche" : "fiches"}}
             </clr-dg-pagination>
         </clr-dg-footer>
-        </div>
+    </div>
 </clr-datagrid>

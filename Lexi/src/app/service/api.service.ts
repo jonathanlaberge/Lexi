@@ -4,6 +4,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Maitresse } from '../model/maitresse';
 import { Eleve } from '../model/eleve';
 import { Categorie } from '../model/categorie';
+import { Fiche } from '../model/fiche';
 
 export const API_URL = "http://lexi.jolab.me/v1/";
 
@@ -137,6 +138,34 @@ export class APIService
         this.SetHeader();
         return this.httpClient.get(`${API_URL}admin/fiches/liste/${page}/parcategorie/${idCategorie}`, this.options);
     }
+
+
+
+
+    AddCategorie(categorie: Categorie) {
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}admin/categorie/creation`, JSON.stringify(categorie), this.options);
+
+    }
+/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayLis /// PlayList/// PlayList/// PlayList/// PlayList
+
+
+
+    GetPlaylist() {
+        this.SetHeader();
+        return this.httpClient.get(`${API_URL}eleve/fiches/liste`, this.options);
+
+    }
+
+
+
+    Postvalidation(fiche : Fiche) {
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}eleve/fiches/validation`, this.options);
+
+    }
+
+
 
 
 
