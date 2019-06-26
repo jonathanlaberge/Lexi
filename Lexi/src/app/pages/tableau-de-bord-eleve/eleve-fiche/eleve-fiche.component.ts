@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { APIService } from 'src/app/service/api.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { RoutingService } from 'src/app/service/routing.service';
+import { Fiche } from 'src/app/model/fiche';
+import { FicheDTO } from 'src/app/model/dto/ficheDTO';
 
 @Component(
     {
@@ -12,7 +14,27 @@ import { RoutingService } from 'src/app/service/routing.service';
 export class EleveFicheComponent implements OnInit
 {
 
-    constructor(private router: Router, private apiService: APIService) { }
+    selectedFiche: FicheDTO = new FicheDTO();
+    ficheList: FicheDTO[] = [];
+    isReady: boolean = false;
+
+
+
+
+
+
+    constructor(
+        private apiService: APIService,
+        private ref: ChangeDetectorRef,
+        private router: Router,
+        private activeRoute: ActivatedRoute
+
+    ) { }
+
+
+
+
+
 
     ngOnInit()
     {
@@ -22,7 +44,33 @@ export class EleveFicheComponent implements OnInit
 
         if (!APIService.IsTokenInEleveMode())
             this.router.navigate(['/eleve']);
+
+
+
+        this.apiService.GetPlaylist().subscribe((data: any) => {
+            if (data != null)
+                data.forEach(function (value) {
+                    this.ficheList.push(value as FicheDTO);
+                }.bind(this));
+
+            this.isReady = true;
+            this.ref.detectChanges();
+        });
+
+
+
+
+
     }
 
+    setSelectedFiche(fiche: FicheDTO) {
 
+        this.selectedFiche = fiche;
+        console.log("selected idCategorie " + this.selectedFiche.idCategorie + "\n    selected idfiche " + this.selectedFiche.idFiche);
+
+
+        this.router.navigate(['/eleve/qcm', this.selectedFiche.idCategorie, this.selectedFiche.idFiche]);
+
+
+    }
 }

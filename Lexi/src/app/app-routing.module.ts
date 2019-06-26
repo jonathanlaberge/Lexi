@@ -80,6 +80,10 @@ const routes: Routes =
                         component: EleveQCMComponent
                     },
                     {
+                        path: 'qcm/:idCategorie/:idFiche',
+                        component: EleveQCMComponent
+                    },
+                    {
                         path: 'historique',
                         component: EleveHistoriqueComponent
                     },
