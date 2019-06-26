@@ -92,7 +92,7 @@ export class QCMComponent implements OnInit {
         console.log(item.idCategorie);
 
 
-        this.apiService.GetFicheList(/* numeros de page, */item.idCategorie).subscribe((data: any) => {
+        this.apiService.GetFicheList(1,item.idCategorie).subscribe((data: any) => {
             if (data != null)
                 data.forEach(function (value) {
          

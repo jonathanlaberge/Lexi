@@ -133,9 +133,9 @@ export class APIService
         return this.httpClient.delete(`${API_URL}admin/categorie/${idCategorie}`, this.options);
     }
 
-    GetFicheList(idCategorie: number) {
+    GetFicheList(page: number,idCategorie: number) {
         this.SetHeader();
-        return this.httpClient.get(`${API_URL}admin/fiches/liste/1/parcategorie/${idCategorie}`, this.options);
+        return this.httpClient.get(`${API_URL}admin/fiches/liste/${page}/parcategorie/${idCategorie}`, this.options);
     }
 
 
