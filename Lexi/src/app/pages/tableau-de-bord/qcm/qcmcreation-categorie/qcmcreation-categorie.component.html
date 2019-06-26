@@ -1,47 +1,63 @@
 
+
+
 <div class="modal">
     <div class="modal-dialog" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
-                <button aria-label="Close" class="close" type="button">
+                <button aria-label="Close" class="close" (click)="cancel()" type="button">
                     <clr-icon aria-hidden="true" shape="close"></clr-icon>
                 </button>
-                <h3 class="modal-title">Création d'élève</h3>
+                <h3 class="modal-title">Création de catégorie</h3>
                 <div class="modal-body">
 
                     <p>Ajouter une catégorie</p>
                     <form class="login" clrForm [formGroup]="addCategorieForm" (ngSubmit)="submitAddCategorieForm()">
                         <div class="login-group">
-                            
-
-
-                                <clr-input-container>
-                                    <label>Nom</label>
-                                    <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
-                                    <clr-control-error *clrIfError="'required'">Le nom est obligatoire</clr-control-error>
-                                </clr-input-container>
-
-
-                                <clr-input-container>
-                                    <label>Matiere</label>
-                                    <input clrInput type="text" formControlName="matiere" name="Matiere" placeholder="Matiere" required />
-                                    <clr-control-error *clrIfError="'required'">La matière est obligatoire</clr-control-error>
-                                </clr-input-container>
 
 
 
+                            <clr-input-container>
+                                <label>Nom</label>
+                                <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
+                                <clr-control-error *clrIfError="'required'">Le nom est obligatoire</clr-control-error>
+                            </clr-input-container>
 
-                                <clr-input-container>
-                                    <label>Niveau</label>
-                                    <input clrInput type="text" formControlName="niveau" name="Niveau" placeholder="Niveau" />
-                                    
-                                </clr-input-container>
 
-                                <clr-input-container>
-                                    <label>Publique</label>
-                                    <input clrInput type="text" formControlName="estPublic" name="Public" placeholder="Public" required />
-                                    <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
-                                </clr-input-container>
+                            <clr-input-container>
+                                <label>Matiere</label>
+                                <input clrInput type="text" formControlName="matiere" name="Matiere" placeholder="Matiere" required />
+                                <clr-control-error *clrIfError="'required'">La matière est obligatoire</clr-control-error>
+                            </clr-input-container>
+
+
+
+
+                            <clr-input-container>
+                                <label>Niveau</label>
+                                <input clrInput type="text" formControlName="niveau" name="Niveau" placeholder="Niveau" />
+
+                            </clr-input-container>
+
+
+                            <label>Est public: </label>
+                            <br>
+
+                            <div class="btn-group" >
+
+                               
+                                <div class="radio btn">
+                                    <input formControlName="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1">
+                                    <label for="btn-radio-1">Oui</label>
+                                </div>
+                                <div class="radio btn">
+                                    <input formControlName="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2">
+                                    <label for="btn-radio-2">Non</label>
+                                </div>
+                            </div>
+
+
+
 
                         </div>
                     </form>
