@@ -102,6 +102,13 @@ a.label:focus {
     margin-left: auto;
 }
 
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    text-align: center;
+}
+
 .pull-right {
     float: right !important;
 }

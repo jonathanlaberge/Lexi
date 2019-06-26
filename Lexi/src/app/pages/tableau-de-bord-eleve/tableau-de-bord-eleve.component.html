@@ -17,10 +17,12 @@
                 </div>
             </div>
             <div *ngIf="IsShowingPortail()" class="clr-row">
-                <span *ngIf="!isReady" class="spinner spinner-lg center">
-                    Loading...
-                </span>
-                <div *ngIf="isReady"  class="clr-row" style="width:100%">
+                <div *ngIf="!isReady" class="center">
+                    <span class="spinner spinner-lg">
+                        Chargement...
+                    </span>
+                </div>
+                <div *ngIf="isReady" class="clr-row" style="width:100%">
                     <div class="card-list" *ngFor="let item of elevesList; let index = index">
                         <a (click)="SelectEleve(item.idEleve)" class="card clickable">
                             <div class="card-header">
