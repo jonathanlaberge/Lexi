@@ -622,13 +622,13 @@ class AdminController extends Controller
 
 		if ($page == 0)
 			return response()->json(DB::select('
-				SELECT `eleve`.`idEleve`, `classe_eleve_maitresse`.`idMaitresse`, `prenom`, `nom`, `genre`, `avatar`
+				SELECT `eleve`.`idEleve`, `classe_eleve_maitresse`.`idMaitresse`, `prenom`, `nom`, `genre`, `avatar`, `dateNaissance`
 				FROM `eleve`
 				JOIN `classe_eleve_maitresse` ON `classe_eleve_maitresse`.`idEleve` = `eleve`.`idEleve`
 				WHERE `classe_eleve_maitresse`.`idMaitresse` =?',[$idMaitresse]), 200);
 			
 		return response()->json(DB::select('
-			SELECT `eleve`.`idEleve`, `classe_eleve_maitresse`.`idMaitresse`, `prenom`, `nom`, `genre`, `avatar`
+			SELECT `eleve`.`idEleve`, `classe_eleve_maitresse`.`idMaitresse`, `prenom`, `nom`, `genre`, `avatar`, `dateNaissance`
 			FROM `eleve`
             JOIN `classe_eleve_maitresse` ON `classe_eleve_maitresse`.`idEleve` = `eleve`.`idEleve`
             WHERE `classe_eleve_maitresse`.`idMaitresse` =?
