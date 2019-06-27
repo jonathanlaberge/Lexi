@@ -1,2 +1,23 @@
-<curseur-simple curseurID="1" [answers]="answers" (valueChanged)="test($event,1)"></curseur-simple>
-<curseur-simple curseurID="2" [color]="testcolor" (valueChanged)="test($event,2)"></curseur-simple>
+
+
+<button (click)="validation()" [attr.disabled]="isDesable? true : null" class="btn btn-success"><clr-icon shape="success-standard" class="is-solid "></clr-icon>Valider</button>
+
+
+<div *ngFor="let item of listQuestion; let index = index">
+
+
+    <curseur-simple class="clr-col" *ngIf="item.choixDeReponses[0] != 'useDot' " [curseurID]="item.idQuestion" [answers]="item.choixDeReponses" (valueChanged)="validationDesSliders($event,item.idQuestion)"></curseur-simple>
+
+    <curseur-simple class="clr-col" *ngIf="item.choixDeReponses[0] == 'useDot' " [curseurID]="item.idQuestion" [useDots]="'true'" (valueChanged)="validationDesSliders($event,item.idQuestion)" [color]="'color[item.idQuestion-1]'"></curseur-simple>
+
+
+
+</div>
+
+
+
+<button (click)="validation()" [attr.disabled]="isDesable? true : null" class="btn btn-success"><clr-icon shape="success-standard" class="is-solid "></clr-icon>Valider</button>
+
+
+
+

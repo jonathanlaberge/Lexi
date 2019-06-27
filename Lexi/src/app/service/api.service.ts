@@ -151,6 +151,10 @@ export class APIService
 
 
 
+    GetFicheQuestion(idCategorie: number, idFiche: number) {
+        this.SetHeader();
+        return this.httpClient.get(`${API_URL}eleve/fiches/${idCategorie}/${idFiche}`, this.options);
+    }
 
 
 
