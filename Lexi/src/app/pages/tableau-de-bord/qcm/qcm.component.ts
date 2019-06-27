@@ -59,7 +59,7 @@ export class QCMComponent implements OnInit {
 
     ngOnInit() {
 
-        this.apiService.GetCategorieList().subscribe((data: any) => {
+        this.apiService.GetCategorieList(0).subscribe((data: any) => {
             if (data != null)
                 data.forEach(function (value) {
                     console.log("GetCategorieList ", value as Categorie);

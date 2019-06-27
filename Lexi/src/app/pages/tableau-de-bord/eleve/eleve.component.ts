@@ -28,6 +28,7 @@ export class EleveComponent implements OnInit
 
     errorRegisterServer: boolean = false;
     isReady: boolean = false;
+    isLoading: boolean = false;
     
     constructor(
         private apiService: APIService,
@@ -46,13 +47,13 @@ export class EleveComponent implements OnInit
 
             });
 
-        this.GetEleveList();
+        this.GetEleveList(1);
     }
 
-    GetEleveList()
+    GetEleveList(page: number)
     {
         this.isReady = false;
-        this.apiService.GetEleveList().subscribe((data: any) =>
+        this.apiService.GetEleveList(page).subscribe((data: any) =>
         {
             if (data != null)
                 data.forEach(function (value)
@@ -66,6 +67,11 @@ export class EleveComponent implements OnInit
         });
     }
 
+    DatagridRefresh($event)
+    {
+
+    }
+
     OnEdit(eleve: Eleve)
     {
         this.selectedEleve = eleve;
@@ -74,7 +80,7 @@ export class EleveComponent implements OnInit
                 prenom: eleve.prenom,
                 nom: eleve.nom,
                 genre: eleve.genre,
-                dateNaissance: eleve.dateNaissance.getDate(),
+                //dateNaissance: eleve.dateNaissance.getDate(),
                 avatar: eleve.avatar
 
             });

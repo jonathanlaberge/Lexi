@@ -35,7 +35,7 @@ export class TableauDeBordEleveComponent implements OnInit
             this.ref.detectChanges();
         });
 
-        this.apiService.GetEleveList().subscribe((data: any) =>
+        this.apiService.GetEleveList(0).subscribe((data: any) =>
         {
             if (data != null)
                 data.forEach(function (value)

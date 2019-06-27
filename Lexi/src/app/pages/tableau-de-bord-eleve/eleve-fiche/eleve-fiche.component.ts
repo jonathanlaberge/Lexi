@@ -47,7 +47,7 @@ export class EleveFicheComponent implements OnInit
 
 
 
-        this.apiService.GetPlaylist().subscribe((data: any) => {
+        this.apiService.GetPlaylist(0).subscribe((data: any) => {
             if (data != null)
                 data.forEach(function (value) {
                     this.ficheList.push(value as FicheDTO);

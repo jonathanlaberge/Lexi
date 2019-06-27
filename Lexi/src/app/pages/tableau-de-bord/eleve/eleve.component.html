@@ -9,30 +9,30 @@
         Chargement...
     </span>
 </div>
-<clr-datagrid *ngIf="isReady">
-    <clr-dg-column></clr-dg-column>
+<clr-datagrid *ngIf="isReady" (clrDgRefresh)="DatagridRefresh($event)" [clrDgLoading]="isLoading">
     <!--<clr-dg-column>ID</clr-dg-column>-->
     <clr-dg-column>Prenom</clr-dg-column>
     <clr-dg-column>Nom</clr-dg-column>
     <clr-dg-column>Date de naissance</clr-dg-column>
     <clr-dg-column>Genre</clr-dg-column>
     <clr-dg-column>Avatar</clr-dg-column>
+    <clr-dg-column></clr-dg-column>
 
     <clr-dg-row *clrDgItems="let eleve of elevesList; let index = index">
+        <!--<clr-dg-cell>{{eleve.idEleve}}</clr-dg-cell>-->
+        <clr-dg-cell>{{eleve.prenom}}</clr-dg-cell>
+        <clr-dg-cell>{{eleve.nom}}</clr-dg-cell>
+        <clr-dg-cell>{{eleve.dateNaissance | date}}</clr-dg-cell>
+        <clr-dg-cell>{{eleve.genre == 1 ? "Homme" : "Femme"}}</clr-dg-cell>
+        <clr-dg-cell><img class="icon" [src]="eleve.avatar"></clr-dg-cell>
         <clr-dg-cell>
             <clr-button-group class="btn-primary btn-icon">
                 <clr-button [clrInMenu]="true" (click)="OnEdit(eleve)">Modifier</clr-button>
-                <clr-button [clrInMenu]="true" (click)="OnDelete(eleve)">Effacer</clr-button>
+                <clr-button [clrInMenu]="true" (click)="OnDelete(eleve)">Supprimer</clr-button>
                 <!--<clr-button [clrInMenu]="true" (click)="ShowHistory(eleve)">Voir l'historique</clr-button>-->
                 <clr-button [clrInMenu]="true" (click)="SelectPlayList(eleve)">Choisir la liste des questions</clr-button>
             </clr-button-group>
         </clr-dg-cell>
-        <!--<clr-dg-cell>{{eleve.idEleve}}</clr-dg-cell>-->
-        <clr-dg-cell>{{eleve.prenom}}</clr-dg-cell>
-        <clr-dg-cell>{{eleve.nom }}</clr-dg-cell>
-        <clr-dg-cell>{{eleve.dateNaissance | date}}</clr-dg-cell>
-        <clr-dg-cell>{{eleve.genre == 1 ? "Homme" : "Femme"}}</clr-dg-cell>
-        <clr-dg-cell><img class="icon" [src]="eleve.avatar"></clr-dg-cell>
     </clr-dg-row>
     <clr-dg-footer>
         <clr-dg-pagination #pagination [clrDgPageSize]="10">
@@ -88,9 +88,9 @@
 
 
 <clr-modal [(clrModalOpen)]="isDeleteModalOpen" *ngIf="selectedEleve != null">
-    <h3 class="modal-title">Éffacer</h3>
+    <h3 class="modal-title">Supprimer</h3>
     <div class="modal-body">
-        <p>Vouler-vous vraiment éffacer {{selectedEleve.prenom}} {{selectedEleve.nom}} ? </p>
+        <p>Voulez-vous vraiment supprimer {{selectedEleve.prenom}} {{selectedEleve.nom}} ? </p>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline" (click)="isDeleteModalOpen = false">Annuler</button>
