@@ -31,26 +31,24 @@ export class CurseurSimpleComponent implements OnInit, OnDestroy, AfterViewInit
     valueChanged = new EventEmitter<number>();
 
     @Input()
-    set color(color: QCMColor)
-    {
-        switch (color)
-        {
+    set color(color: QCMColor) {
+        switch (color) {
             case QCMColor.Green:
-                $("#picker"+ this.curseurID).css("background-color", "green");
-                $("#pickerNumber"+ this.curseurID).css("border-color", "green");
-                $("#pickerNumber"+ this.curseurID).css("color", "green");
+                $("#picker" + this.curseurID).css("background-color", "green");
+                $("#pickerNumber" + this.curseurID).css("border-color", "green");
+                $("#pickerNumber" + this.curseurID).css("color", "green");
                 break;
 
             case QCMColor.Red:
-                $("#picker"+ this.curseurID).css("background-color", "red");
-                $("#pickerNumber"+ this.curseurID).css("border-color", "red");
-                $("#pickerNumber"+ this.curseurID).css("color", "red");
+                $("#picker" + this.curseurID).css("background-color", "red");
+                $("#pickerNumber" + this.curseurID).css("border-color", "red");
+                $("#pickerNumber" + this.curseurID).css("color", "red");
                 break;
 
             default:
-                $("#picker"+ this.curseurID).css("background-color", "black");
-                $("#pickerNumber"+ this.curseurID).css("border-color", "black");
-                $("#pickerNumber"+ this.curseurID).css("color", "black");
+                $("#picker" + this.curseurID).css("background-color", "#E2F700");
+                $("#pickerNumber" + this.curseurID).css("border-color", "Black");
+                $("#pickerNumber" + this.curseurID).css("color", "black");
                 break;
         }
     }
@@ -95,7 +93,7 @@ export class CurseurSimpleComponent implements OnInit, OnDestroy, AfterViewInit
                 create: function ()
                 {
                     if (this.useDots)
-                        $("#pickerNumber" + this.curseurID).text("●");
+                        $("#pickerNumber" + this.curseurID).text(" ");
                     else
                         $("#pickerNumber" + this.curseurID).text(0);
                 }.bind(this),
@@ -109,6 +107,32 @@ export class CurseurSimpleComponent implements OnInit, OnDestroy, AfterViewInit
                     this.valueChanged.emit(ui.value);
                 }.bind(this)
             });
+
+
+
+        switch (this.color) {
+            case QCMColor.Green:
+                $("#picker" + this.curseurID).css("background-color", "green");
+                $("#pickerNumber" + this.curseurID).css("border-color", "green");
+                $("#pickerNumber" + this.curseurID).css("color", "green");
+                break;
+
+            case QCMColor.Red:
+                $("#picker" + this.curseurID).css("background-color", "red");
+                $("#pickerNumber" + this.curseurID).css("border-color", "red");
+                $("#pickerNumber" + this.curseurID).css("color", "red");
+                break;
+
+            default:
+                $("#picker" + this.curseurID).css("background-color", "#E2F700");
+                $("#pickerNumber" + this.curseurID).css("border-color", "Black");
+                $("#pickerNumber" + this.curseurID).css("color", "black");
+                break;
+        }
+
+
+
+
 
     }
 

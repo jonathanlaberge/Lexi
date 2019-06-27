@@ -6,4 +6,7 @@ export class Question {
     quesion: string;
     choixDeReponses: string[];
     bonneReponse: number;
+
+
+
 }
