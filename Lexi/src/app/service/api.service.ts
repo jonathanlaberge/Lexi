@@ -14,11 +14,6 @@ export const API_URL = "http://lexi.jolab.me/v1/";
     })
 export class APIService
 {
-
-    
-
-
-
     private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
 
     public static currentMaitresse: Maitresse = null;
@@ -63,6 +58,7 @@ export class APIService
             APIService.jwtHelper.decodeToken(APIService.token).idEleveEnCours > 0);
     }
 
+
     public Connection(maitresse: Maitresse)
     {
         this.SetHeader();
@@ -81,88 +77,76 @@ export class APIService
         return this.httpClient.post(`${API_URL}compte/mode`, JSON.stringify(obj), this.options);
     }
 
-    // ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES// ELEVES
-    public GetEleveList()
+
+    // Admin - Eleve
+    public GetEleveList(page: number)
     {
         this.SetHeader();
-        return this.httpClient.get(`${API_URL}admin/user/liste`, this.options);
+        return this.httpClient.get(`${API_URL}admin/eleve/liste/${page}`, this.options);
     }
-
-
-    public EditEleve(eleve: Eleve) {
-
+    
+    public EditEleve(eleve: Eleve)
+    {
         this.SetHeader();
-        return this.httpClient.post(`${API_URL}admin/user/${eleve.idEleve}`, JSON.stringify(eleve), this.options);
-
-
+        return this.httpClient.post(`${API_URL}admin/eleve/${eleve.idEleve}`, JSON.stringify(eleve), this.options);
     }
-
-
-    AddEleve(eleve: Eleve) {
+    
+    public AddEleve(eleve: Eleve)
+    {
         this.SetHeader();
-        return this.httpClient.post(`${API_URL}admin/user/creation`, JSON.stringify(eleve), this.options);
-
+        return this.httpClient.post(`${API_URL}admin/eleve/creation`, JSON.stringify(eleve), this.options);
     }
 
-
-
-    DeleteEleve(idEleve: number) {
+    public DeleteEleve(idEleve: number)
+    {
         this.SetHeader();
-        return this.httpClient.delete(`${API_URL}admin/user/${idEleve}`, this.options);
+        return this.httpClient.delete(`${API_URL}admin/eleve/${idEleve}`, this.options);
     }
+    
 
-
-
-    /// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES/// CATEGORIES
-
-
-
-    public GetCategorieList() {
+    /// Admin - Categorie
+    public GetCategorieList(page: number)
+    {
         this.SetHeader();
-        return this.httpClient.get(`${API_URL}admin/categorie/liste`, this.options);
+        return this.httpClient.get(`${API_URL}admin/categorie/liste/${page}`, this.options);
     }
 
-
-    EditCategorie(categorie: Categorie) {
+    public EditCategorie(categorie: Categorie)
+    {
         this.SetHeader();
         return this.httpClient.post(`${API_URL}admin/categorie/${categorie.idCategorie}`, JSON.stringify(categorie), this.options);
     }
-
-
-    DeleteCategorie(idCategorie: number) {
+    
+    public DeleteCategorie(idCategorie: number)
+    {
         this.SetHeader();
         return this.httpClient.delete(`${API_URL}admin/categorie/${idCategorie}`, this.options);
     }
 
-    GetFicheList(page: number,idCategorie: number) {
+    public AddCategorie(categorie: Categorie)
+    {
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}admin/categorie/creation`, JSON.stringify(categorie), this.options);
+    }
+
+    /// Admin - Fiche
+    public GetFicheList(page: number, idCategorie: number)
+    {
         this.SetHeader();
         return this.httpClient.get(`${API_URL}admin/fiches/liste/${page}/parcategorie/${idCategorie}`, this.options);
     }
 
-
-
-
-    AddCategorie(categorie: Categorie) {
+    //Eleve - Fiche
+    public GetPlaylist(page: number)
+    {
         this.SetHeader();
-        return this.httpClient.post(`${API_URL}admin/categorie/creation`, JSON.stringify(categorie), this.options);
-
-    }
-/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayList/// PlayLis /// PlayList/// PlayList/// PlayList/// PlayList
-
-
-
-    GetPlaylist() {
-        this.SetHeader();
-        return this.httpClient.get(`${API_URL}eleve/fiches/liste`, this.options);
-
+        return this.httpClient.get(`${API_URL}eleve/fiches/liste/${page}`, this.options);
     }
 
-
-
-    Postvalidation(fiche : Fiche) {
+    public FicheValidation(validation: any)
+    {
         this.SetHeader();
-        return this.httpClient.post(`${API_URL}eleve/fiches/validation`, this.options);
-
+        return this.httpClient.post(`${API_URL}eleve/fiches/validation`, JSON.stringify(validation), this.options);
     }
 
 
