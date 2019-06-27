@@ -82,12 +82,7 @@ export class ConnectionComponent implements OnInit
         });
     }
 
-    get errorMessage()
-    {
-        return this.loginForm.controls;
-    }
-
-    submitLogin()
+    SubmitLogin()
     {
         this.errorLoginInvalid = false;
         this.errorLoginServer = false;
@@ -141,12 +136,7 @@ export class ConnectionComponent implements OnInit
         }
     }
 
-    openRegisterModalForm()
-    {
-        this.isRegisterModalOpen = true;
-    }
-
-    submitRegister()
+    SubmitRegister()
     {
         this.errorLoginInvalid = false;
         this.errorLoginServer = false;

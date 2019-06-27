@@ -1,22 +1,19 @@
-<router-outlet></router-outlet>
+<router-outlet (deactivate)="GetEleveList(0)"></router-outlet>
 
 <div class="clearfix">
     <h1>Liste des élèves</h1>
     <button class="btn btn-success pull-right" [routerLink]="['creation']">Ajouter un élève.</button>
 </div>
-<div *ngIf="!isReady" class="center">
-    <span class="spinner spinner-lg">
-        Chargement...
-    </span>
-</div>
-<clr-datagrid *ngIf="isReady" (clrDgRefresh)="DatagridRefresh($event)" [clrDgLoading]="isLoading">
+<clr-datagrid [clrDgLoading]="isLoading">
     <!--<clr-dg-column>ID</clr-dg-column>-->
-    <clr-dg-column>Prenom</clr-dg-column>
+    <clr-dg-column>Prénom</clr-dg-column>
     <clr-dg-column>Nom</clr-dg-column>
     <clr-dg-column>Date de naissance</clr-dg-column>
     <clr-dg-column>Genre</clr-dg-column>
     <clr-dg-column>Avatar</clr-dg-column>
     <clr-dg-column></clr-dg-column>
+
+    <clr-dg-placeholder>La liste des élèves est vide. Pensez à créer un élève!</clr-dg-placeholder>
 
     <clr-dg-row *clrDgItems="let eleve of elevesList; let index = index">
         <!--<clr-dg-cell>{{eleve.idEleve}}</clr-dg-cell>-->
@@ -35,36 +32,49 @@
         </clr-dg-cell>
     </clr-dg-row>
     <clr-dg-footer>
-        <clr-dg-pagination #pagination [clrDgPageSize]="10">
-            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Nombre d'élèves par page</clr-dg-page-size>
+        <clr-dg-pagination #pagination [clrDgPageSize]="30">
+            <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre d'élèves par page</clr-dg-page-size>
             {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
             de {{pagination.totalItems}} {{pagination.totalItems > 1 ? "élèves" : "élève"}}
         </clr-dg-pagination>
     </clr-dg-footer>
 </clr-datagrid>
 
-<clr-modal [(clrModalOpen)]="isEditModalOpen" *ngIf="selectedEleve != null">
+
+<clr-modal *ngIf="selectedEleve != null" [(clrModalOpen)]="isEditModalOpen">
     <h3 class="modal-title">Modification de <b>{{selectedEleve.prenom}} {{selectedEleve.nom}}</b></h3>
     <div class="modal-body">
+        <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Il y a eu une erreur lors de la modification. Veuillez réessayer plus tard.
+                    </span>
+                </div>
+            </div>
+        </div>
         <form class="login" clrForm [formGroup]="editForm">
             <div class="login-group">
                 <clr-input-container>
-                    <label>Prenom</label>
+                    <label>Prénom</label>
                     <input clrInput type="text" formControlName="prenom" name="Prenom" required />
                     <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
                 </clr-input-container>
                 <clr-input-container>
                     <label>Nom</label>
                     <input clrInput type="text" formControlName="nom" name="Nom" required />
-                    <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
+                    <clr-control-error *clrIfError="'required'">Le nom est obligatoire</clr-control-error>
                 </clr-input-container>
                 <clr-input-container>
-                    <label>Date de Naissance</label>
-                    <input clrInput type="date" formControlName="dateNaissance" name="Date de naissance"/>
+                    <label>Date de naissance</label>
+                    <input clrInput type="date" formControlName="dateNaissance" name="Date de naissance" />
                 </clr-input-container>
                 <clr-input-container>
                     <label>Avatar</label>
-                    <input clrInput type="text" formControlName="avatar" name="Avatar"/>
+                    <input clrInput type="text" formControlName="avatar" name="Avatar" />
                 </clr-input-container>
                 <br />
                 <div class="btn-group">
@@ -81,19 +91,37 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="isEditModalOpen = false">Annuller</button>
+        <span *ngIf="isLoadingModal" class="spinner spinner-md" style="margin:3px">
+            Changement...
+        </span>
+        <button type="button" class="btn btn-primary" (click)="isEditModalOpen = false;errorServer = false">Annuller</button>
         <button type="button" class="btn btn-success" (click)="SubmitEditEleve()">Modifier</button>
     </div>
 </clr-modal>
 
 
-<clr-modal [(clrModalOpen)]="isDeleteModalOpen" *ngIf="selectedEleve != null">
+<clr-modal *ngIf="selectedEleve != null" [(clrModalOpen)]="isDeleteModalOpen">
     <h3 class="modal-title">Supprimer</h3>
     <div class="modal-body">
-        <p>Voulez-vous vraiment supprimer {{selectedEleve.prenom}} {{selectedEleve.nom}} ? </p>
+        <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Il y a eu une erreur lors de la suppression. Veuillez réessayer plus tard.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <p>Voulez-vous vraiment supprimer {{selectedEleve.prenom}} {{selectedEleve.nom}} ?</p>
     </div>
     <div class="modal-footer">
+        <span *ngIf="isLoadingModal" class="spinner spinner-md" style="margin:3px">
+            Changement...
+        </span>
         <button type="button" class="btn btn-outline" (click)="isDeleteModalOpen = false">Annuler</button>
-        <button type="button" class="btn btn-primary" (click)="SubmitDeleteEleve(selectedEleve.idEleve)">Effacer</button>
+        <button type="button" class="btn btn-danger" (click)="SubmitDeleteEleve(selectedEleve.idEleve)">Supprimer</button>
     </div>
 </clr-modal>

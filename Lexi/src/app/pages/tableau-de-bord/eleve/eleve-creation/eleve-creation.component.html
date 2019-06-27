@@ -1,62 +1,61 @@
-
-    <div class="modal">
-        <div class="modal-dialog" aria-hidden="true">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button aria-label="Close" class="close" type="button">
-                        <clr-icon aria-hidden="true" (click)="cancel()" shape="close"></clr-icon>
-                    </button>
-                    <h3 class="modal-title">Création d'élève</h3>
-                    <div class="modal-body">
-
-                        <p>Ajouter</p>
-                        <form class="login" clrForm [formGroup]="addForm" (ngSubmit)="submitAddForm()">
-                            <div class="login-group">
-                                <clr-input-container>
-                                    <label>Prenom</label>
-                                    <input clrInput type="text" formControlName="prenom" name="Prenom" placeholder="Prénom" required />
-                                    <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
-                                </clr-input-container>
-
-                                <clr-input-container>
-                                    <label>Nom</label>
-                                    <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
-                                    <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
-                                </clr-input-container>
-
-                                <clr-input-container>
-                                    <label>Date de Naissance</label>
-                                    <input clrInput type="date" formControlName="dateNaissance" />
-                                </clr-input-container>
-
-
-
-                                <clr-input-container>
-                                    <label>Avatar</label>
-                                    <input clrInput type="text" formControlName="avatar" />
-                                </clr-input-container>
-
-                                <br />
-                                <div class="btn-group">
-                                    <div class="radio btn">
-                                        <input formControlName="genre" value="1" type="radio" name="genre" id="btn-radio-1">
-                                        <label for="btn-radio-1">Homme</label>
-                                    </div>
-                                    <div class="radio btn">
-                                        <input formControlName="genre" value="0" type="radio" name="genre" id="btn-radio-2">
-                                        <label for="btn-radio-2">Femme</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+<clr-modal [(clrModalOpen)]="isCreationModalOpen" [clrModalClosable]="false">
+    <h3 class="modal-title">Création d'un élève</h3>
+    <div class="modal-body">
+        <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" (click)="cancel()">Annuler</button>
-                        <button type="button" class="btn btn-success" (click)="submitAddForm()">Ajouter</button>
-                    </div>
-
-
+                    <span class="alert-text">
+                        Il y a eu une erreur lors de la création de l'élève. Veuillez réessayer plus tard.
+                    </span>
                 </div>
             </div>
         </div>
+        <form clrForm [formGroup]="creationForm">
+            <div class="login-group">
+                <clr-input-container>
+                    <label>Prénom</label>
+                    <input clrInput type="text" formControlName="prenom" name="Prenom" placeholder="Prénom" required />
+                    <clr-control-error *clrIfError="'required'">Le prénom est obligatoire.</clr-control-error>
+                </clr-input-container>
+
+                <clr-input-container>
+                    <label>Nom</label>
+                    <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
+                    <clr-control-error *clrIfError="'required'">Le nom est obligatoire.</clr-control-error>
+                </clr-input-container>
+
+                <clr-input-container>
+                    <label>Date de naissance</label>
+                    <input clrInput type="date" formControlName="dateNaissance" />
+                </clr-input-container>
+
+                <clr-input-container>
+                    <label>Avatar</label>
+                    <input clrInput type="text" formControlName="avatar" />
+                </clr-input-container>
+
+                <br />
+                <div class="btn-group">
+                    <div class="radio btn">
+                        <input formControlName="genre" value="1" type="radio" name="genre" id="btn-radio-1">
+                        <label for="btn-radio-1">Homme</label>
+                    </div>
+                    <div class="radio btn">
+                        <input formControlName="genre" value="0" type="radio" name="genre" id="btn-radio-2">
+                        <label for="btn-radio-2">Femme</label>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
+    <div class="modal-footer">
+        <span *ngIf="isLoadingModal" class="spinner spinner-md" style="margin:3px">
+            Changement...
+        </span>
+        <button type="button" class="btn btn-primary" (click)="Close()">Annuler</button>
+        <button type="button" class="btn btn-success" (click)="SubmitCreationForm()">Ajouter</button>
+    </div>
+</clr-modal>

@@ -5,132 +5,81 @@ import { APIService } from 'src/app/service/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-@Component({
-  selector: 'app-eleve-creation',
-  templateUrl: './eleve-creation.component.html',
-  styleUrls: ['./eleve-creation.component.css']
-})
-export class EleveCreationComponent implements OnInit {
+@Component(
+    {
+        selector: 'app-eleve-creation',
+        templateUrl: './eleve-creation.component.html'
+    })
+export class EleveCreationComponent implements OnInit
+{
+    @ViewChild(ClrForm, { static: true }) creationFormValidator;
 
-    @ViewChild(ClrForm, { static: true }) addFormValidator;
-
-    isAddModalOpen: boolean = true;
-
-
+    isCreationModalOpen: boolean = true;
+    isLoadingModal: boolean = false;
     
-  
-
-
-    addForm: FormGroup;
-
-
-    successRegister: boolean = false;
-    errorRegisterServer: boolean = false;
-
-    successAdd: boolean = false;
-    errorAddServer: boolean = false;
-
-
-
-
-
-
+    creationForm: FormGroup;
+    
+    errorServer: boolean = false;
+    
     constructor(
         private apiService: APIService,
-        private ref: ChangeDetectorRef,
         private formBuilder: FormBuilder,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute) { }
 
-    ) { }
-
-
-
-    
-
-
-    ngOnInit() {
-
-
-        this.addForm = this.formBuilder.group(
+    ngOnInit()
+    {
+        this.creationForm = this.formBuilder.group(
             {
                 prenom: ['', [Validators.required]],
-                nom: ['', ],
-                genre: ['', ],
-                email: ['', ],
-                dateNaissance: ['',[]],
+                nom: ['', [Validators.required]],
+                genre: ['', []],
+                dateNaissance: ['', []],
                 avatar: ['', []]
             });
-  }
-
-
-
-
-
-
-
-
-
-
-    submitAddForm() {
-
-
-        if (this.addForm.invalid) {
-            this.addFormValidator.markAsTouched();
+    }
+    
+    SubmitCreationForm()
+    {
+        if (this.creationForm.invalid)
+        {
+            this.creationFormValidator.markAsTouched();
         }
-        else {
+        else
+        {
+            this.isLoadingModal = true;
             var eleve: Eleve = new Eleve();
-
-
-          
-            eleve.prenom = this.addForm.value.prenom;
-            eleve.nom = this.addForm.value.nom;
-            eleve.dateNaissance = this.addForm.value.dateNaissance;
-            eleve.genre = this.addForm.value.genre;
-            eleve.avatar = this.addForm.value.avatar;
-
-
+            
+            eleve.prenom = this.creationForm.value.prenom;
+            eleve.nom = this.creationForm.value.nom;
+            eleve.dateNaissance = this.creationForm.value.dateNaissance;
+            eleve.genre = this.creationForm.value.genre;
+            eleve.avatar = this.creationForm.value.avatar;
+            
             this.apiService.AddEleve(eleve).subscribe(
-                (data: any) => {
-                    if (data.code == 200) {
-                        this.successRegister = true;
-                        this.cancel();
-                       
+                (data: any) =>
+                {
+                    if (data.code == 200)
+                    {
+                        this.isLoadingModal = false;
+                        this.Close();
                     }
                     else
-                        this.errorRegisterServer = true;
+                        this.errorServer = true;
                 },
-                error => {
-                    if (error.status == 401)
-                        this.errorRegisterServer = true;
-                    else
-                        this.errorRegisterServer = true;
+                () =>
+                {
+                    this.errorServer = true;
+                    this.isLoadingModal = false;
                 });
-
-
         }
-
-
-
-
     }
 
-    cancel() {
-        this.addForm.reset();
+    Close()
+    {
+        this.errorServer = false;
+        this.isLoadingModal = false;
+        this.creationForm.reset();
         this.router.navigate([`../`], { relativeTo: this.route });
     }
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
 }

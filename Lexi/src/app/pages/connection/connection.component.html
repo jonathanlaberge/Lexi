@@ -1,5 +1,5 @@
 <div class="login-wrapper">
-    <form class="login" clrForm [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+    <form class="login" clrForm [formGroup]="loginForm" (ngSubmit)="SubmitLogin()">
         <section class="title">
             <h3 class="welcome">Bienvenue au</h3>
             Lexi
@@ -162,6 +162,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn" (click)="isRegisterModalOpen = false">Annuler</button>
-        <button type="submit" class="btn btn-success" (click)="submitRegister()">S'enregistrer</button>
+        <button type="submit" class="btn btn-success" (click)="SubmitRegister()">S'enregistrer</button>
     </div>
 </clr-modal>

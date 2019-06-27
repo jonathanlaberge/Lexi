@@ -3,7 +3,6 @@ import { Eleve } from 'src/app/model/eleve';
 import { APIService } from 'src/app/service/api.service';
 import { ClrForm } from '@clr/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component(
     {
@@ -23,11 +22,10 @@ export class EleveComponent implements OnInit
 
     editForm: FormGroup;
     
-    successEdit: boolean = false;
-    successDelete: boolean = false;
 
-    errorRegisterServer: boolean = false;
-    isReady: boolean = false;
+    errorServer: boolean = false;
+
+    isLoadingModal: boolean = false;
     isLoading: boolean = false;
     
     constructor(
@@ -44,15 +42,15 @@ export class EleveComponent implements OnInit
                 genre: [ [Validators.required]],
                 dateNaissance: ['', []],
                 avatar: ['', []]
-
             });
 
-        this.GetEleveList(1);
+        this.GetEleveList(0);
     }
 
     GetEleveList(page: number)
     {
-        this.isReady = false;
+        this.elevesList = [];
+        this.isLoading = true;
         this.apiService.GetEleveList(page).subscribe((data: any) =>
         {
             if (data != null)
@@ -60,31 +58,26 @@ export class EleveComponent implements OnInit
                 {
                     this.elevesList.push(value as Eleve);
                 }.bind(this));
-
-            this.isReady = true;
+            
+            this.isLoading = false;
             this.ref.detectChanges();
-            console.log(this.elevesList);
         });
     }
-
-    DatagridRefresh($event)
-    {
-
-    }
+    
 
     OnEdit(eleve: Eleve)
     {
         this.selectedEleve = eleve;
-        this.editForm.patchValue(
+        this.editForm.setValue(
             {
                 prenom: eleve.prenom,
                 nom: eleve.nom,
                 genre: eleve.genre,
-                //dateNaissance: eleve.dateNaissance.getDate(),
+                dateNaissance: eleve.dateNaissance,
                 avatar: eleve.avatar
-
             });
 
+        this.errorServer = false;
         this.isEditModalOpen = true;
     }
 
@@ -98,7 +91,6 @@ export class EleveComponent implements OnInit
         {
             var eleve: Eleve = new Eleve();
 
-
             eleve.idEleve = this.selectedEleve.idEleve;
             eleve.prenom = this.editForm.value.prenom;
             eleve.nom = this.editForm.value.nom;
@@ -106,93 +98,65 @@ export class EleveComponent implements OnInit
             eleve.genre = this.editForm.value.genre;
             eleve.avatar = this.editForm.value.avatar;
 
+            this.isLoadingModal = true;
+            this.errorServer = false;
 
             this.apiService.EditEleve(eleve).subscribe(
                 (data: any) =>
                 {
+                    this.isLoadingModal = false;
                     if (data.code == 200)
                     {
-                        this.successEdit = true;
+                        this.GetEleveList(0);
                         this.isEditModalOpen = false;
                     }
                     else
-                        this.errorRegisterServer = true;
+                        this.errorServer = true;
                 },
-                error =>
+                () =>
                 {
-                    if (error.status == 401)
-                        this.errorRegisterServer = true;
-                    else
-                        this.errorRegisterServer = true;
+                    this.isLoadingModal = false;
+                    this.errorServer = true;
                 });
-
-
         }
-
     }
-
-
-
-
-
-
-
-
-
-    OnDelete(user: Eleve)
+    
+    OnDelete(eleve: Eleve)
     {
+        this.selectedEleve = eleve;
 
-        this.selectedEleve = user;
+        this.errorServer = false;
         this.isDeleteModalOpen = true;
-        console.log("id selectionné delete " + user.idEleve);
-
     }
-
-
-
+    
     SubmitDeleteEleve(idEleve: number)
     {
+        this.isLoadingModal = true;
+        this.errorServer = false;
 
         this.apiService.DeleteEleve(idEleve).subscribe(
             (data: any) =>
             {
+                this.isLoadingModal = false;
                 if (data.code == 200)
                 {
-                    this.successDelete = true;
+                    this.GetEleveList(0);
                     this.isDeleteModalOpen = false;
                 }
                 else
-                    this.errorRegisterServer = true;
+                    this.errorServer = true;
             },
-            error =>
+            () =>
             {
-                if (error.status == 401)
-                    this.errorRegisterServer = true;
-                else
-                    this.errorRegisterServer = true;
+                this.isLoadingModal = false;
+                this.errorServer = true;
             });
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-    ShowHistory(user: Eleve)
-    {
-        console.log("id selectionné history " + user.idEleve);
-    }
+    
+    //ShowHistory(user: Eleve)
+    //{
+    //    console.log("id selectionné history " + user.idEleve);
+    //}
 
     SelectPlayList(user: Eleve)
     {

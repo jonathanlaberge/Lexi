@@ -248,7 +248,7 @@ class AdminController extends Controller
 
         $result = DB::select('
             SELECT * FROM `fiche`
-            WHERE `idFiche`  ? AND `idCategorie` = ? AND
+            WHERE `idFiche` =? AND `idCategorie` = ? AND
 			(`estPublic` = 1 OR `idMaitresseCreatrice` =?)',
             [$idFiche ,$idCategorie, $idMaitresseCreatrice]);
 
@@ -410,24 +410,15 @@ class AdminController extends Controller
     {
         $body = json_decode($request->getContent());
         
-        if (!isset($body->prenom, $body->nom, $body->dateNaissance, $body->genre, $body->avatar))
+        if (!isset($body->prenom, $body->nom))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 
-		$prenom = $body->prenom;
-		$nom = $body->nom;
-		$dateNaissance = $body->dateNaissance;
-		$genre = $body->genre;
-		$avatar = $body->avatar;
-
-		if (!isset($prenom, $nom, $dateNaissance, $genre, $avatar))
-			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
-
 		DB::insert('
 			INSERT INTO `eleve`
-			(`prenom`, `nom`, `dateNaissance`, `genre`, `avatar`)
-            VALUES (?,?,?,?,?)', [$prenom, $nom, $dateNaissance, $genre, $avatar]);
+			(`prenom`, `nom`)
+            VALUES (?,?)', [$body->prenom, $body->nom]);
             
         $idEleveResult = DB::select('SELECT LAST_INSERT_ID() as id');
             
@@ -435,6 +426,27 @@ class AdminController extends Controller
             INSERT INTO `classe_eleve_maitresse`
             (`idMaitresse`, `idEleve`) 
             VALUES (?,?)', [$idMaitresse, $idEleveResult[0]->id]);
+			
+        if(!isset($body->dateNaissance))
+            DB::update('
+                UPDATE `eleve`
+                SET `dateNaissance` =?
+                WHERE `idEleve` =?',
+                [$body->dateNaissance,$$idEleveResult[0]->id]);
+
+        if(!isset($body->genre))
+            DB::update('
+                UPDATE `eleve`
+                SET `genre` =?
+                WHERE `idEleve` =?',
+                [$body->genre,$$idEleveResult[0]->id]);
+
+        if(!isset($body->avatar))
+            DB::update('
+                UPDATE `eleve`
+                SET `avatar` =?
+                WHERE idEleve` =?',
+                [$body->genre,$$idEleveResult[0]->id]);
 
 		return response()->json(["code" => "200", "message" => "OK"], 200);
 	}
@@ -446,7 +458,7 @@ class AdminController extends Controller
 		if (!$this->IsValidID($idEleve))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
-		$result = DB::delete('DELETE FROM `classe_eleve_maitresse` WHERE `idMaitresse` =? `idEleve` =?', [$idMaitresse, $idEleve]);
+		$result = DB::delete('DELETE FROM `classe_eleve_maitresse` WHERE `idMaitresse` =? AND `idEleve` =?', [$idMaitresse, $idEleve]);
 
 		if ($result == 0)
 			return response()->json(["code" => "404", "message" => "Data Not Found"], 404);
@@ -479,7 +491,7 @@ class AdminController extends Controller
 
         $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
         
-        if (!$this->IsValidID($idCategorie))
+        if (!$this->IsValidID($idEleve))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
         $elevePersimmsion = DB::select('
