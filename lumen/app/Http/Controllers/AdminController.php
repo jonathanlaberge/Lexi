@@ -429,12 +429,12 @@ class AdminController extends Controller
 			(`prenom`, `nom`, `dateNaissance`, `genre`, `avatar`)
             VALUES (?,?,?,?,?)', [$prenom, $nom, $dateNaissance, $genre, $avatar]);
             
-        $idEleveResult = DB::select('SELECT LAST_INSERT_ID()');
+        $idEleveResult = DB::select('SELECT LAST_INSERT_ID() as id');
             
 		DB::insert('
             INSERT INTO `classe_eleve_maitresse`
             (`idMaitresse`, `idEleve`) 
-            VALUES (?,?)', [$idMaitresse, $idEleveResult[0]]);
+            VALUES (?,?)', [$idMaitresse, $idEleveResult[0]->id]);
 
 		return response()->json(["code" => "200", "message" => "OK"], 200);
 	}
