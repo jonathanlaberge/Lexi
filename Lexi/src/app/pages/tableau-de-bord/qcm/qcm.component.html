@@ -1,37 +1,25 @@
+<router-outlet (deactivate)="GetCategorieList(0)"></router-outlet>
 
-
-<router-outlet></router-outlet>
-
-
-
-
-
-
-
-<div class="topright">
-    <button class="btn btn-success content" [routerLink]="['creationcategorie']">Ajouter une categorie.</button>
+<div class="clearfix">
     <h1>Gestion des questionnaires</h1>
+    <h4>Liste des catégories</h4>
+    <button class="btn btn-success pull-right" [routerLink]="['creationcategorie']">Ajouter une catégorie</button>
 </div>
-<br><br>
-
-<clr-datagrid>
-    <!-- --- --- --- --- --- --- --- --- --- --- --- --- --- ---  Categorie --- --- ---  --- --- --- --- --- --- --- --- --- ---   -->
-    <clr-dg-column>Action</clr-dg-column>
-
+<clr-datagrid [clrDgLoading]="isLoadingCategorie">
+    <clr-dg-column></clr-dg-column>
     <clr-dg-column>Nom</clr-dg-column>
     <clr-dg-column>Matière</clr-dg-column>
     <clr-dg-column>Niveau</clr-dg-column>
-    <clr-dg-column>Est privé</clr-dg-column>
+    <clr-dg-column>Est une catégorie public</clr-dg-column>
     <clr-dg-column>Créé par</clr-dg-column>
 
-
-    <clr-dg-row *clrDgItems="let item of categoryList; let index = index"
-                (click)="setSelectedselectedCategorieRow(item)">
+    <clr-dg-row *clrDgItems="let item of categorieList; let index = index"
+                (click)="SetSelectedCategorieRow(item)">
         <clr-dg-cell>
-            <clr-button-group class="btn-primary btn-icon">
-                <clr-button [clrInMenu]="true" (click)="onEdit(item)">Modifier</clr-button>
-                <clr-button [clrInMenu]="true" (click)="onDelete(item)">Effacer</clr-button>
-
+            <button class="btn btn-success btn-icon"><clr-icon shape="angle" style="transform: rotate(-90deg);"></clr-icon></button>
+            <clr-button-group *ngIf="idMaitresse == item.idMaitresseCreatrice" class="btn-primary btn-icon">
+                <clr-button [clrInMenu]="true" (click)="OnEditCategorie(item)">Modifier</clr-button>
+                <clr-button [clrInMenu]="true" (click)="OnDeleteCategorie(item)">Supprimer</clr-button>
             </clr-button-group>
         </clr-dg-cell>
 
@@ -39,128 +27,111 @@
         <clr-dg-cell>{{item.matiere }}</clr-dg-cell>
         <clr-dg-cell>{{item.niveau}}</clr-dg-cell>
         <clr-dg-cell>{{item.estPublic == 1 ? "Oui" : "Non"}}</clr-dg-cell>
-        <clr-dg-cell>{{item.idMaitresseCreatrice}}</clr-dg-cell>
+
+        <clr-dg-cell *ngIf="idMaitresse != item.idMaitresseCreatrice">{{item.prenomCreatrice}} {{item.nomCreatrice}}</clr-dg-cell>
+        <clr-dg-cell *ngIf="idMaitresse == item.idMaitresseCreatrice"><b>Vous-même</b></clr-dg-cell>
     </clr-dg-row>
     <clr-dg-footer>
         <clr-dg-pagination #pagination [clrDgPageSize]="10">
-            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Catégories par page</clr-dg-page-size>
+            <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégorie par page</clr-dg-page-size>
             {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
-            of {{pagination.totalItems}} {{pagination.totalItems == 1 ? "catégorie" : "catégories"}}
+            de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "catégorie" : "catégories"}}
         </clr-dg-pagination>
     </clr-dg-footer>
 </clr-datagrid>
 
-
-
-
-
-
-
-
-<!-- --- modal de edit -->
-<clr-modal [(clrModalOpen)]="isEditModalOpen" *ngIf="selectedCategorie != null">
-    <h3 class="modal-title">Modification de {{selectedCategorie.nom}}</h3>
-    <div class="modal-body">
-
-
-        <form clrForm clrForm [formGroup]="modifyCategorieForm">
-
-            <clr-input-container>
-                <label>nom</label>
-                <input clrInput type="text" formControlName="nom" name="Nom" value="{{selectedCategorie.nom}}" required />
-                <clr-control-error *clrIfError="'required'">Le nom est obligatoire</clr-control-error>
-            </clr-input-container>
-
-            <clr-input-container>
-                <label>Matiere</label>
-                <input clrInput type="text" formControlName="matiere" name="Matiere" value="{{selectedCategorie.matiere}}" />
-            </clr-input-container>
-
-            <clr-input-container>
-                <label>Niveau</label>
-                <input clrInput type="text" formControlName="niveau" name="Niveau" value="{{selectedCategorie.niveau}}" />
-            </clr-input-container>
-
-
-
-            <div class="btn-group">
-                <div class="radio btn">
-                    <input formControlName="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1" [checked]="selectedCategorie.estPublic === 1">
-                    <label for="btn-radio-1">Oui</label>
-                </div>
-                <div class="radio btn">
-                    <input formControlName="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2" [checked]="selectedCategorie.estPublic === 0">
-                    <label for="btn-radio-2">Non</label>
-                </div>
-            </div>
-
-
-
-
-
-
-        </form>
+<div *ngIf="selectedCategorieRow != null">
+    <div class="clearfix">
+        <h4>Liste des fiches pour la catégorie <b>{{selectedCategorieRow.nom}}</b></h4>
+        <button class="btn btn-success pull-right" [routerLink]="['creationcategorie']">Ajouter une catégorie</button>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="isEditModalOpen = false">Annuller</button>
-        <button type="button" class="btn btn-success" (click)="editCategorie()">Modifier</button>
-    </div>
-</clr-modal>
+    <clr-datagrid [clrDgLoading]="isLoadingFiche">
+        <clr-dg-column></clr-dg-column>
+        <!--<clr-dg-column>idCategorie</clr-dg-column>-->
+        <clr-dg-column>Titre</clr-dg-column>
+        <clr-dg-column>Date de création</clr-dg-column>
+        <clr-dg-column>Est une fiche public</clr-dg-column>
 
-
-
-
-
-<!-- ---  ---  ---  ---  ---  ---  ---  ---  MODAL DELETE---  ---  ---  ---  ---  ---  ---  ---  ---  ---  ---  ---  --- -->
-
-<clr-modal [(clrModalOpen)]="isDeleteModalOpen" *ngIf="selectedCategorie != null">
-    <h3 class="modal-title">Éffacer</h3>
-    <div class="modal-body">
-        <p>
-            Vouler-vous vraiment éffacer ?
-            <br>
-            Cette action n'est pas reversible et supprimera tous les qurestions associés à cette categorie.?
-        </p>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="isDeleteModalOpen = false">Annuler</button>
-        <button type="button" class="btn btn-primary" (click)="deleteCategorie()">Effacer</button>
-    </div>
-</clr-modal>
-
-
-
-
-
-
-<clr-datagrid>
-    <clr-dg-column>Action</clr-dg-column>
-    <clr-dg-column>idCategorie</clr-dg-column>
-    <clr-dg-column>titre</clr-dg-column>
-    <clr-dg-column>dateCreation</clr-dg-column>
-    <clr-dg-column>estPublic</clr-dg-column>
-
-
-    <div *ngIf="selectedCategorieRow != null">
-        <clr-dg-row *clrDgItems="let item of fichesList; let index = index;">
+        <clr-dg-row *clrDgItems="let item of ficheList; let index = index;">
             <clr-dg-cell>
-                <clr-button-group class="btn-primary btn-icon">
-                    <clr-button [clrInMenu]="true" (click)="onEdit(item)">Modifier</clr-button>
-                    <clr-button [clrInMenu]="true" (click)="onDelete(item)">Effacer</clr-button>
-                    <clr-button [clrInMenu]="true" (click)="history(item)">Historique</clr-button>
+                <clr-button-group *ngIf="idMaitresse == item.idMaitresseCreatrice" class="btn-primary btn-icon">
+                    <clr-button [clrInMenu]="true" (click)="OnEditFiche(item)">Modifier</clr-button>
+                    <clr-button [clrInMenu]="true" (click)="OnDeleteFiche(item)">Supprimer</clr-button>
+                    <!--<clr-button [clrInMenu]="true" (click)="history(item)">Historique</clr-button>-->
                 </clr-button-group>
             </clr-dg-cell>
-            <clr-dg-cell>{{item.idCategorie}}</clr-dg-cell>
+
+            <!--<clr-dg-cell>{{item.idCategorie}}</clr-dg-cell>-->
             <clr-dg-cell>{{item.titre}}</clr-dg-cell>
             <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell>
             <clr-dg-cell>{{item.estPublic == 1 ? "Oui" : "Non"}}</clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>
-            <clr-dg-pagination #pagination [clrDgPageSize]="10">
-                <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Élèves par page</clr-dg-page-size>
+            <clr-dg-pagination #pagination [clrDgPageSize]="30">
+                <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de fiche par page</clr-dg-page-size>
                 {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
-                of {{pagination.totalItems}} {{pagination.totalItems == 1 ? "fiche" : "fiches"}}
+                de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "fiche" : "fiches"}}
             </clr-dg-pagination>
         </clr-dg-footer>
+    </clr-datagrid>
+</div>
+
+<clr-modal [(clrModalOpen)]="isCategorieDeleteModalOpen" *ngIf="selectedCategorie != null">
+    <h3 class="modal-title">Supprimer</h3>
+    <div class="modal-body">
+        <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Il y a eu une erreur lors de la supression. Veuillez réessayer plus tard.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <p>
+            Voulez-vous vraiment supprimer cette catégorie ?
+            <br>
+            <span style="color:red">Cette action n'est pas réversible et supprimera tous les fiches et les questions associées à cette categorie?</span>
+        </p>
     </div>
-</clr-datagrid>
+    <div class="modal-footer">
+        <span *ngIf="isLoadingModal" class="spinner spinner-md" style="margin:3px">
+            Changement...
+        </span>
+        <button type="button" class="btn btn-outline" (click)="isCategorieDeleteModalOpen = false">Annuler</button>
+        <button type="button" class="btn btn-danger" (click)="deleteCategorie()">Supprimer</button>
+    </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="isFicheDeleteModalOpen" *ngIf="selectedFiche != null">
+    <h3 class="modal-title">Supprimer</h3>
+    <div class="modal-body">
+        <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Il y a eu une erreur lors de la supression. Veuillez réessayer plus tard.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <p>
+            Voulez-vous vraiment supprimer cette fiche ?
+            <br>
+            <span style="color:red">Cette action n'est pas réversible et supprimera tous les questions associées à cette fiche?</span>
+        </p>
+    </div>
+    <div class="modal-footer">
+        <span *ngIf="isLoadingFiche" class="spinner spinner-md" style="margin:3px">
+            Changement...
+        </span>
+        <button type="button" class="btn btn-outline" (click)="isFicheDeleteModalOpen = false">Annuler</button>
+        <button type="button" class="btn btn-danger" (click)="deleteFiche()">Supprimer</button>
+    </div>
+</clr-modal>

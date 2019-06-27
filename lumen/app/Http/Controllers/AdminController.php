@@ -149,11 +149,15 @@ class AdminController extends Controller
 		
 		if ($page == 0)
 			return response()->json(DB::select('
-				SELECT * FROM `categorie`
+				SELECT `idCategorie`, `categorie`.`nom`, `matiere`, `niveau`, `estPublic`, `idMaitresseCreatrice`,
+				`maitresse`.`prenom` as prenomCreatrice, `maitresse`.`nom` as nomCreatrice FROM `categorie`
+				JOIN `maitresse` ON `maitresse`.`idMaitresse` = `categorie`.`idMaitresseCreatrice`
 				WHERE `estPublic` = 1 OR `idMaitresseCreatrice` =?',[$idMaitresseCreatrice]), 200);
 				
 		return response()->json(DB::select('
-			SELECT * FROM `categorie`
+			SELECT `idCategorie`, `categorie`.`nom`, `matiere`, `niveau`, `estPublic`, `idMaitresseCreatrice`,
+			`maitresse`.`prenom` as prenomCreatrice, `maitresse`.`nom` as nomCreatrice FROM `categorie`
+			JOIN `maitresse` ON `maitresse`.`idMaitresse` = `categorie`.`idMaitresseCreatrice`
 			WHERE `estPublic` = 1 OR `idMaitresseCreatrice` =?
 			LIMIT ?,30',[$idMaitresseCreatrice, ($page * 30) - 30]), 200);
 
@@ -379,11 +383,15 @@ class AdminController extends Controller
 		
 		if ($page == 0)
 			return response()->json(DB::select('
-				SELECT * FROM `fiche`
+				SELECT `idFiche`, `idCategorie`, `titre`, `dateCreation`, `estPublic`, `idMaitresseCreatrice`, 
+				`maitresse`.`prenom` as prenomCreatrice, `maitresse`.`nom` as nomCreatrice FROM `fiche`
+				JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
 				WHERE `estPublic` = 1 OR `idMaitresseCreatrice` =?',[$idMaitresseCreatrice]), 200);
 		
 		return response()->json(DB::select('
-			SELECT * FROM `fiche`
+			SELECT `idFiche`, `idCategorie`, `titre`, `dateCreation`, `estPublic`, `idMaitresseCreatrice`, 
+			`maitresse`.`prenom` as prenomCreatrice, `maitresse`.`nom` as nomCreatrice FROM `fiche`
+			JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
 			WHERE `estPublic` = 1 OR `idMaitresseCreatrice` =?
 			LIMIT ?,30',[$idMaitresseCreatrice, ($page * 30) - 30]), 200);
     }
@@ -397,11 +405,15 @@ class AdminController extends Controller
 		
 		if ($page == 0)
 			return response()->json(DB::select('
-				SELECT * FROM `fiche`
-				WHERE `idCategorie` =?` AND (estPublic` = 1 OR `idMaitresseCreatrice` =? )',[$idCategorie, $idMaitresseCreatrice]), 200);
+				SELECT `idFiche`, `idCategorie`, `titre`, `dateCreation`, `estPublic`, `idMaitresseCreatrice`, 
+				`maitresse`.`prenom` as prenomCreatrice, `maitresse`.`nom` as nomCreatrice FROM `fiche`
+				JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
+				WHERE `idCategorie` =? AND (`estPublic` = 1 OR `idMaitresseCreatrice` =? )',[$idCategorie, $idMaitresseCreatrice]), 200);
 
 		return response()->json(DB::select('
-			SELECT * FROM `fiche`
+			SELECT `idFiche`, `idCategorie`, `titre`, `dateCreation`, `estPublic`, `idMaitresseCreatrice`, 
+			`maitresse`.`prenom` as prenomCreatrice, `maitresse`.`nom` as nomCreatrice FROM `fiche`
+			JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
 			WHERE `idCategorie` =?` AND (estPublic` = 1 OR `idMaitresseCreatrice` =? )
 			LIMIT ?,30',[$idCategorie, $idMaitresseCreatrice, ($page * 30) - 30]), 200);
 	}

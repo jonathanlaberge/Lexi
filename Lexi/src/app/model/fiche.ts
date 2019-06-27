@@ -1,5 +1,5 @@
-export class Fiche {
-
+export class Fiche
+{
     idFiche: number;
     idCategorie: number;
     titre: string;
@@ -7,5 +7,6 @@ export class Fiche {
     estPublic: boolean;;
     idMaitresseCreatrice: number;
 
-
+    prenomCreatrice: string;
+    nomCreatrice: string;
 }

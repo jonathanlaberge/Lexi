@@ -1,4 +1,4 @@
-.topright button {
-    float: right;
-    text-align: center;
+
+clr-datagrid {
+    min-height: 400px;
 }

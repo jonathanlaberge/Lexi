@@ -5,23 +5,17 @@
     <button class="btn btn-success pull-right" [routerLink]="['creation']">Ajouter un élève.</button>
 </div>
 <clr-datagrid [clrDgLoading]="isLoading">
+    <clr-dg-column></clr-dg-column>
     <!--<clr-dg-column>ID</clr-dg-column>-->
     <clr-dg-column>Prénom</clr-dg-column>
     <clr-dg-column>Nom</clr-dg-column>
     <clr-dg-column>Date de naissance</clr-dg-column>
     <clr-dg-column>Genre</clr-dg-column>
     <clr-dg-column>Avatar</clr-dg-column>
-    <clr-dg-column></clr-dg-column>
 
     <clr-dg-placeholder>La liste des élèves est vide. Pensez à créer un élève!</clr-dg-placeholder>
 
     <clr-dg-row *clrDgItems="let eleve of elevesList; let index = index">
-        <!--<clr-dg-cell>{{eleve.idEleve}}</clr-dg-cell>-->
-        <clr-dg-cell>{{eleve.prenom}}</clr-dg-cell>
-        <clr-dg-cell>{{eleve.nom}}</clr-dg-cell>
-        <clr-dg-cell>{{eleve.dateNaissance | date}}</clr-dg-cell>
-        <clr-dg-cell>{{eleve.genre == 1 ? "Homme" : "Femme"}}</clr-dg-cell>
-        <clr-dg-cell><img class="icon" [src]="eleve.avatar"></clr-dg-cell>
         <clr-dg-cell>
             <clr-button-group class="btn-primary btn-icon">
                 <clr-button [clrInMenu]="true" (click)="OnEdit(eleve)">Modifier</clr-button>
@@ -30,6 +24,12 @@
                 <clr-button [clrInMenu]="true" (click)="SelectPlayList(eleve)">Choisir la liste des questions</clr-button>
             </clr-button-group>
         </clr-dg-cell>
+        <!--<clr-dg-cell>{{eleve.idEleve}}</clr-dg-cell>-->
+        <clr-dg-cell>{{eleve.prenom}}</clr-dg-cell>
+        <clr-dg-cell>{{eleve.nom}}</clr-dg-cell>
+        <clr-dg-cell>{{eleve.dateNaissance | date}}</clr-dg-cell>
+        <clr-dg-cell>{{eleve.genre == 1 ? "Homme" : "Femme"}}</clr-dg-cell>
+        <clr-dg-cell><img class="icon" [src]="eleve.avatar"></clr-dg-cell>
     </clr-dg-row>
     <clr-dg-footer>
         <clr-dg-pagination #pagination [clrDgPageSize]="30">

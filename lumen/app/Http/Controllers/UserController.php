@@ -21,10 +21,10 @@ class UserController extends Controller
         $idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
         $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 
-		if(!isset($body->idFiche, $body->idCategorie, $body->listeQuestion))
+		if(!isset($body->idFiche, $body->idCategorie, $body->listeReponseEleve))
             return response()->json(['code' => 400 ,'message' => 'Invalid Parameter'], 400);
 
-		$questionACorriger = $body->listeQuestion;
+		$questionACorriger = $body->listeReponseEleve;
 
 		$questions = DB::select('
 			SELECT idQuestion, bonneReponse
