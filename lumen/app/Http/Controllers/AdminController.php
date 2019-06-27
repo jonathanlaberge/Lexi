@@ -144,9 +144,14 @@ class AdminController extends Controller
     {
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 
-		if (!$this->IsValidID($page))
+		if (!$this->IsValidID($page) && $page != 0)
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
-
+		
+		if ($page == 0)
+			return response()->json(DB::select('
+				SELECT * FROM `categorie`
+				WHERE `estPublic` = 1 OR `idMaitresseCreatrice` =?',[$idMaitresseCreatrice]), 200);
+				
 		return response()->json(DB::select('
 			SELECT * FROM `categorie`
 			WHERE `estPublic` = 1 OR `idMaitresseCreatrice` =?
@@ -369,9 +374,14 @@ class AdminController extends Controller
     {
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 
-		if (!$this->IsValidID($page))
+		if (!$this->IsValidID($page) && $page != 0)
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
-
+		
+		if ($page == 0)
+			return response()->json(DB::select('
+				SELECT * FROM `fiche`
+				WHERE `estPublic` = 1 OR `idMaitresseCreatrice` =?',[$idMaitresseCreatrice]), 200);
+		
 		return response()->json(DB::select('
 			SELECT * FROM `fiche`
 			WHERE `estPublic` = 1 OR `idMaitresseCreatrice` =?
@@ -382,8 +392,13 @@ class AdminController extends Controller
 	{
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 
-		if (!$this->IsValidID($page))
+		if (!$this->IsValidID($page) && $page != 0)
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
+		
+		if ($page == 0)
+			return response()->json(DB::select('
+				SELECT * FROM `fiche`
+				WHERE `idCategorie` =?` AND (estPublic` = 1 OR `idMaitresseCreatrice` =? )',[$idCategorie, $idMaitresseCreatrice]), 200);
 
 		return response()->json(DB::select('
 			SELECT * FROM `fiche`
@@ -602,9 +617,16 @@ class AdminController extends Controller
     {
 		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 
-		if (!$this->IsValidID($page))
+		if (!$this->IsValidID($page) && $page != 0)
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
+		if ($page == 0)
+			return response()->json(DB::select('
+				SELECT `eleve`.`idEleve`, `classe_eleve_maitresse`.`idMaitresse`, `prenom`, `nom`, `genre`, `avatar`
+				FROM `eleve`
+				JOIN `classe_eleve_maitresse` ON `classe_eleve_maitresse`.`idEleve` = `eleve`.`idEleve`
+				WHERE `classe_eleve_maitresse`.`idMaitresse` =?',[$idMaitresse]), 200);
+			
 		return response()->json(DB::select('
 			SELECT `eleve`.`idEleve`, `classe_eleve_maitresse`.`idMaitresse`, `prenom`, `nom`, `genre`, `avatar`
 			FROM `eleve`
@@ -617,9 +639,15 @@ class AdminController extends Controller
     {
 		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 
-		if (!$this->IsValidID($page))
+		if (!$this->IsValidID($page) && $page != 0)
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
-
+		
+		if ($page == 0)
+			return response()->json(DB::select('
+				SELECT * FROM `historique`
+				JOIN `classe_eleve_maitresse` ON `classe_eleve_maitresse`.`idEleve` = `historique`.`idEleve`
+				WHERE `classe_eleve_maitresse`.`idMaitresse` =?',[$idMaitresse]), 200);
+		
 		return response()->json(DB::select('
             SELECT * FROM `historique`
             JOIN `classe_eleve_maitresse` ON `classe_eleve_maitresse`.`idEleve` = `historique`.`idEleve`

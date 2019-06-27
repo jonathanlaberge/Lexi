@@ -159,11 +159,19 @@ class UserController extends Controller
 
     public function FicheGetList(Request $request, $page = 1)
     {
-		if (!$this->IsValidID($page))
+		if (!$this->IsValidID($page) && $page != 0)
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		$idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
         $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
+		
+		if ($page == 0)
+			return response()->json(DB::select('
+				SELECT `fiche`.`idFiche`, `fiche`.`idCategorie`, `titre`, `dateCreation`, `estPublic`, `maitresse`.`prenom`, `maitresse`.`nom` FROM `fiche`
+				JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
+				JOIN `fiche_a_remplir` ON `fiche_a_remplir`.`idFiche` = `fiche`.`idFiche` AND `fiche_a_remplir`.`idCategorie` = `fiche`.`idCategorie`
+				WHERE `fiche_a_remplir`.`idEleve` =? AND
+				`fiche_a_remplir`.`idMaitresse` =?',[$idEleve, $idMaitresse]), 200);
 
 		return response()->json(DB::select('
 			SELECT `fiche`.`idFiche`, `fiche`.`idCategorie`, `titre`, `dateCreation`, `estPublic`, `maitresse`.`prenom`, `maitresse`.`nom` FROM `fiche`
@@ -176,12 +184,21 @@ class UserController extends Controller
 
     public function FicheGetListCategorie(Request $request, $page, $idCategorie)
     {
-		if (!$this->IsValidID($page) || !$this->IsValidID($idCategorie))
+		if ((!$this->IsValidID($page) && $page != 0) || !$this->IsValidID($idCategorie))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		$idEleve = JWTAuth::parseToken()->getPayload()["idEleveEnCours"];
         $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
-
+		
+		if ($page == 0)
+			return response()->json(DB::select('
+				SELECT `fiche`.`idFiche`, `fiche`.`idCategorie`, `titre`, `dateCreation`, `estPublic`, `maitresse`.`prenom`, `maitresse`.`nom` FROM `fiche`
+				JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
+				JOIN `fiche_a_remplir` ON `fiche_a_remplir`.`idFiche` = `fiche`.`idFiche` AND `fiche_a_remplir`.`idCategorie` = `fiche`.`idCategorie`
+				WHERE `fiche_a_remplir`.`idEleve` =? AND
+				`fiche_a_remplir`.`idMaitresse` =? AND
+				`fiche`.`idCategorie` =?',[$idEleve, $idMaitresse, $idCategorie]), 200);
+			
 		return response()->json(DB::select('
 			SELECT `fiche`.`idFiche`, `fiche`.`idCategorie`, `titre`, `dateCreation`, `estPublic`, `maitresse`.`prenom`, `maitresse`.`nom` FROM `fiche`
             JOIN `maitresse` ON `maitresse`.`idMaitresse` = `fiche`.`idMaitresseCreatrice`
