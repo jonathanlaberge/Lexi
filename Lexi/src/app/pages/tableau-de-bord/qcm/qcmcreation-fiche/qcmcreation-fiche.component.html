@@ -1,3 +1,56 @@
-<p>
-  qcmcreation-fiche works!
-</p>
+<clr-modal [(clrModalOpen)]="isCreationModalOpen" [clrModalClosable]="false">
+    <h3 class="modal-title">Création d'une fiche</h3>
+    <div class="modal-body">
+        <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Il y a eu une erreur lors de la création de la catégorie. Veuillez réessayer plus tard.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!--<div>
+            <clr-input-container>
+                <label>Nom</label>
+                <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
+                <clr-control-error *clrIfError="'required'">Le nom est obligatoire.</clr-control-error>
+            </clr-input-container>
+
+            <clr-input-container>
+                <label>Matiere</label>
+                <input clrInput type="text" formControlName="matiere" name="Matiere" placeholder="Matiere" required />
+                <clr-control-error *clrIfError="'required'">La matière est obligatoire</clr-control-error>
+            </clr-input-container>
+
+            <clr-input-container>
+                <label>Niveau</label>
+                <input clrInput type="text" formControlName="niveau" name="Niveau" placeholder="Niveau" />
+                <clr-control-error *clrIfError="'required'">Le niveau est obligatoire</clr-control-error>
+            </clr-input-container>
+
+            <label>Visibilité</label>
+            <br />
+            <div class="btn-group">
+                <div class="radio btn">
+                    <input formControlName="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1">
+                    <label for="btn-radio-1">Public</label>
+                </div>
+                <div class="radio btn">
+                    <input formControlName="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2">
+                    <label for="btn-radio-2">Privé</label>
+                </div>
+            </div>
+        </div>-->
+    </div>
+    <div class="modal-footer">
+        <span *ngIf="isLoadingModal" class="spinner spinner-md" style="margin:3px">
+            Changement...
+        </span>
+        <button type="button" class="btn btn-primary" (click)="Close()">Annuler</button>
+        <button type="button" class="btn btn-success" (click)="SubmitCreationForm()">Ajouter</button>
+    </div>
+</clr-modal>

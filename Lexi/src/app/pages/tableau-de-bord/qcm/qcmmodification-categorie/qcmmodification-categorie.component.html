@@ -22,36 +22,34 @@
             <br />
         </div>
         <form *ngIf="isReady" clrForm [formGroup]="editForm">
-            <div class="login-group">
-                <clr-input-container>
-                    <label>Nom</label>
-                    <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
-                    <clr-control-error *clrIfError="'required'">Le nom est obligatoire.</clr-control-error>
-                </clr-input-container>
+            <clr-input-container>
+                <label>Nom</label>
+                <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
+                <clr-control-error *clrIfError="'required'">Le nom est obligatoire.</clr-control-error>
+            </clr-input-container>
 
-                <clr-input-container>
-                    <label>Matiere</label>
-                    <input clrInput type="text" formControlName="matiere" name="Matiere" placeholder="Matiere" required />
-                    <clr-control-error *clrIfError="'required'">La matière est obligatoire</clr-control-error>
-                </clr-input-container>
+            <clr-input-container>
+                <label>Matiere</label>
+                <input clrInput type="text" formControlName="matiere" name="Matiere" placeholder="Matiere" required />
+                <clr-control-error *clrIfError="'required'">La matière est obligatoire.</clr-control-error>
+            </clr-input-container>
 
-                <clr-input-container>
-                    <label>Niveau</label>
-                    <input clrInput type="text" formControlName="niveau" name="Niveau" placeholder="Niveau" />
-                    <clr-control-error *clrIfError="'required'">Le niveau est obligatoire</clr-control-error>
-                </clr-input-container>
+            <clr-input-container>
+                <label>Niveau</label>
+                <input clrInput type="text" formControlName="niveau" name="Niveau" placeholder="Niveau" />
+                <clr-control-error *clrIfError="'required'">Le niveau est obligatoire.</clr-control-error>
+            </clr-input-container>
 
-                <label>Visibilité</label>
-                <br />
-                <div class="btn-group">
-                    <div class="radio btn">
-                        <input formControlName="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1" [checked]="categorie.estPublic === 1">
-                        <label for="btn-radio-1">Public</label>
-                    </div>
-                    <div class="radio btn">
-                        <input formControlName="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2" [checked]="categorie.estPublic === 0">
-                        <label for="btn-radio-2">Privé</label>
-                    </div>
+            <label>Visibilité</label>
+            <br />
+            <div class="btn-group">
+                <div class="radio btn">
+                    <input formControlName="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1" [checked]="categorie.estPublic === 1">
+                    <label for="btn-radio-1">Public</label>
+                </div>
+                <div class="radio btn">
+                    <input formControlName="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2" [checked]="categorie.estPublic === 0">
+                    <label for="btn-radio-2">Privé</label>
                 </div>
             </div>
         </form>
