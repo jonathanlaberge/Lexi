@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Categorie } from 'src/app/model/categorie';
 import { APIService } from 'src/app/service/api.service';
 import { Fiche } from 'src/app/model/fiche';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component(
     {
@@ -30,7 +31,9 @@ export class QCMComponent implements OnInit
     
     constructor(
         private apiService: APIService,
-        private ref: ChangeDetectorRef) { }
+        private ref: ChangeDetectorRef,
+        private router: Router,
+        private route: ActivatedRoute) { }
     
     ngOnInit()
     {
@@ -74,6 +77,13 @@ export class QCMComponent implements OnInit
             this.ref.detectChanges();
         });
     }
+
+    Refresh()
+    {
+        this.GetCategorieList(0);
+        if (this.selectedCategorieRow != null)
+            this.GetFicheList(0, this.selectedCategorieRow.idCategorie);
+    }
     
     SetSelectedCategorieRow(item: Categorie)
     {
@@ -83,7 +93,7 @@ export class QCMComponent implements OnInit
 
     OnEditCategorie(categorie: Categorie)
     {
-
+        this.router.navigate(['modificationcategorie', categorie.idCategorie], { relativeTo: this.route });
     }
 
     OnDeleteCategorie(categorie: Categorie)
@@ -118,7 +128,7 @@ export class QCMComponent implements OnInit
 
     OnEditFiche(fiche: Fiche)
     {
-        
+        this.router.navigate(['modificationfiche', fiche.idCategorie, fiche.idFiche], { relativeTo: this.route });
     }
 
     OnDeleteFiche(fiche: Fiche)

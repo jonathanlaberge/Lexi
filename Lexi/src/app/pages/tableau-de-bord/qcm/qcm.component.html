@@ -1,4 +1,4 @@
-<router-outlet (deactivate)="GetCategorieList(0)"></router-outlet>
+<router-outlet (deactivate)="Refresh()"></router-outlet>
 
 <div class="clearfix">
     <h1>Gestion des questionnaires</h1>
@@ -16,11 +16,13 @@
     <clr-dg-row *clrDgItems="let item of categorieList; let index = index"
                 (click)="SetSelectedCategorieRow(item)">
         <clr-dg-cell>
-            <button class="btn btn-success btn-icon"><clr-icon shape="angle" style="transform: rotate(-90deg);"></clr-icon></button>
-            <clr-button-group *ngIf="idMaitresse == item.idMaitresseCreatrice" class="btn-primary btn-icon">
-                <clr-button [clrInMenu]="true" (click)="OnEditCategorie(item)">Modifier</clr-button>
-                <clr-button [clrInMenu]="true" (click)="OnDeleteCategorie(item)">Supprimer</clr-button>
-            </clr-button-group>
+            <div class="btn-group">
+                <button class="btn btn-success btn-icon"><clr-icon shape="angle" style="transform: rotate(-90deg);"></clr-icon></button>
+                <clr-button-group *ngIf="idMaitresse == item.idMaitresseCreatrice" class="btn-primary btn-icon">
+                    <clr-button [clrInMenu]="true" (click)="OnEditCategorie(item)">Modifier</clr-button>
+                    <clr-button [clrInMenu]="true" (click)="OnDeleteCategorie(item)">Supprimer</clr-button>
+                </clr-button-group>
+            </div>
         </clr-dg-cell>
 
         <clr-dg-cell>{{item.nom}}</clr-dg-cell>
@@ -43,7 +45,7 @@
 <div *ngIf="selectedCategorieRow != null">
     <div class="clearfix">
         <h4>Liste des fiches pour la catégorie <b>{{selectedCategorieRow.nom}}</b></h4>
-        <button class="btn btn-success pull-right" [routerLink]="['creationcategorie']">Ajouter une catégorie</button>
+        <button class="btn btn-success pull-right" [routerLink]="['creationfiche']">Ajouter une fiche</button>
     </div>
     <clr-datagrid [clrDgLoading]="isLoadingFiche">
         <clr-dg-column></clr-dg-column>
@@ -63,7 +65,8 @@
 
             <!--<clr-dg-cell>{{item.idCategorie}}</clr-dg-cell>-->
             <clr-dg-cell>{{item.titre}}</clr-dg-cell>
-            <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell>
+            lr
+            <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell><!-- @TODO: Bug: Fix date format for safari. -->
             <clr-dg-cell>{{item.estPublic == 1 ? "Oui" : "Non"}}</clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>
@@ -102,7 +105,7 @@
             Changement...
         </span>
         <button type="button" class="btn btn-outline" (click)="isCategorieDeleteModalOpen = false">Annuler</button>
-        <button type="button" class="btn btn-danger" (click)="deleteCategorie()">Supprimer</button>
+        <button type="button" class="btn btn-danger" (click)="DeleteCategorie()">Supprimer</button>
     </div>
 </clr-modal>
 
@@ -132,6 +135,6 @@
             Changement...
         </span>
         <button type="button" class="btn btn-outline" (click)="isFicheDeleteModalOpen = false">Annuler</button>
-        <button type="button" class="btn btn-danger" (click)="deleteFiche()">Supprimer</button>
+        <button type="button" class="btn btn-danger" (click)="DeleteFiche()">Supprimer</button>
     </div>
 </clr-modal>
