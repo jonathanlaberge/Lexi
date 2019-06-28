@@ -32,8 +32,8 @@ export class EleveComponent implements OnInit
     constructor(
         private apiService: APIService,
         private ref: ChangeDetectorRef,
-        private router: Router,
         private formBuilder: FormBuilder,
+        private router: Router,
         private route: ActivatedRoute) { }
     
     ngOnInit()
@@ -163,17 +163,6 @@ export class EleveComponent implements OnInit
 
     SelectPlayList(user: Eleve)
     {
-        console.log("id selectionné playlist " + user.idEleve);
-
-
-        //fichearemplir/:id
-
         this.router.navigate(['fichearemplir', user.idEleve], { relativeTo: this.route });
-       // [routerLink] = "['fichearemplir']
-
-
-
-
-
     }
 }
