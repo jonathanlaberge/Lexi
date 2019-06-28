@@ -1,3 +1,66 @@
-<p>
-  qcmmodification-categorie works!
-</p>
+<clr-modal [(clrModalOpen)]="isEditModalOpen" [clrModalClosable]="false">
+    <h3 class="modal-title">Création d'une catégorie</h3>
+    <div class="modal-body">
+        <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Il y a eu une erreur lors de la création de l'élève. Veuillez réessayer plus tard.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!isReady" class="center">
+            <br />
+            <span class="spinner spinner-lg">
+                Chargement...
+            </span>
+            <br />
+            <br />
+        </div>
+        <form *ngIf="isReady" clrForm [formGroup]="editForm">
+            <div class="login-group">
+                <clr-input-container>
+                    <label>Nom</label>
+                    <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
+                    <clr-control-error *clrIfError="'required'">Le nom est obligatoire.</clr-control-error>
+                </clr-input-container>
+
+                <clr-input-container>
+                    <label>Matiere</label>
+                    <input clrInput type="text" formControlName="matiere" name="Matiere" placeholder="Matiere" required />
+                    <clr-control-error *clrIfError="'required'">La matière est obligatoire</clr-control-error>
+                </clr-input-container>
+
+                <clr-input-container>
+                    <label>Niveau</label>
+                    <input clrInput type="text" formControlName="niveau" name="Niveau" placeholder="Niveau" />
+                    <clr-control-error *clrIfError="'required'">Le niveau est obligatoire</clr-control-error>
+                </clr-input-container>
+
+                <label>Visibilité</label>
+                <br />
+                <div class="btn-group">
+                    <div class="radio btn">
+                        <input formControlName="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1">
+                        <label for="btn-radio-1">Public</label>
+                    </div>
+                    <div class="radio btn">
+                        <input formControlName="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2">
+                        <label for="btn-radio-2">Privé</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <span *ngIf="isLoadingModal" class="spinner spinner-md" style="margin:3px">
+            Changement...
+        </span>
+        <button type="button" class="btn btn-primary" (click)="Close()">Annuler</button>
+        <button *ngIf="isReady" type="button" class="btn btn-success" (click)="SubmitEditForm()">Ajouter</button>
+    </div>
+</clr-modal>
