@@ -14,6 +14,10 @@ export const API_URL = "http://lexi.jolab.me/v1/";
     })
 export class APIService
 {
+
+
+
+
     private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
 
     public static currentMaitresse: Maitresse = null;
@@ -168,8 +172,11 @@ export class APIService
     }
 
 
+    //Playlist - Playlist //UserSetTODOList
 
-
-
+    AddPlayliste(selectedFicheListDTO: any[]) {
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}admin/eleve/${selectedFicheListDTO[0].idEleve}/listeafaire`, JSON.stringify(selectedFicheListDTO), this.options);
+    }
 
 }

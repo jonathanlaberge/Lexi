@@ -70,7 +70,7 @@
             </div>
 
 
-            <clr-datagrid [clrDgLoading]="isLoadingCategorie" [(clrDgSelected)]="selectedFiche" [clrDgRowSelection]="true">
+            <clr-datagrid [clrDgLoading]="isLoadingCategorie" [(clrDgSelected)]="selectedFicheList" [clrDgRowSelection]="true">
                 <clr-dg-column>Titre</clr-dg-column>
                 <clr-dg-column>Date de création</clr-dg-column>
                 <clr-dg-column>Nom de maitressse</clr-dg-column>
@@ -83,12 +83,12 @@
 
                     <clr-dg-cell>{{item.titre}}</clr-dg-cell>
                     <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell>
-                    <clr-dg-cell>{{item.prenom}} {{item.nom}}</clr-dg-cell>
+                    <clr-dg-cell>{{item.prenomCreatrice}} {{item.nomCreatrice}}</clr-dg-cell>
 
 
                 </clr-dg-row>
                 <clr-dg-footer>
-                    {{selectedFiche.length}} Fiches   
+                    {{selectedFicheList.length}} Fiches
 
                     <clr-dg-pagination #pagination [clrDgPageSize]="10">
                         <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégorie par page</clr-dg-page-size>

@@ -23,10 +23,10 @@ export class EleveFicheARemplirComponent implements OnInit {
 
     isReady: boolean = false;
     isLoadingCategorie: boolean = false;
-
-
-    selectedFiche: FicheDTO[] = [];
-    ficheList: FicheDTO[] = [];
+    idEleve: number;
+    
+    selectedFicheList: Fiche[] = [];
+    ficheList: Fiche[] = [];
 
     categorieList: Categorie[] = [];
     selectedCategorieRow: Categorie = null;
@@ -40,8 +40,8 @@ export class EleveFicheARemplirComponent implements OnInit {
         private apiService: APIService,
         private ref: ChangeDetectorRef,
         private router: Router,
-        private route: ActivatedRoute,
-        private activeRoute: ActivatedRoute
+        private route: ActivatedRoute
+
 
     ) { }
 
@@ -54,10 +54,21 @@ export class EleveFicheARemplirComponent implements OnInit {
         this.GetCategorieList(0);
 
 
+        this.route.params.subscribe(params => {
+            if (!isNaN(parseFloat(params['id']))) {
+
+
+                this.idEleve = parseFloat(params['id']);
+
+            }
+            else
+                this.router.navigate([`../`], { relativeTo: this.route });
+        });
+
         this.apiService.GetFicheList(0).subscribe((data: any) => {
             if (data != null)
                 data.forEach(function (value) {
-                    this.ficheList.push(value as FicheDTO);
+                    this.ficheList.push(value as Fiche);
                 }.bind(this));
 
             this.isReady = true;
@@ -69,13 +80,6 @@ export class EleveFicheARemplirComponent implements OnInit {
 
 
 
-    ajouterList()
-    {
-
-
-
-
-    }
 
 
     Close()
@@ -130,7 +134,52 @@ export class EleveFicheARemplirComponent implements OnInit {
         this.GetFicheList(0, item.idCategorie);
     }
 
+    ajouterList() {
 
+        var selectedFicheListDTO: any[] = [];
+
+
+      
+
+
+        for (let item of this.selectedFicheList) {
+           
+
+
+            selectedFicheListDTO.push({
+                idMaitresse: APIService.currentMaitresse,
+                idEleve: this.idEleve,
+                idFiche: item.idFiche,
+                idCategorie: item.idCategorie
+
+
+            });
+
+
+
+
+        }
+
+        this.apiService.AddPlayliste(selectedFicheListDTO).subscribe(
+            (data: any) => {
+                if (data.code == 200) {
+                    this.isLoadingModal = false;
+                    this.Close();
+                }
+                else
+                    this.errorServer = true;
+            },
+            () => {
+                this.errorServer = true;
+                this.isLoadingModal = false;
+            });
+
+
+
+
+
+
+    }
 
 
 
