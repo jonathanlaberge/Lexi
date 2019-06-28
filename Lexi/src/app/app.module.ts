@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ClarityModule } from "@clr/angular";
+import { EditorModule } from '@tinymce/tinymce-angular';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -72,6 +74,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
                 ReactiveFormsModule,
                 BrowserAnimationsModule,
                 ClarityModule,
+                EditorModule,
                 SidebarModule,
                 NavbarModule,
                 FooterModule,

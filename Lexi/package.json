@@ -24,6 +24,7 @@
     "@clr/icons": "^2.0.1",
     "@clr/ui": "^2.0.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@tinymce/tinymce-angular": "^3.1.0",
     "@webcomponents/custom-elements": "^1.2.4",
     "angular-font-awesome": "^3.1.2",
     "core-js": "^3.1.4",
