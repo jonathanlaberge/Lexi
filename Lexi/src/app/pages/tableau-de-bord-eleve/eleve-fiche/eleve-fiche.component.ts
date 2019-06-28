@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { APIService } from 'src/app/service/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RoutingService } from 'src/app/service/routing.service';
-import { Fiche } from 'src/app/model/fiche';
 import { FicheDTO } from 'src/app/model/dto/ficheDTO';
 
 @Component(
@@ -13,28 +12,14 @@ import { FicheDTO } from 'src/app/model/dto/ficheDTO';
     })
 export class EleveFicheComponent implements OnInit
 {
-
-    selectedFiche: FicheDTO = new FicheDTO();
     ficheList: FicheDTO[] = [];
-    isReady: boolean = false;
 
-
-
-
-
+    isLoading: boolean = false;
 
     constructor(
         private apiService: APIService,
         private ref: ChangeDetectorRef,
-        private router: Router,
-        private activeRoute: ActivatedRoute
-
-    ) { }
-
-
-
-
-
+        private router: Router) { }
 
     ngOnInit()
     {
@@ -45,32 +30,22 @@ export class EleveFicheComponent implements OnInit
         if (!APIService.IsTokenInEleveMode())
             this.router.navigate(['/eleve']);
 
-
-
-        this.apiService.GetPlaylist(0).subscribe((data: any) => {
+        this.isLoading = true;
+        this.apiService.GetPlaylist(0).subscribe((data: any) =>
+        {
             if (data != null)
-                data.forEach(function (value) {
+                data.forEach(function (value)
+                {
                     this.ficheList.push(value as FicheDTO);
                 }.bind(this));
 
-            this.isReady = true;
+            this.isLoading = false;
             this.ref.detectChanges();
         });
-
-
-
-
-
     }
 
-    setSelectedFiche(fiche: FicheDTO) {
-
-        this.selectedFiche = fiche;
-        console.log("selected idCategorie " + this.selectedFiche.idCategorie + "\n    selected idfiche " + this.selectedFiche.idFiche);
-
-
-        this.router.navigate(['/eleve/qcm', this.selectedFiche.idCategorie, this.selectedFiche.idFiche]);
-
-
+    SetSelectedFiche(fiche: FicheDTO)
+    {
+        this.router.navigate(['/eleve/qcm', fiche.idCategorie, fiche.idFiche]);
     }
 }
