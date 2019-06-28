@@ -1,5 +1,5 @@
 <clr-modal [(clrModalOpen)]="isEditModalOpen" [clrModalClosable]="false">
-    <h3 class="modal-title">Création d'une catégorie</h3>
+    <h3 class="modal-title">Modification d'une catégorie</h3>
     <div class="modal-body">
         <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
             <div class="alert-items">
@@ -8,7 +8,7 @@
                         <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
                     </div>
                     <span class="alert-text">
-                        Il y a eu une erreur lors de la création de l'élève. Veuillez réessayer plus tard.
+                        Il y a eu une erreur lors de la modification de la catécorie. Veuillez réessayer plus tard.
                     </span>
                 </div>
             </div>
@@ -45,11 +45,11 @@
                 <br />
                 <div class="btn-group">
                     <div class="radio btn">
-                        <input formControlName="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1">
+                        <input formControlName="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1" [checked]="categorie.estPublic === 1">
                         <label for="btn-radio-1">Public</label>
                     </div>
                     <div class="radio btn">
-                        <input formControlName="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2">
+                        <input formControlName="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2" [checked]="categorie.estPublic === 0">
                         <label for="btn-radio-2">Privé</label>
                     </div>
                 </div>
@@ -61,6 +61,6 @@
             Changement...
         </span>
         <button type="button" class="btn btn-primary" (click)="Close()">Annuler</button>
-        <button *ngIf="isReady" type="button" class="btn btn-success" (click)="SubmitEditForm()">Ajouter</button>
+        <button *ngIf="isReady" type="button" class="btn btn-success" (click)="SubmitEditForm()">Modifier</button>
     </div>
 </clr-modal>

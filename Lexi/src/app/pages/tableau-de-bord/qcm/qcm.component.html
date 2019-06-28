@@ -10,8 +10,10 @@
     <clr-dg-column>Nom</clr-dg-column>
     <clr-dg-column>Matière</clr-dg-column>
     <clr-dg-column>Niveau</clr-dg-column>
-    <clr-dg-column>Est une catégorie public</clr-dg-column>
+    <clr-dg-column>Visibilité</clr-dg-column>
     <clr-dg-column>Créé par</clr-dg-column>
+
+    <clr-dg-placeholder>La liste des catégories est vide. Pensez à créer une catégorie!</clr-dg-placeholder>
 
     <clr-dg-row *clrDgItems="let item of categorieList; let index = index"
                 (click)="SetSelectedCategorieRow(item)">
@@ -28,7 +30,7 @@
         <clr-dg-cell>{{item.nom}}</clr-dg-cell>
         <clr-dg-cell>{{item.matiere }}</clr-dg-cell>
         <clr-dg-cell>{{item.niveau}}</clr-dg-cell>
-        <clr-dg-cell>{{item.estPublic == 1 ? "Oui" : "Non"}}</clr-dg-cell>
+        <clr-dg-cell>{{item.estPublic == 1 ? "Public" : "Privé"}}</clr-dg-cell>
 
         <clr-dg-cell *ngIf="idMaitresse != item.idMaitresseCreatrice">{{item.prenomCreatrice}} {{item.nomCreatrice}}</clr-dg-cell>
         <clr-dg-cell *ngIf="idMaitresse == item.idMaitresseCreatrice"><b>Vous-même</b></clr-dg-cell>
@@ -52,7 +54,9 @@
         <!--<clr-dg-column>idCategorie</clr-dg-column>-->
         <clr-dg-column>Titre</clr-dg-column>
         <clr-dg-column>Date de création</clr-dg-column>
-        <clr-dg-column>Est une fiche public</clr-dg-column>
+        <clr-dg-column>Visibilité</clr-dg-column>
+
+        <clr-dg-placeholder>La liste des fiches est vide. Pensez à créer une fiche dans cette catégorie!</clr-dg-placeholder>
 
         <clr-dg-row *clrDgItems="let item of ficheList; let index = index;">
             <clr-dg-cell>
@@ -67,7 +71,7 @@
             <clr-dg-cell>{{item.titre}}</clr-dg-cell>
             lr
             <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell><!-- @TODO: Bug: Fix date format for safari. -->
-            <clr-dg-cell>{{item.estPublic == 1 ? "Oui" : "Non"}}</clr-dg-cell>
+            <clr-dg-cell>{{item.estPublic == 1 ? "Public" : "Privé"}}</clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>
             <clr-dg-pagination #pagination [clrDgPageSize]="30">

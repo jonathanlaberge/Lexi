@@ -65,7 +65,7 @@ export class QCMComponent implements OnInit
         this.isLoadingFiche = true;
         this.ficheList = [];
 
-        this.apiService.GetFicheList(page, idCategorie).subscribe((data: any) =>
+        this.apiService.GetFicheListCategorie(page, idCategorie).subscribe((data: any) =>
         {
             if (data != null)
                 data.forEach(function (value)
