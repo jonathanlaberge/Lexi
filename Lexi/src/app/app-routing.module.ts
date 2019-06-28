@@ -59,7 +59,7 @@ const routes: Routes =
                                 { path: 'modificationcategorie', component: QCMModificationCategorieComponent },
                                 { path: 'modificationcategorie/:id', component: QCMModificationCategorieComponent },
                                 { path: 'modificationfiche', component: QCMModificationFicheComponent },
-                                { path: 'modificationfiche/:id', component: QCMModificationFicheComponent },
+                                { path: 'modificationfiche/:idCategorie/:idFiche', component: QCMModificationFicheComponent },
                                 //{ path: 'statistique', component: QCMStatistiqueComponent },
                                 //{ path: 'statistique/:id', component: QCMStatistiqueComponent }
                             ]
