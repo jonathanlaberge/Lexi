@@ -1,5 +1,5 @@
 
-<clr-modal [(clrModalOpen)]="isCreationModalOpen" [clrModalClosable]="false">
+<clr-modal [(clrModalOpen)]="isCreationModalOpen" [clrModalClosable]="false" [clrModalSize]="'xl'">
     <h3 class="modal-title">Assignation de fiche a un élève.</h3>
     <div class="modal-body">
         <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
@@ -17,23 +17,93 @@
 
 
 
-        <clr-datagrid [(clrDgSelected)]="selectedFiche" [clrDgRowSelection]="true">
 
-            <clr-dg-column>Titre</clr-dg-column>
-            <clr-dg-column>Date de création</clr-dg-column>
-            <clr-dg-column>Nom de maitressse</clr-dg-column>
+
+
+
+
+
+
+
+        <clr-datagrid [clrDgLoading]="isLoadingCategorie">
             
+            <clr-dg-column>Nom</clr-dg-column>
+            <clr-dg-column>Matière</clr-dg-column>
+            <clr-dg-column>Niveau</clr-dg-column>
+            <clr-dg-column>Visibilité</clr-dg-column>
+            <clr-dg-column>Créé par</clr-dg-column>
+
+            <clr-dg-placeholder>La liste des catégories est vide. Pensez à créer une catégorie!</clr-dg-placeholder>
+
+            <clr-dg-row *clrDgItems="let item of categorieList; let index = index"
+                        (click)="SetSelectedCategorieRow(item)">
 
 
-            <clr-dg-row *clrDgItems="let item of ficheList; let index = index" [clrDgItem]="item">
-                <clr-dg-cell>{{item.titre}} <clr-icon shape="tasks" class="has-alert is-solid"></clr-icon></clr-dg-cell>
-                <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell>
-                <clr-dg-cell>{{item.prenom}} {{item.nom}}</clr-dg-cell>
+                <clr-dg-cell>{{item.nom}}</clr-dg-cell>
+                <clr-dg-cell>{{item.matiere }}</clr-dg-cell>
+                <clr-dg-cell>{{item.niveau}}</clr-dg-cell>
+                <clr-dg-cell>{{item.estPublic == 1 ? "Public" : "Privé"}}</clr-dg-cell>
+
+                <clr-dg-cell *ngIf="idMaitresse != item.idMaitresseCreatrice">{{item.prenomCreatrice}} {{item.nomCreatrice}}</clr-dg-cell>
+                <clr-dg-cell *ngIf="idMaitresse == item.idMaitresseCreatrice"><b>Vous-même</b></clr-dg-cell>
             </clr-dg-row>
-
-
-            <clr-dg-footer>{{selectedFiche.length}} Fiches</clr-dg-footer>
+            <clr-dg-footer>
+                <clr-dg-pagination #pagination [clrDgPageSize]="10">
+                    <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégorie par page</clr-dg-page-size>
+                    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+                    de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "catégorie" : "catégories"}}
+                </clr-dg-pagination>
+            </clr-dg-footer>
         </clr-datagrid>
+
+
+
+
+
+
+
+
+        <div *ngIf="selectedCategorieRow != null">
+            <div class="clearfix">
+                <h4>Liste dde fiche de la catégorie <b>{{selectedCategorieRow.nom}}</b></h4>
+
+            </div>
+
+
+            <clr-datagrid [clrDgLoading]="isLoadingCategorie" [(clrDgSelected)]="selectedFiche" [clrDgRowSelection]="true">
+                <clr-dg-column>Titre</clr-dg-column>
+                <clr-dg-column>Date de création</clr-dg-column>
+                <clr-dg-column>Nom de maitressse</clr-dg-column>
+
+                <clr-dg-row *clrDgItems="let item of ficheList; let index = index"
+                          
+                            [clrDgItem]="item">
+
+
+
+                    <clr-dg-cell>{{item.titre}}</clr-dg-cell>
+                    <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell>
+                    <clr-dg-cell>{{item.prenom}} {{item.nom}}</clr-dg-cell>
+
+
+                </clr-dg-row>
+                <clr-dg-footer>
+                    {{selectedFiche.length}} Fiches   
+
+                    <clr-dg-pagination #pagination [clrDgPageSize]="10">
+                        <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégorie par page</clr-dg-page-size>
+                        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+                        de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "fiche" : "fiches"}}
+                    </clr-dg-pagination>
+
+
+                </clr-dg-footer>
+            </clr-datagrid>
+        </div>
+
+
+
+
 
 
 
@@ -47,4 +117,13 @@
         <button type="button" class="btn btn-success" (click)="ajouterList()">Ajouter</button>
     </div>
 </clr-modal>
-   
+
+
+
+
+
+
+
+
+
+

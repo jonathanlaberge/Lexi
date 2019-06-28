@@ -3,6 +3,7 @@ import { Eleve } from 'src/app/model/eleve';
 import { APIService } from 'src/app/service/api.service';
 import { ClrForm } from '@clr/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component(
     {
@@ -31,7 +32,9 @@ export class EleveComponent implements OnInit
     constructor(
         private apiService: APIService,
         private ref: ChangeDetectorRef,
-        private formBuilder: FormBuilder) { }
+        private router: Router,
+        private formBuilder: FormBuilder,
+        private route: ActivatedRoute) { }
     
     ngOnInit()
     {
@@ -165,8 +168,8 @@ export class EleveComponent implements OnInit
 
         //fichearemplir/:id
 
-        //this.router.navigate(['fichearemplir/:id']);
-
+        this.router.navigate(['fichearemplir', user.idEleve], { relativeTo: this.route });
+       // [routerLink] = "['fichearemplir']
 
 
 

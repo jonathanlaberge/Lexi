@@ -21,7 +21,7 @@
                 <clr-button [clrInMenu]="true" (click)="OnEdit(eleve)">Modifier</clr-button>
                 <clr-button [clrInMenu]="true" (click)="OnDelete(eleve)">Supprimer</clr-button>
                 <!--<clr-button [clrInMenu]="true" (click)="ShowHistory(eleve)">Voir l'historique</clr-button>-->
-                <clr-button [clrInMenu]="true" [routerLink]="['fichearemplir/eleve.idEleve']">Choisir la liste des questions</clr-button>
+                <clr-button [clrInMenu]="true" (click)="SelectPlayList(eleve)">Choisir la liste des questions</clr-button>
             </clr-button-group>
         </clr-dg-cell>
         <!--<clr-dg-cell>{{eleve.idEleve}}</clr-dg-cell>-->
