@@ -161,5 +161,16 @@ export class EleveComponent implements OnInit
     SelectPlayList(user: Eleve)
     {
         console.log("id selectionné playlist " + user.idEleve);
+
+
+        //fichearemplir/:id
+
+        //this.router.navigate(['fichearemplir/:id']);
+
+
+
+
+
+
     }
 }
