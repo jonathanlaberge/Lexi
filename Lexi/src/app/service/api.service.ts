@@ -110,6 +110,12 @@ export class APIService
         this.SetHeader();
         return this.httpClient.get(`${API_URL}admin/categorie/liste/${page}`, this.options);
     }
+    
+    public GetCategorie(idCategorie: number)
+    {
+        this.SetHeader();
+        return this.httpClient.get(`${API_URL}admin/categorie/${idCategorie}`, this.options);
+    }
 
     public EditCategorie(categorie: Categorie)
     {
@@ -130,7 +136,13 @@ export class APIService
     }
 
     /// Admin - Fiche
-    public GetFicheList(page: number, idCategorie: number)
+    public GetFicheList(page: number)
+    {
+        this.SetHeader();
+        return this.httpClient.get(`${API_URL}admin/fiches/liste/${page}`, this.options);
+    }
+
+    public GetFicheListCategorie(page: number, idCategorie: number)
     {
         this.SetHeader();
         return this.httpClient.get(`${API_URL}admin/fiches/liste/${page}/parcategorie/${idCategorie}`, this.options);
@@ -148,10 +160,9 @@ export class APIService
         this.SetHeader();
         return this.httpClient.post(`${API_URL}eleve/fiches/validation`, JSON.stringify(validation), this.options);
     }
-
-
-
-    GetFicheQuestion(idCategorie: number, idFiche: number) {
+    
+    public GetFicheQuestion(idCategorie: number, idFiche: number)
+    {
         this.SetHeader();
         return this.httpClient.get(`${API_URL}eleve/fiches/${idCategorie}/${idFiche}`, this.options);
     }
