@@ -45,22 +45,22 @@ export class QCMCreationFicheComponent implements OnInit
             //categorie.niveau = this.creationForm.value.niveau;
             //categorie.estPublic = this.creationForm.value.estPublic;
 
-            this.apiService.AddCategorie(fiche).subscribe(
-                (data: any) =>
-                {
-                    if (data.code == 200)
-                    {
-                        this.isLoadingModal = false;
-                        this.Close();
-                    }
-                    else
-                        this.errorServer = true;
-                },
-                () =>
-                {
-                    this.errorServer = true;
-                    this.isLoadingModal = false;
-                });
+            //this.apiService.AddFiche(fiche).subscribe(
+            //    (data: any) =>
+            //    {
+            //        if (data.code == 200)
+            //        {
+            //            this.isLoadingModal = false;
+            //            this.Close();
+            //        }
+            //        else
+            //            this.errorServer = true;
+            //    },
+            //    () =>
+            //    {
+            //        this.errorServer = true;
+            //        this.isLoadingModal = false;
+            //    });
         }
     }
 
