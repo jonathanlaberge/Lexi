@@ -206,7 +206,7 @@ export class EleveQCMComponent implements OnInit {
 
                     }
 
-                    window.alert("Bravo, 100%");
+                    window.alert("Erreur trouvé.");
                     this.router.navigate([`../`], { relativeTo: this.route });
 
                 }

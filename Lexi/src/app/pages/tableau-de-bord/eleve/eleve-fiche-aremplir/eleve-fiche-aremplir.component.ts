@@ -9,9 +9,9 @@ import { Categorie } from 'src/app/model/categorie';
 import { Fiche } from 'src/app/model/fiche';
 
 @Component({
-  selector: 'app-eleve-fiche-aremplir',
-  templateUrl: './eleve-fiche-aremplir.component.html',
-  styleUrls: ['./eleve-fiche-aremplir.component.css']
+    selector: 'app-eleve-fiche-aremplir',
+    templateUrl: './eleve-fiche-aremplir.component.html',
+    styleUrls: ['./eleve-fiche-aremplir.component.css']
 })
 export class EleveFicheARemplirComponent implements OnInit {
 
@@ -24,7 +24,7 @@ export class EleveFicheARemplirComponent implements OnInit {
     isReady: boolean = false;
     isLoadingCategorie: boolean = false;
     idEleve: number;
-    
+
     selectedFicheList: Fiche[] = [];
     ficheList: Fiche[] = [];
 
@@ -32,7 +32,7 @@ export class EleveFicheARemplirComponent implements OnInit {
     selectedCategorieRow: Categorie = null;
 
     isLoadingFiche: boolean = false;
-   
+
 
 
 
@@ -49,8 +49,7 @@ export class EleveFicheARemplirComponent implements OnInit {
 
 
 
-    ngOnInit()
-    {
+    ngOnInit() {
         this.GetCategorieList(0);
 
 
@@ -82,8 +81,7 @@ export class EleveFicheARemplirComponent implements OnInit {
 
 
 
-    Close()
-    {
+    Close() {
         this.errorServer = false;
         this.isLoadingModal = false;
 
@@ -120,14 +118,29 @@ export class EleveFicheARemplirComponent implements OnInit {
 
             this.isLoadingFiche = false;
             this.ref.detectChanges();
+
+            this.apiService.GetPlayliste(this.idEleve).subscribe((data: any) => {
+                if (data != null)
+                    data.forEach(function (value) {
+
+                        console.log(value);
+
+
+
+                        this.selectedFicheList.push(this.ficheList.find(x => x.idCategorie === value.idCategorie && x.idFiche === value.idFiche));
+                    }.bind(this));
+
+                this.isLoadingFiche = false;
+                this.ref.detectChanges();
+            });
         });
+
+
+
+
+
     }
 
-    Refresh() {
-        this.GetCategorieList(0);
-        if (this.selectedCategorieRow != null)
-            this.GetFicheList(0, this.selectedCategorieRow.idCategorie);
-    }
 
     SetSelectedCategorieRow(item: Categorie) {
         this.selectedCategorieRow = item;
@@ -138,12 +151,8 @@ export class EleveFicheARemplirComponent implements OnInit {
 
         var selectedFicheListDTO: any[] = [];
 
-
-      
-
-
         for (let item of this.selectedFicheList) {
-           
+
 
 
             selectedFicheListDTO.push({
@@ -151,8 +160,6 @@ export class EleveFicheARemplirComponent implements OnInit {
                 idEleve: this.idEleve,
                 idFiche: item.idFiche,
                 idCategorie: item.idCategorie
-
-
             });
 
 
@@ -174,12 +181,27 @@ export class EleveFicheARemplirComponent implements OnInit {
                 this.isLoadingModal = false;
             });
 
-
-
-
-
-
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

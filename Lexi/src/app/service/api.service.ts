@@ -179,4 +179,12 @@ export class APIService
         return this.httpClient.post(`${API_URL}admin/eleve/${selectedFicheListDTO[0].idEleve}/listeafaire`, JSON.stringify(selectedFicheListDTO), this.options);
     }
 
+
+    GetPlayliste(id: number) {
+        this.SetHeader();
+        return this.httpClient.get(`${API_URL}admin/eleve/${id}/listeafaire`, this.options);
+    }
+
+
+
 }
