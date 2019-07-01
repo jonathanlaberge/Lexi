@@ -7,6 +7,8 @@ import { Eleve } from 'src/app/model/eleve';
 import { FicheDTO } from 'src/app/model/dto/ficheDTO';
 import { Categorie } from 'src/app/model/categorie';
 import { Fiche } from 'src/app/model/fiche';
+import { ficheGlobale } from 'src/app/model/dto/ficheGlobale';
+import { isNullOrUndefined } from 'util';
 
 @Component({
     selector: 'app-eleve-fiche-aremplir',
@@ -17,21 +19,25 @@ export class EleveFicheARemplirComponent implements OnInit {
 
 
 
-    isCreationModalOpen: boolean = true;
-    isLoadingModal: boolean = false;
-    errorServer: boolean = false;
 
-    isReady: boolean = false;
-    isLoadingCategorie: boolean = false;
-    idEleve: number;
+    idEleve: number = 0;
 
-    selectedFicheList: Fiche[] = [];
-    ficheList: Fiche[] = [];
 
-    categorieList: Categorie[] = [];
-    selectedCategorieRow: Categorie = null;
+   public isCreationModalOpen: boolean = true;
+    public isLoadingModal: boolean = false;
+     public errorServer: boolean = false;
 
-    isLoadingFiche: boolean = false;
+    public  isReady: boolean = false;
+    public isLoadingCategorie: boolean = false;
+
+    public selectedGlobalList: Fiche[] = [];
+    public selectedFicheList: Fiche[] = [];
+    public ficheList: Fiche[] = [];
+
+    public  categorieList: Categorie[] = [];
+    public  selectedCategorieRow: Categorie = null;
+
+    public     isLoadingFiche: boolean = false;
 
 
 
@@ -64,15 +70,23 @@ export class EleveFicheARemplirComponent implements OnInit {
                 this.router.navigate([`../`], { relativeTo: this.route });
         });
 
-        this.apiService.GetFicheList(0).subscribe((data: any) => {
+
+
+        /*
+        this.apiService.GetPlayliste(this.idEleve).subscribe((data: any) => {
             if (data != null)
                 data.forEach(function (value) {
-                    this.ficheList.push(value as Fiche);
+
+                    console.log(value);
+
+                    this.selectedGlobalList.push(value);
+                    //this.selectedGlobalList.push(this.ficheList.find(x => x.idCategorie === value.idCategorie && x.idFiche === value.idFiche));
                 }.bind(this));
 
-            this.isReady = true;
+            this.isLoadingFiche = false;
             this.ref.detectChanges();
         });
+        */
 
     }
 
@@ -106,6 +120,11 @@ export class EleveFicheARemplirComponent implements OnInit {
         });
     }
 
+
+
+
+
+
     GetFicheList(page: number, idCategorie: number) {
         this.isLoadingFiche = true;
         this.ficheList = [];
@@ -119,20 +138,66 @@ export class EleveFicheARemplirComponent implements OnInit {
             this.isLoadingFiche = false;
             this.ref.detectChanges();
 
+
+
+
+            //this.selectedFicheList.push(this.ficheList.find(x => x.idCategorie === selectedGlobalList.idCategorie && x.idFiche === value.idFiche));
+
+
+            /*for (var item of this.selectedGlobalList) {
+                 console.log(item);
+                                  if (item.idCategorie == this.selectedCategorieRow.idCategorie)
+                         this.selectedFicheList.push(item);
+ 
+             }*/
+
+
+
+
+
+
+            //  this.selectedGlobalList.push(this.ficheList.find(x => x.idCategorie === value.idCategorie && x.idFiche === value.idFiche));
+
+
+
             this.apiService.GetPlayliste(this.idEleve).subscribe((data: any) => {
                 if (data != null)
                     data.forEach(function (value) {
 
                         console.log(value);
 
-
-
-                        this.selectedFicheList.push(this.ficheList.find(x => x.idCategorie === value.idCategorie && x.idFiche === value.idFiche));
+                        this.selectedFicheList.push(this.ficheList.find(x => x.idCategorie == value.idCategorie && x.idFiche == value.idFiche));
+                        this.selectedGlobalList.push(this.ficheList.find(x => x.idCategorie === value.idCategorie && x.idFiche === value.idFiche));
                     }.bind(this));
 
                 this.isLoadingFiche = false;
                 this.ref.detectChanges();
             });
+            /* this.selectedGlobalList.forEach(
+                 x => {
+                     if (x.idCategorie == this.selectedCategorieRow.idCategorie) {
+                         this.selectedFicheList.push(this.ficheList.find(x => x.idCategorie === this.selectedCategorieRow.idCategorie));
+ 
+                         console.log(x);
+ 
+                         this.isLoadingFiche = false;
+                         this.ref.detectChanges();
+                     }
+ 
+                 });*/
+
+
+
+
+
+
+
+
+
+
+
+
+
         });
 
 
@@ -143,31 +208,43 @@ export class EleveFicheARemplirComponent implements OnInit {
 
 
     SetSelectedCategorieRow(item: Categorie) {
+
+
+
+       // this.addToGlobalList();
+
         this.selectedCategorieRow = item;
         this.GetFicheList(0, item.idCategorie);
     }
 
     ajouterList() {
-
+        this.addToGlobalList();
         var selectedFicheListDTO: any[] = [];
 
-        for (let item of this.selectedFicheList) {
 
 
+        for (var f of this.selectedGlobalList) {
+
+
+
+
+
+            
 
             selectedFicheListDTO.push({
-                idMaitresse: APIService.currentMaitresse,
+                idMaitresse: APIService.currentMaitresse.idMaitresse,
                 idEleve: this.idEleve,
-                idFiche: item.idFiche,
-                idCategorie: item.idCategorie
+
+               
+                idCategorie: f.idCategorie,
+                idFiche: f.idFiche
+                
             });
-
-
-
+        
 
         }
 
-        this.apiService.AddPlayliste(selectedFicheListDTO).subscribe(
+        this.apiService.AddPlayliste(selectedFicheListDTO, this.idEleve).subscribe(
             (data: any) => {
                 if (data.code == 200) {
                     this.isLoadingModal = false;
@@ -180,22 +257,28 @@ export class EleveFicheARemplirComponent implements OnInit {
                 this.errorServer = true;
                 this.isLoadingModal = false;
             });
-
     }
 
 
 
 
+    addToGlobalList() {
+
+
+
+        this.selectedFicheList.forEach(
+            x => {
+               console.log(x)
+                    this.selectedGlobalList.push(x);
+                
+        })
+
+        
 
 
 
 
-
-
-
-
-
-
+    }
 
 
 
