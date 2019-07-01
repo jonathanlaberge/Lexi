@@ -4,11 +4,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 @Component(
     {
-        selector: 'app-tableau-de-bord',
-        templateUrl: './tableau-de-bord.component.html',
-        styleUrls: ['./tableau-de-bord.component.css']
+        selector: 'app-tableau-de-bord-maitresse',
+        templateUrl: './tableau-de-bord-maitresse.component.html'
     })
-export class TableauDeBordComponent implements OnInit
+export class TableauDeBordMaitresseComponent implements OnInit
 {
 
     constructor(private router: Router, private activeRoute: ActivatedRoute) { }

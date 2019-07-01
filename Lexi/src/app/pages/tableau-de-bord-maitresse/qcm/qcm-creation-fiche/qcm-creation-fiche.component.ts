@@ -6,8 +6,7 @@ import { Fiche } from 'src/app/model/fiche';
 @Component(
     {
         selector: 'app-qcmcreation-fiche',
-        templateUrl: './qcmcreation-fiche.component.html',
-        styleUrls: ['./qcmcreation-fiche.component.css']
+        templateUrl: './qcmcreation-fiche.component.html'
     })
 export class QCMCreationFicheComponent implements OnInit
 {

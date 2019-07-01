@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-qcmmodification-fiche',
-  templateUrl: './qcmmodification-fiche.component.html',
-  styleUrls: ['./qcmmodification-fiche.component.css']
+  selector: 'app-qcm-modification-fiche',
+  templateUrl: './qcm-modification-fiche.component.html'
 })
 export class QCMModificationFicheComponent implements OnInit {
 

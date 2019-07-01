@@ -7,8 +7,8 @@ import { Categorie } from 'src/app/model/categorie';
 
 @Component(
     {
-        selector: 'app-qcmmodification-categorie',
-        templateUrl: './qcmmodification-categorie.component.html'
+        selector: 'app-qcm-modification-categorie',
+        templateUrl: './qcm-modification-categorie.component.html'
     })
 export class QCMModificationCategorieComponent implements OnInit
 {
