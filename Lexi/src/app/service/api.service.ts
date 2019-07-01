@@ -174,9 +174,9 @@ export class APIService
 
     //Playlist - Playlist //UserSetTODOList
 
-    AddPlayliste(selectedFicheListDTO: any[]) {
+    AddPlayliste(selectedFicheListDTO: any[], idEleve: number ) {
         this.SetHeader();
-        return this.httpClient.post(`${API_URL}admin/eleve/${selectedFicheListDTO[0].idEleve}/listeafaire`, JSON.stringify(selectedFicheListDTO), this.options);
+        return this.httpClient.post(`${API_URL}admin/eleve/${idEleve}/listeafaire`, JSON.stringify(selectedFicheListDTO), this.options);
     }
 
 
