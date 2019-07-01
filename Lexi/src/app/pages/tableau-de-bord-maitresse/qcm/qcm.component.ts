@@ -23,18 +23,18 @@ export class QCMComponent implements OnInit
     isLoadingCategorie: boolean = false;
     isLoadingFiche: boolean = false;
     isLoadingModal: boolean = false;
-    
+
     isCategorieDeleteModalOpen: boolean = false;
     isFicheDeleteModalOpen: boolean = false;
-    
+
     errorServer: boolean = false;
-    
+
     constructor(
         private apiService: APIService,
         private ref: ChangeDetectorRef,
         private router: Router,
         private route: ActivatedRoute) { }
-    
+
     ngOnInit()
     {
         this.idMaitresse = APIService.currentMaitresse.idMaitresse;
@@ -82,13 +82,16 @@ export class QCMComponent implements OnInit
     {
         this.GetCategorieList(0);
         if (this.selectedCategorieRow != null)
-            this.GetFicheList(0, this.selectedCategorieRow.idCategorie);
+            this.SetSelectedCategorieRow(this.selectedCategorieRow);
     }
-    
+
     SetSelectedCategorieRow(item: Categorie)
     {
-        this.selectedCategorieRow = item;
-        this.GetFicheList(0, item.idCategorie);
+        if (this.selectedCategorieRow != item)
+        {
+            this.selectedCategorieRow = item;
+            this.GetFicheList(0, item.idCategorie);
+        }
     }
 
     OnEditCategorie(categorie: Categorie)

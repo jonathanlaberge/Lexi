@@ -51,10 +51,10 @@
     </div>
     <clr-datagrid [clrDgLoading]="isLoadingFiche">
         <clr-dg-column></clr-dg-column>
-        <!--<clr-dg-column>idCategorie</clr-dg-column>-->
         <clr-dg-column>Titre</clr-dg-column>
         <clr-dg-column>Date de création</clr-dg-column>
         <clr-dg-column>Visibilité</clr-dg-column>
+        <clr-dg-column>Créé par</clr-dg-column>
 
         <clr-dg-placeholder>La liste des fiches est vide. Pensez à créer une fiche dans cette catégorie!</clr-dg-placeholder>
 
@@ -63,14 +63,15 @@
                 <clr-button-group *ngIf="idMaitresse == item.idMaitresseCreatrice" class="btn-primary btn-icon">
                     <clr-button [clrInMenu]="true" (click)="OnEditFiche(item)">Modifier</clr-button>
                     <clr-button [clrInMenu]="true" (click)="OnDeleteFiche(item)">Supprimer</clr-button>
-                    <!--<clr-button [clrInMenu]="true" (click)="history(item)">Historique</clr-button>-->
                 </clr-button-group>
             </clr-dg-cell>
 
-            <!--<clr-dg-cell>{{item.idCategorie}}</clr-dg-cell>-->
             <clr-dg-cell>{{item.titre}}</clr-dg-cell>
             <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell><!-- @TODO: Bug: Fix date format for safari. -->
             <clr-dg-cell>{{item.estPublic == 1 ? "Public" : "Privé"}}</clr-dg-cell>
+
+            <clr-dg-cell *ngIf="idMaitresse != item.idMaitresseCreatrice">{{item.prenomCreatrice}} {{item.nomCreatrice}}</clr-dg-cell>
+            <clr-dg-cell *ngIf="idMaitresse == item.idMaitresseCreatrice"><b>Vous-même</b></clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>
             <clr-dg-pagination #pagination [clrDgPageSize]="30">

@@ -6,14 +6,16 @@ import { Fiche } from 'src/app/model/fiche';
 @Component(
     {
         selector: 'app-qcmcreation-fiche',
-        templateUrl: './qcmcreation-fiche.component.html'
+        templateUrl: './qcm-creation-fiche.component.html'
     })
 export class QCMCreationFicheComponent implements OnInit
 {
     isCreationModalOpen: boolean = true;
     isLoadingModal: boolean = false;
 
-    
+    nom: string;
+    estPublic: number;
+    questions: string;
 
     errorServer: boolean = false;
     

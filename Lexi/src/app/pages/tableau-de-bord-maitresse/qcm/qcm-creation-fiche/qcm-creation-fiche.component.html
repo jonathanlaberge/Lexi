@@ -1,4 +1,4 @@
-<clr-modal [(clrModalOpen)]="isCreationModalOpen" [clrModalClosable]="false">
+<clr-modal [(clrModalOpen)]="isCreationModalOpen" [clrModalClosable]="false" [clrModalSize]="'xl'">
     <h3 class="modal-title">Création d'une fiche</h3>
     <div class="modal-body">
         <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
@@ -13,38 +13,32 @@
                 </div>
             </div>
         </div>
-        <!--<div>
+        <div>
             <clr-input-container>
                 <label>Nom</label>
-                <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
+                <input clrInput type="text" [(ngModel)]="nom" name="Nom" placeholder="Nom" required />
                 <clr-control-error *clrIfError="'required'">Le nom est obligatoire.</clr-control-error>
             </clr-input-container>
 
-            <clr-input-container>
-                <label>Matiere</label>
-                <input clrInput type="text" formControlName="matiere" name="Matiere" placeholder="Matiere" required />
-                <clr-control-error *clrIfError="'required'">La matière est obligatoire</clr-control-error>
-            </clr-input-container>
-
-            <clr-input-container>
-                <label>Niveau</label>
-                <input clrInput type="text" formControlName="niveau" name="Niveau" placeholder="Niveau" />
-                <clr-control-error *clrIfError="'required'">Le niveau est obligatoire</clr-control-error>
-            </clr-input-container>
-
-            <label>Visibilité</label>
-            <br />
+            <h4>Visibilité</h4>
             <div class="btn-group">
                 <div class="radio btn">
-                    <input formControlName="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1">
+                    <input [(ngModel)]="estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1">
                     <label for="btn-radio-1">Public</label>
                 </div>
                 <div class="radio btn">
-                    <input formControlName="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2">
+                    <input [(ngModel)]="estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2">
                     <label for="btn-radio-2">Privé</label>
                 </div>
             </div>
-        </div>-->
+            <h2>Questions</h2>
+            <editor [(ngModel)]="questions"
+                    [init]="{
+                    plugins: 'lists advlist',
+                    toolbar: 'undo redo | bold italic | bullist numlist outdent indent'}
+                    "></editor>
+
+        </div>
     </div>
     <div class="modal-footer">
         <span *ngIf="isLoadingModal" class="spinner spinner-md" style="margin:3px">

@@ -20,7 +20,22 @@
                         "tsConfig": "src/tsconfig.app.json",
                         "assets": [
                             "src/favicon.ico",
-                            "src/assets"
+                            "src/assets",
+                            {
+                                "glob": "**/*",
+                                "input": "node_modules/tinymce/skins",
+                                "output": "/skins/"
+                            },
+                            {
+                                "glob": "**/*",
+                                "input": "node_modules/tinymce/themes",
+                                "output": "/themes/"
+                            },
+                            {
+                                "glob": "**/*",
+                                "input": "node_modules/tinymce/plugins",
+                                "output": "/plugins/"
+                            }
                         ],
                         "styles": [
                             "src/styles.css",
@@ -35,7 +50,8 @@
                             "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
                             "node_modules/@clr/icons/clr-icons.min.js",
                             "node_modules/jquery/dist/jquery.min.js",
-                            "node_modules/jquery-ui-dist/jquery-ui.min.js"
+                            "node_modules/jquery-ui-dist/jquery-ui.min.js",
+                            "node_modules/tinymce/tinymce.min.js"
                         ],
                         "es5BrowserSupport": true
                     },
