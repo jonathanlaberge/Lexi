@@ -4,7 +4,7 @@
     <clr-dg-column>Nom de maitressse</clr-dg-column>
     <clr-dg-column></clr-dg-column>
 
-    <clr-dg-placeholder>Ta liste de questionnaires est vide. Tu les as toutes terminé!</clr-dg-placeholder>
+    <clr-dg-placeholder>La liste de questionnaires est vide.</clr-dg-placeholder>
 
     <clr-dg-row *clrDgItems="let item of ficheList; let index = index" (click)="SetSelectedFiche(item)">
         <clr-dg-cell><clr-icon shape="tasks" class="has-alert is-solid"></clr-icon> {{item.titre}}</clr-dg-cell>
