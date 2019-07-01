@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { APIService } from 'src/app/service/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Fiche } from 'src/app/model/fiche';
+import { Question } from 'src/app/model/question';
 
 @Component(
     {
@@ -10,12 +11,9 @@ import { Fiche } from 'src/app/model/fiche';
     })
 export class QCMCreationFicheComponent implements OnInit
 {
-    isCreationModalOpen: boolean = true;
-    isLoadingModal: boolean = false;
-
-    nom: string;
-    estPublic: number;
-    questions: string;
+    isLoading: boolean = false;
+    
+    fiche: Fiche = new Fiche();
 
     errorServer: boolean = false;
     
@@ -26,7 +24,20 @@ export class QCMCreationFicheComponent implements OnInit
 
     ngOnInit()
     {
+        this.fiche.listeQuestion = [];
+        this.fiche.titre = "Nouvelle Fiche";
+        this.fiche.estPublic = 0;
+        this.AjouterQuestion();
 
+        this.route.params.subscribe(params =>
+        {
+            if (!isNaN(parseFloat(params['id'])))
+            {
+                this.fiche.idCategorie = parseFloat(params['id']);
+            }
+            else
+                this.router.navigate([`../`], { relativeTo: this.route });
+        });
     }
 
 
@@ -38,37 +49,67 @@ export class QCMCreationFicheComponent implements OnInit
         }
         else
         {
-            this.isLoadingModal = true;
-            var fiche: Fiche = new Fiche();
+            this.isLoading = true;
 
-            //categorie.nom = this.creationForm.value.nom;
-            //categorie.matiere = this.creationForm.value.matiere;
-            //categorie.niveau = this.creationForm.value.niveau;
-            //categorie.estPublic = this.creationForm.value.estPublic;
+            console.log(this.fiche);
 
-            //this.apiService.AddFiche(fiche).subscribe(
-            //    (data: any) =>
-            //    {
-            //        if (data.code == 200)
-            //        {
-            //            this.isLoadingModal = false;
-            //            this.Close();
-            //        }
-            //        else
-            //            this.errorServer = true;
-            //    },
-            //    () =>
-            //    {
-            //        this.errorServer = true;
-            //        this.isLoadingModal = false;
-            //    });
+            this.apiService.AddFiche(this.fiche).subscribe(
+                (data: any) =>
+                {
+                    //if (data.code == 200)
+                    //{
+                        this.isLoading = false;
+                        this.Close();
+                    //}
+                    //else
+                    //    this.errorServer = true;
+                }/*,
+                () =>
+                {
+                    this.errorServer = true;
+                }*/);
+        }
+    }
+
+    AjouterQuestion()
+    {
+        var question = new Question();
+        question.choixDeReponses = ["Vrai", "Faux"];
+        question.bonneReponse = 1;
+        this.fiche.listeQuestion.push(question);
+    }
+
+    EnleverQuestion()
+    {
+        this.fiche.listeQuestion.pop();
+    }
+
+    AjouterReponse(index: number)
+    {
+        this.fiche.listeQuestion[index].choixDeReponses.push("");
+    }
+
+    EnleverReponse(index: number)
+    {
+        this.fiche.listeQuestion[index].choixDeReponses.pop();
+    }
+
+    OnChangeUserDots(index: number, event)
+    {
+        if (event.target.checked)
+        {
+            this.fiche.listeQuestion[index].choixDeReponses = ["<p hidden>useDots</p>"];
+        }
+        else
+        {
+            this.fiche.listeQuestion[index].choixDeReponses = ["Vrai", "Faux"];
+            this.fiche.listeQuestion[index].bonneReponse = 1;
         }
     }
 
     Close()
     {
         this.errorServer = false;
-        this.isLoadingModal = false;
-        this.router.navigate([`../`], { relativeTo: this.route });
+        this.router.navigate([`../../`], { relativeTo: this.route });
     }
 }

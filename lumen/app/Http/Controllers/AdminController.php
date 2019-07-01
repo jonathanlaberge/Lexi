@@ -167,10 +167,16 @@ class AdminController extends Controller
     {
         $body = json_decode($request->getContent());
         
-        if (!isset($body->idFiche, $body->idCategorie, $body->titre, $body->listeQuestion))
+        if (!isset($body->idCategorie, $body->titre, $body->listeQuestion))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
-		$idFiche = $body->idFiche;
+		$resultID = DB::select('SELECT MAX(`idFiche`) as id FROM `fiche` WHERE `idCategorie` =?',[$body->idCategorie]);
+		
+		if ($resultID == null)
+			$idFiche = 1;
+		else
+			$idFiche = $resultID[0]->id + 1;
+		
 		$idCategorie = $body->idCategorie;
 		$titre = $body->titre;
 		$listeQuestion = $body->listeQuestion;
@@ -607,7 +613,7 @@ class AdminController extends Controller
     {
         $body = json_decode($request->getContent());
 
-        if (!$this->IsValidID($idEleve) || count($body) == 0)
+        if (!$this->IsValidID($idEleve))
             return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
         $idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
@@ -619,21 +625,24 @@ class AdminController extends Controller
             
         $numberAffected = 0;
 
-        foreach ($body as $item)
-        {
-            if (isset($item->idCategorie, $item->idFiche))
-            {
-                $numberAffected++;
-                    
-                DB::insert('
-                    INSERT INTO `fiche_a_remplir`
-                    (`idCategorie`, `idFiche`, `idEleve`, `idMaitresse`)
-                    VALUES (?,?,?,?)',
-                    [$item->idCategorie, $item->idFiche, $idEleve, $idMaitresse]);
-            
-            }
-        }
-
+		if (count($body) != 0)
+		{
+			foreach ($body as $item)
+			{
+				if (isset($item->idCategorie, $item->idFiche))
+				{
+					$numberAffected++;
+						
+					DB::insert('
+						INSERT INTO `fiche_a_remplir`
+						(`idCategorie`, `idFiche`, `idEleve`, `idMaitresse`)
+						VALUES (?,?,?,?)',
+						[$item->idCategorie, $item->idFiche, $idEleve, $idMaitresse]);
+				
+				}
+			}
+		}
+		
         return response()->json(['code' => 200 ,'message' => $numberAffected.' Variable(s) Affected'] , 200);
     }
 

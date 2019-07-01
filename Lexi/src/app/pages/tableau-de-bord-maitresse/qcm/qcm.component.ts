@@ -23,6 +23,7 @@ export class QCMComponent implements OnInit
     isLoadingCategorie: boolean = false;
     isLoadingFiche: boolean = false;
     isLoadingModal: boolean = false;
+    isParentPageHidden: boolean = false;
 
     isCategorieDeleteModalOpen: boolean = false;
     isFicheDeleteModalOpen: boolean = false;
@@ -33,13 +34,22 @@ export class QCMComponent implements OnInit
         private apiService: APIService,
         private ref: ChangeDetectorRef,
         private router: Router,
-        private route: ActivatedRoute) { }
+        private activeRoute: ActivatedRoute) { }
 
     ngOnInit()
     {
         this.idMaitresse = APIService.currentMaitresse.idMaitresse;
 
         this.GetCategorieList(0);
+        
+        this.activeRoute.url.subscribe(() =>
+        {
+            if (this.router.url !== '/tableaudebord/qcm')
+            {
+                this.isParentPageHidden = true;
+            }
+            this.ref.detectChanges();
+        });
     }
 
     GetCategorieList(page: number)
@@ -87,7 +97,7 @@ export class QCMComponent implements OnInit
 
     SetSelectedCategorieRow(item: Categorie)
     {
-        if (this.selectedCategorieRow != item)
+        if (this.selectedCategorieRow != item || this.isParentPageHidden /* Refresh la table fiche lors de création ou mofidication de fiche.*/)
         {
             this.selectedCategorieRow = item;
             this.GetFicheList(0, item.idCategorie);
@@ -96,7 +106,7 @@ export class QCMComponent implements OnInit
 
     OnEditCategorie(categorie: Categorie)
     {
-        this.router.navigate(['modificationcategorie', categorie.idCategorie], { relativeTo: this.route });
+        this.router.navigate(['modificationcategorie', categorie.idCategorie], { relativeTo: this.activeRoute });
     }
 
     OnDeleteCategorie(categorie: Categorie)
@@ -131,7 +141,14 @@ export class QCMComponent implements OnInit
 
     OnEditFiche(fiche: Fiche)
     {
-        this.router.navigate(['modificationfiche', fiche.idCategorie, fiche.idFiche], { relativeTo: this.route });
+        this.isParentPageHidden = true;
+        this.router.navigate(['modificationfiche', fiche.idCategorie, fiche.idFiche], { relativeTo: this.activeRoute });
+    }
+
+    OnCreateFiche()
+    {
+        this.isParentPageHidden = true;
+        this.router.navigate(['creationfiche', this.selectedCategorieRow.idCategorie], { relativeTo: this.activeRoute });
     }
 
     OnDeleteFiche(fiche: Fiche)
