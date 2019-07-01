@@ -7,6 +7,8 @@ import { Eleve } from 'src/app/model/eleve';
 import { FicheDTO } from 'src/app/model/dto/ficheDTO';
 import { Categorie } from 'src/app/model/categorie';
 import { Fiche } from 'src/app/model/fiche';
+import { ficheGlobale } from 'src/app/model/dto/ficheGlobale';
+import { isNullOrUndefined } from 'util';
 
 @Component({
     selector: 'app-eleve-fiche-aremplir',
@@ -28,7 +30,7 @@ export class EleveFicheARemplirComponent implements OnInit {
     public  isReady: boolean = false;
     public isLoadingCategorie: boolean = false;
 
-    public    selectedGlobalList: Fiche[] = [];
+    public selectedGlobalList: Fiche[] = [];
     public selectedFicheList: Fiche[] = [];
     public ficheList: Fiche[] = [];
 
@@ -223,14 +225,22 @@ export class EleveFicheARemplirComponent implements OnInit {
 
         for (var f of this.selectedGlobalList) {
 
+
+
+
+
+            
+
             selectedFicheListDTO.push({
-                idMaitresse: APIService.currentMaitresse,
+                idMaitresse: APIService.currentMaitresse.idMaitresse,
                 idEleve: this.idEleve,
+
+               
                 idCategorie: f.idCategorie,
                 idFiche: f.idFiche
                 
             });
-
+        
 
         }
 
@@ -258,7 +268,9 @@ export class EleveFicheARemplirComponent implements OnInit {
 
         this.selectedFicheList.forEach(
             x => {
-            this.selectedGlobalList.push(x);
+               console.log(x)
+                    this.selectedGlobalList.push(x);
+                
         })
 
         
