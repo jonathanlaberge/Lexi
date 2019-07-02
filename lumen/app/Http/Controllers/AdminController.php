@@ -345,7 +345,7 @@ class AdminController extends Controller
 						$numberAffected++;
 						//DB::update('
 						//	UPDATE `question`
-						//	SET `quesion` =?,`choixDeReponses` =?,`bonneReponse` =?
+						//	SET `question` =?,`choixDeReponses` =?,`bonneReponse` =?
 						//	WHERE `idQuestion` =?,`idFiche` =?,`idCategorie` =?',
                         //  [$question->question, $question->choixDeReponses, $question->bonneReponse, $question->idQuestion, $question->idFiche, $question->idCategorie]);
                             

@@ -149,7 +149,7 @@ class UserController extends Controller
 
 
 		$fiche->listeQuestion = DB::select("
-			SELECT `idQuestion`, `quesion`, `choixDeReponses`
+			SELECT `idQuestion`, `question`, `choixDeReponses`
 			FROM `question`
 			WHERE `idFiche`=? AND
 			`idCategorie`=?", [$idFiche ,$idCategorie]);
