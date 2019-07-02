@@ -28,7 +28,7 @@
         <clr-dg-cell>{{eleve.prenom}}</clr-dg-cell>
         <clr-dg-cell>{{eleve.nom}}</clr-dg-cell>
         <clr-dg-cell>{{eleve.dateNaissance | date}}</clr-dg-cell>
-        <clr-dg-cell>{{eleve.genre == 1 ? "Homme" : "Femme"}}</clr-dg-cell>
+        <clr-dg-cell>{{eleve.genre == 1 ? "Homme" : eleve.genre == 0 ? "Femme" : ""}}</clr-dg-cell>
         <clr-dg-cell><img class="icon" [src]="eleve.avatar"></clr-dg-cell>
     </clr-dg-row>
     <clr-dg-footer>
@@ -71,10 +71,6 @@
                 <label>Date de naissance</label>
                 <input clrInput type="date" formControlName="dateNaissance" name="Date de naissance" />
             </clr-input-container>
-            <clr-input-container>
-                <label>Avatar</label>
-                <input clrInput type="text" formControlName="avatar" name="Avatar" />
-            </clr-input-container>
             <br />
             <div class="btn-group">
                 <div class="radio btn">
@@ -86,6 +82,16 @@
                     <label for="btn-radio-2">Femme</label>
                 </div>
             </div>
+
+            <clr-input-container>
+                <label>Avatar</label>
+            </clr-input-container>
+
+            <p-galleria [activeIndex]="0" (onImageChange)="getAvatar($event.index)" [frameWidth]="40" [images]="images" [panelWidth]="500" [panelHeight]="350" [autoPlay]="false" [showCaption]="false">
+
+            </p-galleria>
+
+
         </form>
     </div>
     <div class="modal-footer">

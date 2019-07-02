@@ -1,4 +1,4 @@
-<clr-modal [clrModalSize]="'xl'" [(clrModalOpen)]="isCreationModalOpen" [clrModalClosable]="false">
+<clr-modal [clrModalSize]="'md'" [(clrModalOpen)]="isCreationModalOpen" [clrModalClosable]="false">
     <h3 class="modal-title">Création d'un élève</h3>
     <div class="modal-body">
         <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
@@ -31,10 +31,7 @@
                 <input clrInput type="date" formControlName="dateNaissance" />
             </clr-input-container>
 
-            <clr-input-container>
-                <label>Avatar</label>
-                <input clrInput type="text" formControlName="avatar" />
-            </clr-input-container>
+
 
             <br />
             <div class="btn-group">
@@ -46,13 +43,23 @@
                     <input formControlName="genre" value="0" type="radio" name="genre" id="btn-radio-2">
                     <label for="btn-radio-2">Femme</label>
                 </div>
-
-                <p-galleria [images]="images" panelWidth="500" panelHeight="313" [showCaption]="true"></p-galleria>
-
-
-
-
             </div>
+
+
+            <clr-input-container>
+                <label>Avatar</label>
+            </clr-input-container>
+            <p-galleria (onImageChange)="getAvatar($event.index)" [images]="images" [panelWidth]="500" [panelHeight]="256" [autoPlay]="false" [showCaption]="false">
+
+            </p-galleria>
+
+
+
+
+
+
+
+
         </form>
     </div>
     <div class="modal-footer">

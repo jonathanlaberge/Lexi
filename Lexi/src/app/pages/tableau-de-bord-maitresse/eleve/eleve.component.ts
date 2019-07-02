@@ -28,6 +28,11 @@ export class EleveComponent implements OnInit
 
     isLoadingModal: boolean = false;
     isLoading: boolean = false;
+
+
+    images: any[];
+    avatarPathIndex: number;
+    selectedAvatarPath: string;
     
     constructor(
         private apiService: APIService,
@@ -36,8 +41,8 @@ export class EleveComponent implements OnInit
         private router: Router,
         private route: ActivatedRoute) { }
     
-    ngOnInit()
-    {
+    ngOnInit() {
+    
         this.editForm = this.formBuilder.group(
             {
                 prenom: [ [Validators.required]],
@@ -70,6 +75,10 @@ export class EleveComponent implements OnInit
 
     OnEdit(eleve: Eleve)
     {
+        
+
+        this.images = [];
+
         this.selectedEleve = eleve;
         this.editForm.setValue(
             {
@@ -77,12 +86,29 @@ export class EleveComponent implements OnInit
                 nom: eleve.nom,
                 genre: eleve.genre,
                 dateNaissance: eleve.dateNaissance,
-                avatar: eleve.avatar
+                avatar: ""
             });
 
+        this.images.push({ source: this.selectedEleve.avatar, alt: 'Avatar courrent', title: 'Avatar courrent' });
+
+        this.getAvatar(0);
+        for (var i = 1; i <= 22; i++) {
+            this.images.push({ source: 'assets/kids-avatars/png/boy-' + i + '.png', alt: 'Avatar garcon ' + 1, title: 'Garcon ' + i });
+        }
+
+        for (var i = 1; i <= 26; i++) {
+            this.images.push({ source: 'assets/kids-avatars/png/girl-' + i + '.png', alt: 'Avatar fille ' + 1, title: 'Fille ' + i });
+        }
         this.errorServer = false;
         this.isEditModalOpen = true;
     }
+
+
+    getAvatar(index: number) {
+        console.log(this.images[index].source)
+        this.selectedAvatarPath = this.images[index].source;
+    }
+
 
     SubmitEditEleve()
     {
@@ -99,7 +125,8 @@ export class EleveComponent implements OnInit
             eleve.nom = this.editForm.value.nom;
             eleve.dateNaissance = this.editForm.value.dateNaissance;
             eleve.genre = this.editForm.value.genre;
-            eleve.avatar = this.editForm.value.avatar;
+            if (this.editForm.value.selectedAvatarPath != "")
+                eleve.avatar = this.selectedAvatarPath;
 
             this.isLoadingModal = true;
             this.errorServer = false;
@@ -165,4 +192,11 @@ export class EleveComponent implements OnInit
     {
         this.router.navigate(['fichearemplir', user.idEleve], { relativeTo: this.route });
     }
+
+
+
+
+
+
+
 }
