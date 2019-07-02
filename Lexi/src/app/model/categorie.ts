@@ -4,7 +4,7 @@ export class Categorie
     nom: string;
     matiere: string;
     niveau: string;
-    estPublic: boolean;
+    estPublic: number;
     idMaitresseCreatrice: number;
     
     prenomCreatrice: string;

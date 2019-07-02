@@ -6,7 +6,7 @@ export class Fiche
     idCategorie: number;
     titre: string;
     dateCreation: Date;
-    estPublic: boolean | number;
+    estPublic: number;
     idMaitresseCreatrice: number;
 
     listeQuestion: Question[];

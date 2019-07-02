@@ -183,9 +183,6 @@ class AdminController extends Controller
 
 		$idMaitresseCreatrice = JWTAuth::parseToken()->getPayload()["sub"];
 
-		if (!isset($idFiche, $idCategorie, $titre, $listeQuestion))
-			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
-
 		try
 		{
 			DB::beginTransaction();
@@ -208,7 +205,7 @@ class AdminController extends Controller
 					INSERT INTO `question`
 					(`idQuestion`, `idFiche`, `idCategorie`, `question`, `choixDeReponses`, `bonneReponse`)
 					VALUES (?,?,?,?,?,?)',
-					[$i, $idFiche, $idCategorie, $question->question, $question->choixDeReponses, $question->bonneReponse]);
+					[$i, $idFiche, $idCategorie, $question->question, json_encode($question->choixDeReponses), $question->bonneReponse]);
 
 				$i++;
 			}

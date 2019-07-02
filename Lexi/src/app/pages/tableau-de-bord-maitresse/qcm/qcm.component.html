@@ -20,8 +20,8 @@
                     (click)="SetSelectedCategorieRow(item)">
             <clr-dg-cell>
                 <div class="btn-group">
-                    <button class="btn btn-success btn-icon"><clr-icon shape="angle" style="transform: rotate(-90deg);"></clr-icon></button>
-                    <clr-button-group *ngIf="idMaitresse == item.idMaitresseCreatrice" class="btn-primary btn-icon">
+                    <button class="btn btn-success btn-icon btn-sm"><clr-icon shape="angle" style="transform: rotate(-90deg);"></clr-icon></button>
+                    <clr-button-group *ngIf="idMaitresse == item.idMaitresseCreatrice" class="btn-primary btn-icon btn-sm">
                         <clr-button [clrInMenu]="true" (click)="OnEditCategorie(item)">Modifier</clr-button>
                         <clr-button [clrInMenu]="true" (click)="OnDeleteCategorie(item)">Supprimer</clr-button>
                     </clr-button-group>
@@ -61,7 +61,7 @@
 
             <clr-dg-row *clrDgItems="let item of ficheList; let index = index;">
                 <clr-dg-cell>
-                    <clr-button-group *ngIf="idMaitresse == item.idMaitresseCreatrice" class="btn-primary btn-icon">
+                    <clr-button-group *ngIf="idMaitresse == item.idMaitresseCreatrice" class="btn-primary btn-icon btn-sm">
                         <clr-button [clrInMenu]="true" (click)="OnEditFiche(item)">Modifier</clr-button>
                         <clr-button [clrInMenu]="true" (click)="OnDeleteFiche(item)">Supprimer</clr-button>
                     </clr-button-group>

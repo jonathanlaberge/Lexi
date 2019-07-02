@@ -14,7 +14,8 @@
                 </div>
             </div>
         </div>
-        <clr-datagrid [clrDgLoading]="isLoadingCategorie">
+        <clr-datagrid [clrDgLoading]="isLoadingCategorie" class="datagrid-compact">
+            <clr-dg-column></clr-dg-column>
             <clr-dg-column>Nom</clr-dg-column>
             <clr-dg-column>Matière</clr-dg-column>
             <clr-dg-column>Niveau</clr-dg-column>
@@ -25,6 +26,9 @@
 
             <clr-dg-row *clrDgItems="let item of categorieList; let index = index"
                         (click)="SetSelectedCategorieRow(item)">
+                <clr-dg-cell>
+                    <button class="btn btn-success btn-icon btn-sm"><clr-icon shape="angle" style="transform: rotate(-90deg);"></clr-icon></button>
+                </clr-dg-cell>
                 <clr-dg-cell>{{item.nom}}</clr-dg-cell>
                 <clr-dg-cell>{{item.matiere }}</clr-dg-cell>
                 <clr-dg-cell>{{item.niveau}}</clr-dg-cell>
@@ -45,7 +49,7 @@
             <div class="clearfix">
                 <h4>Liste des fiches de la catégorie <b>{{selectedCategorieRow.nom}}</b></h4>
             </div>
-            <clr-datagrid [clrDgLoading]="isLoadingCategorie" [(clrDgSelected)]="selectedFicheList" [clrDgRowSelection]="true">
+            <clr-datagrid [clrDgLoading]="isLoadingCategorie" [(clrDgSelected)]="selectedFicheList" [clrDgRowSelection]="true"  class="datagrid-compact">
                 <clr-dg-column>Titre</clr-dg-column>
                 <clr-dg-column>Date de création</clr-dg-column>
                 <clr-dg-column>Nom de maitressse</clr-dg-column>

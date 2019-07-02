@@ -1,4 +1,11 @@
 <h1>Création d'une fiche</h1>
+<div class="pull-right">
+    <span *ngIf="isLoading" class="spinner spinner-md" style="margin:3px">
+        Changement...
+    </span>
+    <button type="button" class="btn btn-primary" (click)="Close()">Annuler</button>
+    <button type="button" class="btn btn-success" (click)="SubmitCreationForm()">Ajouter</button>
+</div>
 <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
     <div class="alert-items">
         <div class="alert-item static">
@@ -11,9 +18,21 @@
         </div>
     </div>
 </div>
+<div class="alert alert-danger" role="alert" [hidden]="!errorInput">
+    <div class="alert-items">
+        <div class="alert-item static">
+            <div class="alert-icon-wrapper">
+                <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+            </div>
+            <span class="alert-text">
+                Le titre est obligatoire. Veuillez entrer un titre.
+            </span>
+        </div>
+    </div>
+</div>
 <div>
     <clr-input-container>
-        <label>Nom</label>
+        <label>Titre</label>
         <input clrInput type="text" [(ngModel)]="fiche.titre" name="Titre" placeholder="Titre" required />
         <clr-control-error *clrIfError="'required'">Le titre est obligatoire.</clr-control-error>
     </clr-input-container>
@@ -21,11 +40,11 @@
     <h4>Visibilité</h4>
     <div class="btn-group">
         <div class="radio btn">
-            <input [(ngModel)]="fiche.estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1">
+            <input [(ngModel)]="fiche.estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1" [checked]="fiche.estPublic == 1">
             <label for="btn-radio-1">Public</label>
         </div>
         <div class="radio btn">
-            <input [(ngModel)]="fiche.estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2">
+            <input [(ngModel)]="fiche.estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2" [checked]="fiche.estPublic == 0">
             <label for="btn-radio-2">Privé</label>
         </div>
     </div>

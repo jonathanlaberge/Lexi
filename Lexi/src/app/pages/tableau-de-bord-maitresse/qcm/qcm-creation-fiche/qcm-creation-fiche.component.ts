@@ -12,11 +12,12 @@ import { Question } from 'src/app/model/question';
 export class QCMCreationFicheComponent implements OnInit
 {
     isLoading: boolean = false;
-    
+
     fiche: Fiche = new Fiche();
 
     errorServer: boolean = false;
-    
+    errorInput: boolean = false;
+
     constructor(
         private apiService: APIService,
         private router: Router,
@@ -43,38 +44,38 @@ export class QCMCreationFicheComponent implements OnInit
 
     SubmitCreationForm()
     {
-        if (/*this.creationForm.invalid*/false)
+        this.errorInput = false;
+
+        if (this.fiche.titre == "")
         {
-            //this.creationFormValidator.markAsTouched();
+            this.errorInput = true;
         }
         else
         {
             this.isLoading = true;
 
-            console.log(this.fiche);
-
             this.apiService.AddFiche(this.fiche).subscribe(
                 (data: any) =>
                 {
-                    //if (data.code == 200)
-                    //{
-                        this.isLoading = false;
+                    this.isLoading = false;
+                    if (data.code == 200)
                         this.Close();
-                    //}
-                    //else
-                    //    this.errorServer = true;
-                }/*,
+                    else
+                        this.errorServer = true;
+                },
                 () =>
                 {
+                    this.isLoading = false;
                     this.errorServer = true;
-                }*/);
+                });
         }
     }
 
     AjouterQuestion()
     {
         var question = new Question();
-        question.choixDeReponses = ["Vrai", "Faux"];
+        question.question = "<p></p>";
+        question.choixDeReponses = ["<p>Vrai</p>", "<p>Faux</p>"];
         question.bonneReponse = 1;
         this.fiche.listeQuestion.push(question);
     }
@@ -102,7 +103,7 @@ export class QCMCreationFicheComponent implements OnInit
         }
         else
         {
-            this.fiche.listeQuestion[index].choixDeReponses = ["Vrai", "Faux"];
+            this.fiche.listeQuestion[index].choixDeReponses = ["<p>Vrai</p>", "<p>Faux</p>"];
             this.fiche.listeQuestion[index].bonneReponse = 1;
         }
     }
