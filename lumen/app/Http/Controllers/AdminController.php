@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Fiche;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -269,12 +270,28 @@ class AdminController extends Controller
         $fiche->titre = $result[0]->titre;
         $fiche->dateCreation = $result[0]->dateCreation;
         $fiche->idMaitresseCreatrice = $result[0]->idMaitresseCreatrice;
+		$fiche->estPublic = $result[0]->estPublic;
 
-        $fiche->listeQuestion = DB::select('
+        $fiche->listeQuestion = array();
+		
+		$resultQuestion = DB::select('
             SELECT *
             FROM `question`
             WHERE `idFiche`=? AND
             `idCategorie`=?', [$idFiche ,$idCategorie]);
+			
+		foreach ($resultQuestion as $question)
+		{
+			array_push($fiche->listeQuestion, 
+			[
+				"idQuestion" => $question->idQuestion,
+				"idCategorie" => $question->idCategorie,
+				"idFiche" => $question->idFiche,
+				"question" => $question->question,
+				"choixDeReponses" => json_decode($question->choixDeReponses),
+				"bonneReponse" => $question->bonneReponse,
+			]);
+		}
 
         return response()->json($fiche, 200);
     }
@@ -290,47 +307,23 @@ class AdminController extends Controller
 		try
 		{
 			DB::beginTransaction();
-			if(isset($body->nom))
+			if(isset($body->titre))
 			{
 				$numberAffected++;
 				DB::update('
-					UPDATE `categorie`
-					SET `nom` =?
+					UPDATE `fiche`
+					SET `titre` =?
                     WHERE `idMaitresseCreatrice` =? AND
                     `idCategorie` =? AND
                     `idFiche` =?',
-					[$body->nom, $idMaitresse, $idCategorie, $idFiche]);
-			}
-
-			if(isset($body->matiere))
-			{
-				$numberAffected++;
-				DB::update('
-					UPDATE `categorie`
-					SET `matiere` =?
-					WHERE `idMaitresseCreatrice` =? AND
-                    `idCategorie` =? AND
-                    `idFiche` =?',
-					[$body->matiere, $idMaitresse, $idCategorie, $idFiche]);
-			}
-
-			if(isset($body->niveau))
-			{
-				$numberAffected++;
-				DB::update('
-					UPDATE `categorie`
-					SET `niveau` =?
-					WHERE `idMaitresseCreatrice` =? AND
-                    `idCategorie` =? AND
-                    `idFiche` =?',
-					[$body->niveau, $idMaitresse, $idCategorie, $idFiche]);
+					[$body->titre, $idMaitresse, $idCategorie, $idFiche]);
 			}
 
 			if(isset($body->estPublic))
 			{
 				$numberAffected++;
 				DB::update('
-					UPDATE `categorie`
+					UPDATE `fiche`
 					SET `estPublic` =?
 					WHERE `idMaitresseCreatrice` =? AND
                     `idCategorie` =? AND
@@ -341,7 +334,7 @@ class AdminController extends Controller
 			if(isset($body->listeQuestion))
 			{
                 DB::delete('
-                    DELETE FROM `question`
+                    DELETE `question` FROM `question`
                     JOIN `fiche` ON `question`.`idFiche` = `fiche`.`idFiche` AND `question`.`idCategorie` = `fiche`.`idCategorie`
                     WHERE `question`.`idFiche` =? AND `question`.`idCategorie` =? AND `fiche`.`idMaitresseCreatrice` =?', [$idFiche, $idCategorie, $idMaitresse]);
 
@@ -360,7 +353,7 @@ class AdminController extends Controller
                             INSERT INTO `question`
                             (`idQuestion`, `idFiche`, `idCategorie`, `question`, `choixDeReponses`, `bonneReponse`)
                             VALUES (?,?,?,?,?,?)',
-                            [$question->idQuestion, $question->idFiche, $question->idCategorie, $question->question, $question->choixDeReponses, $question->bonneReponse]);
+                            [$question->idQuestion, $question->idFiche, $question->idCategorie, $question->question, json_encode($question->choixDeReponses), $question->bonneReponse]);
                     
 					}
 				}
@@ -442,26 +435,26 @@ class AdminController extends Controller
             (`idMaitresse`, `idEleve`) 
             VALUES (?,?)', [$idMaitresse, $idEleveResult[0]->id]);
 			
-        if(!isset($body->dateNaissance))
+        if(isset($body->dateNaissance))
             DB::update('
                 UPDATE `eleve`
                 SET `dateNaissance` =?
                 WHERE `idEleve` =?',
-                [$body->dateNaissance,$$idEleveResult[0]->id]);
+                [$body->dateNaissance, $idEleveResult[0]->id]);
 
-        if(!isset($body->genre))
+        if(isset($body->genre))
             DB::update('
                 UPDATE `eleve`
                 SET `genre` =?
                 WHERE `idEleve` =?',
-                [$body->genre,$$idEleveResult[0]->id]);
+                [$body->genre, $idEleveResult[0]->id]);
 
-        if(!isset($body->avatar))
+        if(isset($body->avatar))
             DB::update('
                 UPDATE `eleve`
                 SET `avatar` =?
-                WHERE idEleve` =?',
-                [$body->genre,$$idEleveResult[0]->id]);
+                WHERE `idEleve` =?',
+                [$body->avatar, $idEleveResult[0]->id]);
 
 		return response()->json(["code" => "200", "message" => "OK"], 200);
 	}

@@ -154,6 +154,24 @@ export class APIService
         return this.httpClient.post(`${API_URL}admin/fiches/creation`, JSON.stringify(fiche), this.options);
     }
 
+    public DeleteFiche(idCategorie: number, idFiche: number)
+    {
+        this.SetHeader();
+        return this.httpClient.delete(`${API_URL}admin/fiches/${idCategorie}/${idFiche}`, this.options);
+    }
+
+    public GetFiche(idCategorie: number, idFiche: number)
+    {
+        this.SetHeader();
+        return this.httpClient.get(`${API_URL}admin/fiches/${idCategorie}/${idFiche}`, this.options);
+    }
+
+    public EditFiche(fiche: Fiche)
+    {
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}admin/fiches/${fiche.idCategorie}/${fiche.idFiche}`, JSON.stringify(fiche), this.options);
+    }
+
     //Eleve - Fiche
     public GetPlaylist(page: number)
     {

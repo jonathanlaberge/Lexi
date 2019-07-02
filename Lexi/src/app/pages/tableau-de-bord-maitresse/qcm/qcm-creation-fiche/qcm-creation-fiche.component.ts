@@ -45,6 +45,7 @@ export class QCMCreationFicheComponent implements OnInit
     SubmitCreationForm()
     {
         this.errorInput = false;
+        this.errorServer = false;
 
         if (this.fiche.titre == "")
         {

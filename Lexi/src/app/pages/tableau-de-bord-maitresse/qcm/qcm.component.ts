@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Categorie } from 'src/app/model/categorie';
 import { APIService } from 'src/app/service/api.service';
 import { Fiche } from 'src/app/model/fiche';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component(
     {
@@ -10,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
         templateUrl: './qcm.component.html',
         styleUrls: ['./qcm.component.css']
     })
-export class QCMComponent implements OnInit
+export class QCMComponent implements OnInit, OnDestroy
 {
     idMaitresse: number = 0;
     selectedCategorie: Categorie = null;
@@ -30,6 +31,8 @@ export class QCMComponent implements OnInit
 
     errorServer: boolean = false;
 
+    getCategorieListAPIService: Subscription;
+
     constructor(
         private apiService: APIService,
         private ref: ChangeDetectorRef,
@@ -41,7 +44,7 @@ export class QCMComponent implements OnInit
         this.idMaitresse = APIService.currentMaitresse.idMaitresse;
 
         this.GetCategorieList(0);
-        
+
         this.activeRoute.url.subscribe(() =>
         {
             if (this.router.url !== '/tableaudebord/qcm')
@@ -52,13 +55,20 @@ export class QCMComponent implements OnInit
         });
     }
 
+    ngOnDestroy()
+    {
+        if (this.getCategorieListAPIService != null)
+            this.getCategorieListAPIService.unsubscribe();
+    }
+
     GetCategorieList(page: number)
     {
         this.isLoadingCategorie = true;
         this.categorieList = [];
-
-        this.apiService.GetCategorieList(page).subscribe((data: any) =>
+        
+        this.getCategorieListAPIService = this.apiService.GetCategorieList(page).subscribe((data: any) =>
         {
+            this.categorieList = [];
             if (data != null)
                 data.forEach(function (value)
                 {
@@ -77,6 +87,7 @@ export class QCMComponent implements OnInit
 
         this.apiService.GetFicheListCategorie(page, idCategorie).subscribe((data: any) =>
         {
+            this.ficheList = [];
             if (data != null)
                 data.forEach(function (value)
                 {
@@ -127,6 +138,10 @@ export class QCMComponent implements OnInit
                 if (data.code == 200)
                 {
                     this.isCategorieDeleteModalOpen = false;
+
+                    if (this.selectedCategorie == this.selectedCategorieRow)
+                        this.selectedCategorieRow = null;
+
                     this.GetCategorieList(0);
                 }
                 else
@@ -162,7 +177,7 @@ export class QCMComponent implements OnInit
         this.isLoadingModal = true;
         this.errorServer = false;
 
-        this.apiService.DeleteCategorie(this.selectedCategorie.idCategorie).subscribe(
+        this.apiService.DeleteFiche(this.selectedFiche.idCategorie, this.selectedFiche.idFiche).subscribe(
             (data: any) =>
             {
                 if (data.code == 200)

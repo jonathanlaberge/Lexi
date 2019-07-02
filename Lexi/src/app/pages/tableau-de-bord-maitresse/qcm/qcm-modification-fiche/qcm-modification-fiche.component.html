@@ -1,3 +1,112 @@
-<p>
-  qcmmodification-fiche works!
-</p>
+<h1>Création d'une fiche</h1>
+<div *ngIf="isReady" class="pull-right">
+    <span *ngIf="isLoading" class="spinner spinner-md" style="margin:3px">
+        Changement...
+    </span>
+    <button type="button" class="btn btn-primary" (click)="Close()">Annuler</button>
+    <button type="button" class="btn btn-success" (click)="SubmitEditForm()">Sauvegarder</button>
+</div>
+<div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+    <div class="alert-items">
+        <div class="alert-item static">
+            <div class="alert-icon-wrapper">
+                <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+            </div>
+            <span class="alert-text">
+                Il y a eu une erreur lors de la modification de la fiche. Veuillez réessayer plus tard.
+            </span>
+        </div>
+    </div>
+</div>
+<div class="alert alert-danger" role="alert" [hidden]="!errorInput">
+    <div class="alert-items">
+        <div class="alert-item static">
+            <div class="alert-icon-wrapper">
+                <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+            </div>
+            <span class="alert-text">
+                Le titre est obligatoire. Veuillez entrer un titre.
+            </span>
+        </div>
+    </div>
+</div>
+<div *ngIf="!isReady" class="center">
+    <br />
+    <span class="spinner spinner-lg">
+        Chargement...
+    </span>
+    <br />
+    <br />
+</div>
+<div *ngIf="isReady">
+    <clr-input-container>
+        <label>Titre</label>
+        <input clrInput type="text" [(ngModel)]="fiche.titre" name="Titre" placeholder="Titre" required />
+        <clr-control-error *clrIfError="'required'">Le titre est obligatoire.</clr-control-error>
+    </clr-input-container>
+
+    <h4>Visibilité</h4>
+    <div class="btn-group">
+        <div class="radio btn">
+            <input [(ngModel)]="fiche.estPublic" value="1" type="radio" name="estPublic" id="btn-radio-1" [checked]="fiche.estPublic == 1">
+            <label for="btn-radio-1">Public</label>
+        </div>
+        <div class="radio btn">
+            <input [(ngModel)]="fiche.estPublic" value="0" type="radio" name="estPublic" id="btn-radio-2" [checked]="fiche.estPublic == 0">
+            <label for="btn-radio-2">Privé</label>
+        </div>
+    </div>
+    <h2>Questions</h2>
+    <button type="button" class="btn btn-primary" (click)="AjouterQuestion()" [disabled]="fiche.listeQuestion.length >= 20">Ajouter une question</button>
+    <button type="button" class="btn btn-danger" (click)="EnleverQuestion()" [disabled]="fiche.listeQuestion.length <= 1">Enlever la dernière question</button>
+    <div *ngFor="let question of fiche.listeQuestion; let index = index" class="card">
+        <div class="card-header">
+            Question n° {{index + 1}}
+        </div>
+        <div class="card-block">
+            <editor [(ngModel)]="question.question"
+                    plugins="lists advlist fullscreen image link media"
+                    toolbar="undo redo | bold italic forecolor backcolor | bullist numlist | link image media | fullscreen"
+                    [init]="{menubar: 'false', height: 180}"></editor>
+        </div>
+        <div *ngIf="!IsUsingDots(question)">
+            <div *ngFor="let reponse of question.choixDeReponses; let indexReponse = index" class="card-block">
+                <div class="card-title pull-left">
+                    Réponse n°<span class="badge badge-warning">{{indexReponse + 1}}</span>
+                </div>
+                <editor [(ngModel)]="reponse"
+                        plugins="fullscreen image link media"
+                        toolbar="undo redo | bold italic forecolor backcolor | image media | fullscreen"
+                        [init]="{menubar: 'false', height: 120}"></editor>
+            </div>
+        </div>
+        <div class="card-block">
+            La bonne réponse est
+            <select *ngIf="!IsUsingDots(question)" clrSelect name="options" [(ngModel)]="question.bonneReponse" required>
+                <option *ngFor="let reponse of question.choixDeReponses; let indexReponse = index" value="{{indexReponse + 1}}">
+                    la réponse n° {{indexReponse + 1}}
+                </option>
+            </select>
+            <select *ngIf="IsUsingDots(question)" clrSelect name="options" [(ngModel)]="question.bonneReponse" required>
+                <option value="1">● (1)</option>
+                <option value="2">●● (2)</option>
+                <option value="3">●●● (3)</option>
+            </select>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-sm btn-primary" [disabled]="question.choixDeReponses.length > 5 || IsUsingDots(question)" (click)="AjouterReponse(index)">Ajouter une réponse</button>
+            <button class="btn btn-sm btn-danger" [disabled]="question.choixDeReponses.length <= 2 || IsUsingDots(question)" (click)="EnleverReponse(index)">Enlever la dernière réponse</button>
+            <clr-checkbox-wrapper>
+                <input type="checkbox" clrCheckbox value="1" name="useDots" (change)="OnChangeUserDots(index, $event)" />
+                <label>Utiliser les symboles de point pour cette question</label>
+            </clr-checkbox-wrapper>
+        </div>
+    </div>
+</div>
+<div class="pull-left">
+    <button type="button" class="btn btn-primary" (click)="Close()">Annuler</button>
+    <button *ngIf="isReady" type="button" class="btn btn-success" (click)="SubmitEditForm()">Sauvegarder</button>
+    <span *ngIf="isLoading" class="spinner spinner-md" style="margin:3px">
+        Changement...
+    </span>
+</div>
