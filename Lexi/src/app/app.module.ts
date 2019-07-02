@@ -6,7 +6,7 @@ import { ClarityModule } from "@clr/angular";
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-
+import { GalleriaModule } from 'primeng/galleria';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -75,6 +75,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
                 AppRoutingModule,
                 ReactiveFormsModule,
                 BrowserAnimationsModule,
+                GalleriaModule,
                 ClarityModule,
                 EditorModule,
                 SidebarModule,

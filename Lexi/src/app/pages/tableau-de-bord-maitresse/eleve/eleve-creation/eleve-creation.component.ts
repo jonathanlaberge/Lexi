@@ -20,6 +20,8 @@ export class EleveCreationComponent implements OnInit
     creationForm: FormGroup;
     
     errorServer: boolean = false;
+
+    images: any[];
     
     constructor(
         private apiService: APIService,
@@ -29,6 +31,22 @@ export class EleveCreationComponent implements OnInit
 
     ngOnInit()
     {
+
+
+        this.images = [];
+
+        for (var i = 1; i <= 22; i++) {
+            this.images.push({ source: 'assets\\kids-avatars\\png\\boy-' + i + '.png', alt: 'Avatar garcon ' + 1, title: 'Garcon ' + i });
+        }
+
+        for (var i = 1; i <= 26; i++) {
+            this.images.push({ source: 'assets\\kids-avatars\\png\\girl-' + i + '.png', alt: 'Avatar fille ' + 1, title: 'Fille ' + i });
+        }
+
+
+
+
+
         this.creationForm = this.formBuilder.group(
             {
                 prenom: ['', [Validators.required]],

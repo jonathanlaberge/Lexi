@@ -31,6 +31,8 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
     "jquery-ui-dist": "^1.12.1",
+    "primeicons": "^1.0.0",
+    "primeng": "^8.0.0",
     "rxjs": "~6.5.2",
     "tinymce": "^5.0.9",
     "tslib": "^1.9.0",
