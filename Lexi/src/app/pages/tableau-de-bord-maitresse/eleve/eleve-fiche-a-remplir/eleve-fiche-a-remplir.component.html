@@ -1,6 +1,6 @@
 
 <clr-modal [(clrModalOpen)]="isCreationModalOpen" [clrModalClosable]="false" [clrModalSize]="'xl'">
-    <h3 class="modal-title">Assignation de fiche a un élève.</h3>
+    <h3 class="modal-title">Assignation de fiche à un élève.</h3>
     <div class="modal-body">
         <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
             <div class="alert-items">
@@ -14,19 +14,7 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
         <clr-datagrid [clrDgLoading]="isLoadingCategorie">
-            
             <clr-dg-column>Nom</clr-dg-column>
             <clr-dg-column>Matière</clr-dg-column>
             <clr-dg-column>Niveau</clr-dg-column>
@@ -37,8 +25,6 @@
 
             <clr-dg-row *clrDgItems="let item of categorieList; let index = index"
                         (click)="SetSelectedCategorieRow(item)">
-
-
                 <clr-dg-cell>{{item.nom}}</clr-dg-cell>
                 <clr-dg-cell>{{item.matiere }}</clr-dg-cell>
                 <clr-dg-cell>{{item.niveau}}</clr-dg-cell>
@@ -55,75 +41,38 @@
                 </clr-dg-pagination>
             </clr-dg-footer>
         </clr-datagrid>
-
-
-
-
-
-
-
-
         <div *ngIf="selectedCategorieRow != null">
             <div class="clearfix">
-                <h4>Liste dde fiche de la catégorie <b>{{selectedCategorieRow.nom}}</b></h4>
-
+                <h4>Liste des fiches de la catégorie <b>{{selectedCategorieRow.nom}}</b></h4>
             </div>
-
-
             <clr-datagrid [clrDgLoading]="isLoadingCategorie" [(clrDgSelected)]="selectedFicheList" [clrDgRowSelection]="true">
                 <clr-dg-column>Titre</clr-dg-column>
                 <clr-dg-column>Date de création</clr-dg-column>
                 <clr-dg-column>Nom de maitressse</clr-dg-column>
 
-                <clr-dg-row *clrDgItems="let item of ficheList; let index = index"
-                          
-                            [clrDgItem]="item">
-
-
-
+                <clr-dg-row *clrDgItems="let item of ficheList; let index = index" [clrDgItem]="item">
                     <clr-dg-cell>{{item.titre}}</clr-dg-cell>
                     <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell>
                     <clr-dg-cell>{{item.prenomCreatrice}} {{item.nomCreatrice}}</clr-dg-cell>
-
-
                 </clr-dg-row>
                 <clr-dg-footer>
-                    {{selectedGlobalList.length}} Fiches
-
                     <clr-dg-pagination #pagination [clrDgPageSize]="10">
                         <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégorie par page</clr-dg-page-size>
                         {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
                         de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "fiche" : "fiches"}}
                     </clr-dg-pagination>
-
-
                 </clr-dg-footer>
             </clr-datagrid>
         </div>
-
-
-
-
-
-
-
-
     </div>
     <div class="modal-footer">
         <span *ngIf="isLoadingModal" class="spinner spinner-md" style="margin:3px">
             Changement...
         </span>
+        <span *ngIf="isLoadingModal">
+            {{selectedGlobalList.length}} {{selectedGlobalList.length == 1 ? "fiche" : "fiches"}} à compléter
+        </span>
         <button type="button" class="btn btn-primary" (click)="Close()">Annuler</button>
-        <button type="button" class="btn btn-success" (click)="ajouterList()">Ajouter</button>
+        <button type="button" class="btn btn-success" (click)="SendList()">Sauvegarder</button>
     </div>
 </clr-modal>
-
-
-
-
-
-
-
-
-
-

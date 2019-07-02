@@ -5,7 +5,7 @@ import { ConnectionComponent } from './pages/connection/connection.component';
 import { TableauDeBordMaitresseComponent } from './pages/tableau-de-bord-maitresse/tableau-de-bord-maitresse.component';
 import { EleveComponent } from './pages/tableau-de-bord-maitresse/eleve/eleve.component';
 import { EleveCreationComponent } from './pages/tableau-de-bord-maitresse/eleve/eleve-creation/eleve-creation.component';
-import { EleveFicheARemplirComponent } from './pages/tableau-de-bord-maitresse/eleve/eleve-fiche-aremplir/eleve-fiche-aremplir.component';
+import { EleveFicheARemplirComponent } from './pages/tableau-de-bord-maitresse/eleve/eleve-fiche-a-remplir/eleve-fiche-a-remplir.component';
 import { EleveStatistiqueComponent } from './pages/tableau-de-bord-maitresse/eleve/eleve-statistique/eleve-statistique.component';
 import { QCMComponent } from './pages/tableau-de-bord-maitresse/qcm/qcm.component';
 import { QCMCreationCategorieComponent } from './pages/tableau-de-bord-maitresse/qcm/qcm-creation-categorie/qcm-creation-categorie.component';
