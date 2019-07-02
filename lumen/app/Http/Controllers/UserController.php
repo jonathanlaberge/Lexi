@@ -219,6 +219,22 @@ class UserController extends Controller
 		if (!$this->IsValidID($page))
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
+
+return response()->json(DB::select('
+			SELECT `fiche`.`titre`, `categorie`.`nom`,`categorie`.`matiere`,`categorie`.`niveau`,`historique`.`date`,
+			`historique`.`nombreTentative`, `historique`.`erreurMax`,`historique`.`erreurMin` FROM `historique`
+            JOIN `fiche` ON `fiche`.`idFiche` = `historique`.`idFiche` AND `fiche`.`idCategorie` = `historique`.`idCategorie`
+			JOIN `categorie` ON `categorie`.`idCategorie` = `historique`.`idCategorie`
+			WHERE `historique`.`idEleve` =?
+			LIMIT ?,30',[$idEleve, ($page * 30) - 30]), 200);
+
+
+
+
+
+
+
+
 		return response()->json(DB::select('SELECT * FROM `historique` WHERE idEleve = ? LIMIT ?,30',[$idEleve, ($page * 30) - 30]), 200);
 
     }

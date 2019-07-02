@@ -68,7 +68,8 @@ $router->group(['prefix' => 'v1'], function () use ($router)
 			$router->get('{idCategorie:[0-9]+}/{idFiche:[0-9]+}', 'UserController@FicheGet');
 			$router->get('liste[/{page:[0-9]+}]', 'UserController@FicheGetList');
 			$router->get('liste/{page:[0-9]+}/parcategorie/{idCategorie:[0-9]+}', 'UserController@FicheGetListCategorie');
+			$router->get('historique[/{page:[0-9]+}]', 'UserController@Historique');
 		});
-		$router->get('historique[/{page:[0-9]+}]', 'UserController@Historique');
+		
 	});
 });

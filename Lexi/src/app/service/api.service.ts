@@ -14,6 +14,7 @@ export const API_URL = "http://lexi.jolab.me/v1/";
     })
 export class APIService
 {
+
     private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
 
     public static currentMaitresse: Maitresse = null;
@@ -207,6 +208,9 @@ export class APIService
         return this.httpClient.get(`${API_URL}admin/eleve/${id}/listeafaire`, this.options);
     }
 
-
-
+    //Eleve Historique 
+    GetHistorique(arg0: number) {
+        this.SetHeader();
+        return this.httpClient.get(`${API_URL}eleve/fiches/historique`, this.options);
+    }
 }
