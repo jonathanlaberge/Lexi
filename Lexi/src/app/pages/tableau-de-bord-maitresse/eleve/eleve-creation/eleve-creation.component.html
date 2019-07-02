@@ -31,8 +31,6 @@
                 <input clrInput type="date" formControlName="dateNaissance" />
             </clr-input-container>
 
-
-
             <br />
             <div class="btn-group">
                 <div class="radio btn">
@@ -45,21 +43,17 @@
                 </div>
             </div>
 
-
             <clr-input-container>
                 <label>Avatar</label>
             </clr-input-container>
-            <p-galleria (onImageChange)="getAvatar($event.index)" [images]="images" [frameWidth]="40" [panelWidth]="500" [panelHeight]="350" [autoPlay]="false" [showCaption]="false">
-
-            </p-galleria>
-
-
-
-
-
-
-
-
+            <p-galleria [activeIndex]="0"
+                        (onImageChange)="SetChosenAvatar($event.index)"
+                        [frameWidth]="40"
+                        [images]="avatars"
+                        [panelWidth]="500"
+                        [panelHeight]="300"
+                        [autoPlay]="false"
+                        [showCaption]="false"></p-galleria>
         </form>
     </div>
     <div class="modal-footer">

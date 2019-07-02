@@ -44,10 +44,7 @@
                             "node_modules/@clr/ui/clr-ui-dark.min.css",
                             "node_modules/jquery-ui-dist/jquery-ui.min.css",
                             "node_modules/jquery-ui-dist/jquery-ui.structure.min.css",
-                            "node_modules/jquery-ui-dist/jquery-ui.theme.min.css",
-                            "node_modules/primeicons/primeicons.css",
-                            "node_modules/primeng/resources/themes/nova-light/theme.css",
-                            "node_modules/primeng/resources/primeng.min.css"
+                            "node_modules/jquery-ui-dist/jquery-ui.theme.min.css"
                         ],
                         "scripts": [
                             "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
