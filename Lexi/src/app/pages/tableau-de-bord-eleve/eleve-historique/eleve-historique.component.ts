@@ -10,6 +10,8 @@ import { RoutingService } from 'src/app/service/routing.service';
   styleUrls: ['./eleve-historique.component.css']
 })
 export class EleveHistoriqueComponent implements OnInit {
+
+
     historiqueList: HistoriqueDTO[] = [];
 
     isLoading: boolean = false;
@@ -28,12 +30,12 @@ export class EleveHistoriqueComponent implements OnInit {
             this.router.navigate(['/eleve']);
 
         this.isLoading = true;
-        this.apiService.UserController_Historique(0).subscribe((data: any) => {
+        this.apiService.UserController_Historique(0).subscribe((data) => {
             if (data != null)
-                data.forEach(function (value) {
-                    this.historiqueList.push(value as HistoriqueDTO);
-                }.bind(this));
-
+                
+                    this.historiqueList= (data as HistoriqueDTO[]);
+              
+            console.log(data)
             this.isLoading = false;
             this.ref.detectChanges();
         });

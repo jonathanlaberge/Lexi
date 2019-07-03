@@ -1,29 +1,30 @@
 
 <clr-datagrid [clrDgLoading]="isLoading">
     <clr-dg-column>Titre</clr-dg-column>
-    <clr-dg-column>nom</clr-dg-column>
-    <clr-dg-column>Nom de complétion</clr-dg-column>
-    <clr-dg-column>matiere</clr-dg-column>
-    <clr-dg-column>niveau</clr-dg-column>
-    <clr-dg-column>nombreTentative</clr-dg-column>
-    <clr-dg-column>Erreur Maximum</clr-dg-column>
-    <clr-dg-column>Erreur Minimum</clr-dg-column>
+    <clr-dg-column>Nom de fiche</clr-dg-column>
+    <clr-dg-column>Date de complétion</clr-dg-column>
+    <clr-dg-column>Matière</clr-dg-column>
+    <clr-dg-column>Niveau</clr-dg-column>
+    <clr-dg-column>Nombre de tentative</clr-dg-column>
+    <clr-dg-column>Erreur maximum</clr-dg-column>
+    <clr-dg-column>Erreur minimum</clr-dg-column>
 
     <clr-dg-placeholder>La liste d'historique est vide.</clr-dg-placeholder>
 
-    <clr-dg-row *clrDgItems="let item of historiqueList; let index = index">
+    <clr-dg-row *clrDgItems="let item of historiqueList">
 
-        <clr-dg-column>{{item.titre}}</clr-dg-column>
-        <clr-dg-column>{{item.nom}}</clr-dg-column>
-        <clr-dg-column>{{item.date}}</clr-dg-column>
-        <clr-dg-column>{{item.matiere}}</clr-dg-column>
-        <clr-dg-column>{{item.niveau}}</clr-dg-column>
-        <clr-dg-column>{{item.nombreTentative}}</clr-dg-column>
-        <clr-dg-column>{{item.erreurMax}}</clr-dg-column>
-        <clr-dg-column>{{item.erreurMin}}</clr-dg-column>
+        <clr-dg-cell>{{item.titre}}</clr-dg-cell>
+        <clr-dg-cell>{{item.nom}}</clr-dg-cell>
+        <clr-dg-cell>{{item.date}}</clr-dg-cell>
+        <clr-dg-cell>{{item.matiere}}</clr-dg-cell>
+        <clr-dg-cell>{{item.niveau}}</clr-dg-cell>
+        <clr-dg-cell>{{item.nombreTentative}}</clr-dg-cell>
+        <clr-dg-cell>{{item.erreurMax}}</clr-dg-cell>
+        <clr-dg-cell>{{item.erreurMin}}</clr-dg-cell>
+        
     </clr-dg-row>
     <clr-dg-footer>
-        <clr-dg-pagination #pagination [clrDgPageSize]="50">
+        <clr-dg-pagination #pagination [clrDgPageSize]="10">
             <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Élèves par page</clr-dg-page-size>
             {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
             de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "historique" : "historiques"}}
