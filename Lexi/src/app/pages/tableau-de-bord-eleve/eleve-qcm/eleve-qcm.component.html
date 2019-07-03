@@ -1,27 +1,31 @@
-
-<button (click)="validation()"
-        [attr.disabled]="isDisable? true : null"
-        class="btn btn-success">
-    <clr-icon shape="success-standard" class="is-solid"></clr-icon>
-    Valider
-</button>
-<div *ngIf="isReady" class="pull-right">
-    <span *ngIf="isLoading" class="spinner spinner-md" style="margin:3px">
-        Changement...
-    </span>
-    <button type="button" class="btn btn-primary" (click)="Close()">Annuler</button>
-    <button type="button" class="btn btn-success" (click)="SubmitEditForm()">Sauvegarder</button>
-</div>
 <div>
-    <div *ngFor="let item of listQuestion; let index = index">
+    <button type="button" class="btn btn-primary" (click)="Close()">Retourner en arrière</button>
+    <button (click)="validation()" [attr.disabled]="canValidate ? false : true" class="btn btn-success">
+        <clr-icon shape="success-standard" class="is-solid"></clr-icon> Valider
+    </button>
+    <button type="button" class="btn btn-warning" [attr.disabled]="canContinue ? false : true" (click)="Continue()">Compléter la fiche suivante</button>
+</div>
+<div *ngIf="!isReady" class="center">
+    <br />
+    <span class="spinner spinner-lg">
+        Chargement...
+    </span>
+    <br />
+    <br />
+</div>
+<div *ngIf="isReady">
+    <div *ngFor="let question of fiche.listeQuestion; let index = index">
         <curseur-simple class="clr-col"
-                        *ngIf="item.choixDeReponses[0] == 'useDot' "
-                        [curseurID]="item.idQuestion"
-                        [useDots]="'true'"
-                        (valueChanged)="validationDesSliders($event, item.idQuestion)"
-                        [color]="'color[item.idQuestion - 1]'"></curseur-simple>
-
-
-
+                        [curseurID]="question.idQuestion"
+                        [useDots]="IsUsingDots(question)"
+                        (valueChanged)="OnChangeCurseur($event, question.idQuestion)"
+                        [color]="'color[question.idQuestion - 1]'"></curseur-simple>
     </div>
+</div>
+<div class="pull-right">
+    <button type="button" class="btn btn-primary" (click)="Close()">Retourner en arrière</button>
+    <button (click)="validation()" [attr.disabled]="canValidate ? false : true" class="btn btn-success">
+        <clr-icon shape="success-standard" class="is-solid"></clr-icon> Valider
+    </button>
+    <button type="button" class="btn btn-warning" [attr.disabled]="canContinue ? false : true" (click)="Continue()">Compléter la fiche suivante</button>
 </div>

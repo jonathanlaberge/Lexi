@@ -20,10 +20,13 @@ export class EleveQCMComponent implements OnInit
     isValidationButtonDisable: boolean = true;
     isReady: boolean = false;
 
-    reponseList = new Map();
-    isDisable: boolean;
-    isLoading: boolean;
-    errorServer: boolean;
+    reponseList: Map<number, number> = new Map();
+
+    canValidate: boolean = false;
+    canContinue: boolean = false;
+
+    isLoading: boolean = false;
+    errorServer: boolean = false;
 
     constructor(
         private apiService: APIService,
@@ -54,29 +57,34 @@ export class EleveQCMComponent implements OnInit
                 this.router.navigate([`/eleve/fiche`]);
         });
     }
+    
+    IsUsingDots(question: Question)
+    {
+        if (question.choixDeReponses.length != 0)
+            if (question.choixDeReponses[0] == "<p hidden>useDots</p>")
+                return true;
 
+        return false;
+    }
+    
+    OnChangeCurseur(reponseSlider: number, idReponse: number)
+    {
+        console.log({ i: reponseSlider, j: idReponse });
 
+        this.reponseList.set(idReponse, reponseSlider);
 
-
-
-    //validationDesSliders(reponseSlider: number, idReponse: number)
-    //{
-    //    console.log({ i: reponseSlider, j: idReponse });
-
-    //    this.reponseList.set(idReponse, reponseSlider);
-
-    //    // activation du boutton ou non selon une réponse non selectionnée.
-    //    for (let value of this.reponseList.values())
-    //    {
-    //        if (value == 0)
-    //        {
-    //            this.isDisable = true;
-    //            break;
-    //        }
-    //        else
-    //            this.isDisable = false;
-    //    }
-    //}
+        // Activation du boutton ou non selon une réponse non selectionnée.
+        for (let value of this.reponseList.values())
+        {
+            if (value == 0)
+            {
+                this.canValidate = false;
+                break;
+            }
+            else
+                this.canValidate = true;
+        }
+    }
 
     //validation()
     //{
