@@ -216,7 +216,7 @@ class UserController extends Controller
 		if ($idEleve == 0)
 			return response()->json(["code" => "403", "message" => "No student selected"], 403);
 
-		if (!$this->IsValidID($page))
+		if (!$this->IsValidID($page) && $page != 0)
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		if ($page == 0)
