@@ -57,7 +57,7 @@ export class EleveComponent implements OnInit
     {
         this.elevesList = [];
         this.isLoading = true;
-        this.apiService.GetEleveList(page).subscribe((data: any) =>
+        this.apiService.AdminController_UserGetList(page).subscribe((data: any) =>
         {
             if (data != null)
                 data.forEach(function (value)
@@ -135,7 +135,7 @@ export class EleveComponent implements OnInit
             this.isLoadingModal = true;
             this.errorServer = false;
 
-            this.apiService.EditEleve(eleve).subscribe(
+            this.apiService.AdminController_UserSet(eleve).subscribe(
                 (data: any) =>
                 {
                     this.isLoadingModal = false;
@@ -168,7 +168,7 @@ export class EleveComponent implements OnInit
         this.isLoadingModal = true;
         this.errorServer = false;
 
-        this.apiService.DeleteEleve(idEleve).subscribe(
+        this.apiService.AdminController_UserDelete(idEleve).subscribe(
             (data: any) =>
             {
                 this.isLoadingModal = false;

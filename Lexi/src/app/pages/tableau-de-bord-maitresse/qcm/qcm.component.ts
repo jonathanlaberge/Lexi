@@ -66,7 +66,7 @@ export class QCMComponent implements OnInit, OnDestroy
         this.isLoadingCategorie = true;
         this.categorieList = [];
         
-        this.getCategorieListAPIService = this.apiService.GetCategorieList(page).subscribe((data: any) =>
+        this.getCategorieListAPIService = this.apiService.AdminController_CategorieGetList(page).subscribe((data: any) =>
         {
             this.categorieList = [];
             if (data != null)
@@ -85,7 +85,7 @@ export class QCMComponent implements OnInit, OnDestroy
         this.isLoadingFiche = true;
         this.ficheList = [];
 
-        this.apiService.GetFicheListCategorie(page, idCategorie).subscribe((data: any) =>
+        this.apiService.AdminController_FicheGetListCategorie(page, idCategorie).subscribe((data: any) =>
         {
             this.ficheList = [];
             if (data != null)
@@ -131,7 +131,7 @@ export class QCMComponent implements OnInit, OnDestroy
         this.isLoadingModal = true;
         this.errorServer = false;
 
-        this.apiService.DeleteCategorie(this.selectedCategorie.idCategorie).subscribe(
+        this.apiService.AdminController_CategorieDelete(this.selectedCategorie.idCategorie).subscribe(
             (data: any) =>
             {
                 this.isLoadingModal = false;
@@ -177,7 +177,7 @@ export class QCMComponent implements OnInit, OnDestroy
         this.isLoadingModal = true;
         this.errorServer = false;
 
-        this.apiService.DeleteFiche(this.selectedFiche.idCategorie, this.selectedFiche.idFiche).subscribe(
+        this.apiService.AdminController_FicheDelete(this.selectedFiche.idCategorie, this.selectedFiche.idFiche).subscribe(
             (data: any) =>
             {
                 if (data.code == 200)

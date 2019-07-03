@@ -35,7 +35,7 @@ export class TableauDeBordEleveComponent implements OnInit
             this.ref.detectChanges();
         });
 
-        this.apiService.GetEleveList(0).subscribe((data: any) =>
+        this.apiService.AdminController_UserGetList(0).subscribe((data: any) =>
         {
             if (data != null)
                 data.forEach(function (value)
@@ -59,7 +59,7 @@ export class TableauDeBordEleveComponent implements OnInit
 
         var args = { idEleveEnCours: idEleve };
 
-        this.apiService.Mode(args).subscribe(
+        this.apiService.AccountController_Mode(args).subscribe(
             (data: any) =>
             {
                 if (data.token != null)

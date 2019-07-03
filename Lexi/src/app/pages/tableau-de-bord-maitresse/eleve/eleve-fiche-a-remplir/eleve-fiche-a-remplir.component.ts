@@ -59,7 +59,7 @@ export class EleveFicheARemplirComponent implements OnInit
             {
                 this.idEleve = parseFloat(params['id']);
 
-                this.apiService.GetPlayliste(this.idEleve).subscribe((data: any) =>
+                this.apiService.AdminController_UserGetTODOList(this.idEleve).subscribe((data: any) =>
                 {
                     console.log(data);
                     if (data != null)
@@ -88,7 +88,7 @@ export class EleveFicheARemplirComponent implements OnInit
         this.isLoadingCategorie = true;
         this.categorieList = [];
 
-        this.apiService.GetCategorieList(page).subscribe((data: any) =>
+        this.apiService.AdminController_CategorieGetList(page).subscribe((data: any) =>
         {
             if (data != null)
                 data.forEach(function (value)
@@ -106,7 +106,7 @@ export class EleveFicheARemplirComponent implements OnInit
         this.isLoadingFiche = true;
         this.ficheList = [];
 
-        this.apiService.GetFicheListCategorie(page, idCategorie).subscribe((data: any) =>
+        this.apiService.AdminController_FicheGetListCategorie(page, idCategorie).subscribe((data: any) =>
         {
             if (data != null)
                 data.forEach(function (value)
@@ -170,7 +170,7 @@ export class EleveFicheARemplirComponent implements OnInit
         this.isLoadingModal = true;
         this.SetSelectedGlobalFiche();
 
-        this.apiService.AddPlayliste(this.selectedGlobalList, this.idEleve).subscribe(
+        this.apiService.AdminController_UserSetTODOList(this.selectedGlobalList, this.idEleve).subscribe(
             (data: any) =>
             {
                 if (data.code == 200)

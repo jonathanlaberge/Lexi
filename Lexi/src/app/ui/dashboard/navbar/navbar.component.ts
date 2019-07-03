@@ -59,7 +59,7 @@ export class NavbarComponent implements OnInit
     {
         var args = { motdepasse: this.loginPassword };
 
-        this.apiService.Mode(args).subscribe(
+        this.apiService.AccountController_Mode(args).subscribe(
             (data: any) =>
             {
                 if (data.token != null)

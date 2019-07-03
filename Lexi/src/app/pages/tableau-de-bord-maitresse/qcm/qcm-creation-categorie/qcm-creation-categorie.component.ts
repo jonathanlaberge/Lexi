@@ -54,7 +54,7 @@ export class QCMCreationCategorieComponent implements OnInit
             categorie.niveau = this.creationForm.value.niveau;
             categorie.estPublic = this.creationForm.value.estPublic;
 
-            this.apiService.AddCategorie(categorie).subscribe(
+            this.apiService.AdminController_CategorieCreation(categorie).subscribe(
                 (data: any) =>
                 {
                     if (data.code == 200)

@@ -84,7 +84,6 @@ export class CurseurSimpleComponent implements OnInit, OnDestroy, AfterViewInit
 
     ngAfterViewInit()
     {
-
         $("#picker" + this.curseurID).slider(
             {
                 range: "max",
@@ -107,33 +106,6 @@ export class CurseurSimpleComponent implements OnInit, OnDestroy, AfterViewInit
                     this.valueChanged.emit(ui.value);
                 }.bind(this)
             });
-
-
-
-        switch (this.color) {
-            case QCMColor.Green:
-                $("#picker" + this.curseurID).css("background-color", "green");
-                $("#pickerNumber" + this.curseurID).css("border-color", "green");
-                $("#pickerNumber" + this.curseurID).css("color", "green");
-                break;
-
-            case QCMColor.Red:
-                $("#picker" + this.curseurID).css("background-color", "red");
-                $("#pickerNumber" + this.curseurID).css("border-color", "red");
-                $("#pickerNumber" + this.curseurID).css("color", "red");
-                break;
-
-            default:
-                $("#picker" + this.curseurID).css("background-color", "#E2F700");
-                $("#pickerNumber" + this.curseurID).css("border-color", "Black");
-                $("#pickerNumber" + this.curseurID).css("color", "black");
-                break;
-        }
-
-
-
-
-
     }
 
     ngOnDestroy()

@@ -28,7 +28,7 @@ export class EleveHistoriqueComponent implements OnInit {
             this.router.navigate(['/eleve']);
 
         this.isLoading = true;
-        this.apiService.GetHistorique(0).subscribe((data: any) => {
+        this.apiService.UserController_Historique(0).subscribe((data: any) => {
             if (data != null)
                 data.forEach(function (value) {
                     this.historiqueList.push(value as HistoriqueDTO);

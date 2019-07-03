@@ -43,7 +43,7 @@ export class QCMModificationCategorieComponent implements OnInit
         {
             if (!isNaN(parseFloat(params['id'])))
             {
-                this.apiService.GetCategorie(params['id']).subscribe(
+                this.apiService.AdminController_CategorieGet(params['id']).subscribe(
                     (data: any) =>
                     {
                         this.categorie = data as Categorie;
@@ -83,7 +83,7 @@ export class QCMModificationCategorieComponent implements OnInit
             this.categorie.niveau = this.editForm.value.niveau;
             this.categorie.estPublic = this.editForm.value.estPublic;
 
-            this.apiService.EditCategorie(this.categorie).subscribe(
+            this.apiService.AdminController_CategorieSet(this.categorie).subscribe(
                 (data: any) =>
                 {
                     if (data.code == 200)

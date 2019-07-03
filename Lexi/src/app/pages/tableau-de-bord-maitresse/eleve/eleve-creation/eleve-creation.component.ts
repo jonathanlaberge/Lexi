@@ -85,7 +85,7 @@ export class EleveCreationComponent implements OnInit
             if (this.selectedAvatarPath != "")
                 eleve.avatar = this.selectedAvatarPath;
 
-            this.apiService.AddEleve(eleve).subscribe(
+            this.apiService.AdminController_UserCreation(eleve).subscribe(
                 (data: any) =>
                 {
                     if (data.code == 200)

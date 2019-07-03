@@ -31,7 +31,7 @@ export class EleveFicheComponent implements OnInit
             this.router.navigate(['/eleve']);
 
         this.isLoading = true;
-        this.apiService.GetPlaylist(0).subscribe((data: any) =>
+        this.apiService.UserController_FicheGetList(0).subscribe((data: any) =>
         {
             if (data != null)
                 data.forEach(function (value)

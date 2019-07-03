@@ -102,7 +102,7 @@ export class ConnectionComponent implements OnInit
             maitresse.motdepasse = this.loginForm.value.motdepasse;
             maitresse.email = this.loginForm.value.email;
 
-            this.apiService.Connection(maitresse).subscribe(
+            this.apiService.AccountController_Connection(maitresse).subscribe(
                 (data: any) =>
                 {
                     if (data.token != null)
@@ -159,7 +159,7 @@ export class ConnectionComponent implements OnInit
             maitresse.dateNaissance = this.registerForm.value.dateNaissance as Date;
             maitresse.genre = this.registerForm.value.genre;
 
-            this.apiService.Enregistrement(maitresse).subscribe(
+            this.apiService.AccountController_Enregistrement(maitresse).subscribe(
                 (data: any) =>
                 {
                     if (data.code == 200)

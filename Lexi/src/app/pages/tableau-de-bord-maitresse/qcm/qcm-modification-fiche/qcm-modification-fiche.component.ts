@@ -30,7 +30,7 @@ export class QCMModificationFicheComponent implements OnInit
         {
             if (!isNaN(parseFloat(params['idCategorie'])) && !isNaN(parseFloat(params['idFiche'])))
             {
-                this.apiService.GetFiche(params['idCategorie'], params['idFiche']).subscribe(
+                this.apiService.AdminController_FicheGet(params['idCategorie'], params['idFiche']).subscribe(
                     (data) =>
                     {
                         this.fiche = data as Fiche;
@@ -60,7 +60,7 @@ export class QCMModificationFicheComponent implements OnInit
         {
             this.isLoading = true;
 
-            this.apiService.EditFiche(this.fiche).subscribe(
+            this.apiService.AdminController_FicheSet(this.fiche).subscribe(
                 (data: any) =>
                 {
                     this.isLoading = false;

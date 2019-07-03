@@ -55,7 +55,7 @@ export class QCMCreationFicheComponent implements OnInit
         {
             this.isLoading = true;
 
-            this.apiService.AddFiche(this.fiche).subscribe(
+            this.apiService.AdminController_FicheCreation(this.fiche).subscribe(
                 (data: any) =>
                 {
                     this.isLoading = false;
