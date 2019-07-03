@@ -147,12 +147,26 @@ class UserController extends Controller
 		$fiche->maitresseNom = $result[0]->nom;
 		$fiche->maitressePrenom = $result[0]->prenom;
 
-
-		$fiche->listeQuestion = DB::select("
-			SELECT `idQuestion`, `question`, `choixDeReponses`
-			FROM `question`
-			WHERE `idFiche`=? AND
-			`idCategorie`=?", [$idFiche ,$idCategorie]);
+		$fiche->listeQuestion = array();
+		
+		$resultQuestion = DB::select('
+            SELECT *
+            FROM `question`
+            WHERE `idFiche`=? AND
+            `idCategorie`=?', [$idFiche ,$idCategorie]);
+			
+		foreach ($resultQuestion as $question)
+		{
+			array_push($fiche->listeQuestion, 
+			[
+				"idQuestion" => $question->idQuestion,
+				"idCategorie" => $question->idCategorie,
+				"idFiche" => $question->idFiche,
+				"question" => $question->question,
+				"choixDeReponses" => json_decode($question->choixDeReponses),
+				"bonneReponse" => $question->bonneReponse,
+			]);
+		}
 
 		return response()->json($fiche, 200);
     }
