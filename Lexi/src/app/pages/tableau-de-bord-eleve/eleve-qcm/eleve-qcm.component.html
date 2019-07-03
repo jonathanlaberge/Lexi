@@ -1,27 +1,27 @@
+
 <button (click)="validation()"
         [attr.disabled]="isDisable? true : null"
         class="btn btn-success">
     <clr-icon shape="success-standard" class="is-solid"></clr-icon>
     Valider
 </button>
-
-
-<div *ngFor="let item of listQuestion; let index = index">
-    <curseur-simple class="clr-col"
-                    *ngIf="item.choixDeReponses[0] != 'useDot' "
-                    [curseurID]="item.idQuestion"
-                    [answers]="item.choixDeReponses"
-                    (valueChanged)="validationDesSliders($event, item.idQuestion)"></curseur-simple>
-
-    <curseur-simple class="clr-col"
-                    *ngIf="item.choixDeReponses[0] == 'useDot' "
-                    [curseurID]="item.idQuestion"
-                    [useDots]="'true'"
-                    (valueChanged)="validationDesSliders($event, item.idQuestion)"
-                    [color]="'color[item.idQuestion - 1]'"></curseur-simple>
-
-
-
+<div *ngIf="isReady" class="pull-right">
+    <span *ngIf="isLoading" class="spinner spinner-md" style="margin:3px">
+        Changement...
+    </span>
+    <button type="button" class="btn btn-primary" (click)="Close()">Annuler</button>
+    <button type="button" class="btn btn-success" (click)="SubmitEditForm()">Sauvegarder</button>
 </div>
+<div>
+    <div *ngFor="let item of listQuestion; let index = index">
+        <curseur-simple class="clr-col"
+                        *ngIf="item.choixDeReponses[0] == 'useDot' "
+                        [curseurID]="item.idQuestion"
+                        [useDots]="'true'"
+                        (valueChanged)="validationDesSliders($event, item.idQuestion)"
+                        [color]="'color[item.idQuestion - 1]'"></curseur-simple>
 
 
+
+    </div>
+</div>
