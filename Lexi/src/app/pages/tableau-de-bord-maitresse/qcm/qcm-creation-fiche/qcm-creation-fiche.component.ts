@@ -75,6 +75,9 @@ export class QCMCreationFicheComponent implements OnInit
     AjouterQuestion()
     {
         var question = new Question();
+        question.idCategorie = this.fiche.idCategorie;
+        question.idFiche = this.fiche.idFiche;
+        question.idQuestion = this.fiche.listeQuestion.length + 1;
         question.question = "<p></p>";
         question.choixDeReponses = ["<p>Vrai</p>", "<p>Faux</p>"];
         question.bonneReponse = 1;
@@ -113,5 +116,10 @@ export class QCMCreationFicheComponent implements OnInit
     {
         this.errorServer = false;
         this.router.navigate([`../../`], { relativeTo: this.route });
+    }
+
+    TrackByIndex(index: number, obj: any): any
+    {
+        return index;
     }
 }

@@ -1,4 +1,4 @@
-<h1>Création d'une fiche</h1>
+<h1>Modification d'une fiche</h1>
 <div *ngIf="isReady" class="pull-right">
     <span *ngIf="isLoading" class="spinner spinner-md" style="margin:3px">
         Changement...
@@ -59,9 +59,9 @@
     <h2>Questions</h2>
     <button type="button" class="btn btn-primary" (click)="AjouterQuestion()" [disabled]="fiche.listeQuestion.length >= 20">Ajouter une question</button>
     <button type="button" class="btn btn-danger" (click)="EnleverQuestion()" [disabled]="fiche.listeQuestion.length <= 1">Enlever la dernière question</button>
-    <div *ngFor="let question of fiche.listeQuestion; let index = index" class="card">
+    <div *ngFor="let question of fiche.listeQuestion; index as indexQuestion" class="card">
         <div class="card-header">
-            Question n° {{index + 1}}
+            Question n° {{indexQuestion + 1}}
         </div>
         <div class="card-block">
             <editor [(ngModel)]="question.question"
@@ -70,11 +70,11 @@
                     [init]="{menubar: 'false', height: 180}"></editor>
         </div>
         <div *ngIf="!IsUsingDots(question)">
-            <div *ngFor="let reponse of question.choixDeReponses; let indexReponse = index" class="card-block">
+            <div *ngFor="let reponse of fiche.listeQuestion[indexQuestion].choixDeReponses; index as indexReponse; trackBy: TrackByIndex" class="card-block">
                 <div class="card-title pull-left">
                     Réponse n°<span class="badge badge-warning">{{indexReponse + 1}}</span>
                 </div>
-                <editor [(ngModel)]="reponse"
+                <editor [(ngModel)]="fiche.listeQuestion[indexQuestion].choixDeReponses[indexReponse]"
                         plugins="fullscreen image link media"
                         toolbar="undo redo | bold italic forecolor backcolor | image media | fullscreen"
                         [init]="{menubar: 'false', height: 120}"></editor>
@@ -83,7 +83,7 @@
         <div class="card-block">
             La bonne réponse est
             <select *ngIf="!IsUsingDots(question)" clrSelect name="options" [(ngModel)]="question.bonneReponse" required>
-                <option *ngFor="let reponse of question.choixDeReponses; let indexReponse = index" value="{{indexReponse + 1}}">
+                <option *ngFor="let reponse of question.choixDeReponses; index as indexReponse" value="{{indexReponse + 1}}">
                     la réponse n° {{indexReponse + 1}}
                 </option>
             </select>
@@ -94,10 +94,10 @@
             </select>
         </div>
         <div class="card-footer">
-            <button class="btn btn-sm btn-primary" [disabled]="question.choixDeReponses.length > 5 || IsUsingDots(question)" (click)="AjouterReponse(index)">Ajouter une réponse</button>
-            <button class="btn btn-sm btn-danger" [disabled]="question.choixDeReponses.length <= 2 || IsUsingDots(question)" (click)="EnleverReponse(index)">Enlever la dernière réponse</button>
+            <button class="btn btn-sm btn-primary" [disabled]="question.choixDeReponses.length > 5 || IsUsingDots(question)" (click)="AjouterReponse(indexQuestion)">Ajouter une réponse</button>
+            <button class="btn btn-sm btn-danger" [disabled]="question.choixDeReponses.length <= 2 || IsUsingDots(question)" (click)="EnleverReponse(indexQuestion)">Enlever la dernière réponse</button>
             <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox value="1" name="useDots" (change)="OnChangeUserDots(index, $event)" />
+                <input type="checkbox" clrCheckbox value="1" name="useDots" (change)="OnChangeUserDots(indexQuestion, $event)" />
                 <label>Utiliser les symboles de point pour cette question</label>
             </clr-checkbox-wrapper>
         </div>
