@@ -1,14 +1,8 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ClrForm } from '@clr/angular';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { APIService } from 'src/app/service/api.service';
-import { Router, ActivatedRoute, Route } from '@angular/router';
-import { Eleve } from 'src/app/model/eleve';
-import { FicheDTO } from 'src/app/model/dto/ficheDTO';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Categorie } from 'src/app/model/categorie';
 import { Fiche } from 'src/app/model/fiche';
-import { ficheGlobale } from 'src/app/model/dto/ficheGlobale';
-import { isNullOrUndefined } from 'util';
 
 @Component(
     {
@@ -17,12 +11,7 @@ import { isNullOrUndefined } from 'util';
     })
 export class EleveFicheARemplirComponent implements OnInit
 {
-
-
-
-
     idEleve: number = 0;
-
 
     public isCreationModalOpen: boolean = true;
     public isLoadingModal: boolean = false;
