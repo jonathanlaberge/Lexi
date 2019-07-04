@@ -1,9 +1,27 @@
 <div>
-    <button type="button" class="btn btn-primary" (click)="Close()">Retourner en arrière</button>
-    <button (click)="validation()" [attr.disabled]="canValidate ? false : true" class="btn btn-success">
+    <button type="button" class="btn btn-primary" (click)="Close()">
+        <clr-icon shape="login"></clr-icon>
+        Retourner en arrière
+    </button>
+    <button (click)="Validation()" [attr.disabled]="canValidate ? null : true" class="btn btn-success">
         <clr-icon shape="success-standard" class="is-solid"></clr-icon> Valider
     </button>
-    <button type="button" class="btn btn-warning" [attr.disabled]="canContinue ? false : true" (click)="Continue()">Compléter la fiche suivante</button>
+    <button type="button" class="btn btn-warning" [attr.disabled]="canContinue ? null : true" (click)="Continue()">
+        <clr-icon shape="fast-forward" class="is-solid"></clr-icon>
+        Compléter la fiche suivante
+    </button>
+</div>
+<div class="alert alert-danger" role="alert" [hidden]="!errorServer">
+    <div class="alert-items">
+        <div class="alert-item static">
+            <div class="alert-icon-wrapper">
+                <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+            </div>
+            <span class="alert-text">
+                Il y a eu une erreur avec l'application. Veuillez réessayer plus tard.
+            </span>
+        </div>
+    </div>
 </div>
 <div *ngIf="!isReady" class="center">
     <br />
@@ -14,18 +32,69 @@
     <br />
 </div>
 <div *ngIf="isReady">
-    <div *ngFor="let question of fiche.listeQuestion; let index = index">
-        <curseur-simple class="clr-col"
-                        [curseurID]="question.idQuestion"
-                        [useDots]="IsUsingDots(question)"
-                        (valueChanged)="OnChangeCurseur($event, question.idQuestion)"
-                        [color]="'color[question.idQuestion - 1]'"></curseur-simple>
+    <div class="row">
+        <div *ngFor="let question of fiche.listeQuestion; let index = index" class="col-md-4">
+            <curseur-simple [curseurID]="question.idQuestion"
+                            [useDots]="IsUsingDots(question)"
+                            [answers]="IsUsingDots(question) ? [] : question.choixDeReponses"
+                            [question]="question.question"
+                            (valueChanged)="OnChangeCurseur($event, question.idQuestion)"
+                            [color]="colorCurseur[question.idQuestion - 1]"
+                            [disable]="disabledCurseur[question.idQuestion - 1]"></curseur-simple>
+        </div>
+    </div>
+    <div class="pull-right">
+        <button type="button" class="btn btn-primary" (click)="Close()">
+            <clr-icon shape="login"></clr-icon>
+            Retourner en arrière
+        </button>
+        <button (click)="Validation()" [attr.disabled]="canValidate ? null : true" class="btn btn-success">
+            <clr-icon shape="success-standard" class="is-solid"></clr-icon> Valider
+        </button>
+        <button type="button" class="btn btn-warning" [attr.disabled]="canContinue ? null : true" (click)="Continue()">
+            <clr-icon shape="fast-forward" class="is-solid"></clr-icon>
+            Compléter la fiche suivante
+        </button>
     </div>
 </div>
-<div class="pull-right">
-    <button type="button" class="btn btn-primary" (click)="Close()">Retourner en arrière</button>
-    <button (click)="validation()" [attr.disabled]="canValidate ? false : true" class="btn btn-success">
-        <clr-icon shape="success-standard" class="is-solid"></clr-icon> Valider
-    </button>
-    <button type="button" class="btn btn-warning" [attr.disabled]="canContinue ? false : true" (click)="Continue()">Compléter la fiche suivante</button>
-</div>
+<clr-modal [(clrModalOpen)]="showSuccessModal">
+    <h3 class="modal-title">Bravo! Tu as réussi toutes les questions.</h3>
+    <div class="modal-body">
+        <clr-icon shape="success-standard" size="128" class="is-solid is-success center-block"></clr-icon>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="showSuccessModal = false">
+            <clr-icon shape="login"></clr-icon>
+            Fermer
+        </button>
+        <button type="button" class="btn btn-warning" (click)="showSuccessModal = false; Continue()">
+            <clr-icon shape="fast-forward" class="is-solid"></clr-icon>
+            Compléter la fiche suivante
+        </button>
+    </div>
+</clr-modal>
+<clr-modal [(clrModalOpen)]="showErrorModal">
+    <h3 class="modal-title" *ngIf="errorNumber == 1">Une question n'est pas valide !</h3>
+    <h3 class="modal-title" *ngIf="errorNumber != 1">Plusieurs questions ne sont pas valides !</h3>
+    <div class="modal-body">
+        <clr-icon shape="exclamation-triangle" size="128" class="is-solid is-danger center-block"></clr-icon>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="showErrorModal = false">
+            <clr-icon shape="login"></clr-icon>
+            Retourner
+        </button>
+    </div>
+</clr-modal>
+<clr-modal [(clrModalOpen)]="showLoadingModal" [clrModalSize]="'sm'">
+    <div class="modal-body">
+        <div class="center">
+            <br />
+            <span class="spinner spinner-lg">
+                Chargement...
+            </span>
+            <br />
+            <br />
+        </div>
+    </div>
+</clr-modal>

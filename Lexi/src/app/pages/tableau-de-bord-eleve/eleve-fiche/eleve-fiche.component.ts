@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { APIService } from 'src/app/service/api.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, } from '@angular/router';
 import { RoutingService } from 'src/app/service/routing.service';
-import { FicheDTO } from 'src/app/model/dto/ficheDTO';
+import { FicheDTO } from 'src/app/model/dto/fiche-dto';
 
 @Component(
     {

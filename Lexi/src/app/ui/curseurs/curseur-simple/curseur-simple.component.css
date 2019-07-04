@@ -7,3 +7,9 @@
     text-align: center !important;
     line-height: 1.6em !important;
 }
+
+.innerContent {
+    color: white !important;
+    font-size: 1rem;
+    margin-top: 0;
+}

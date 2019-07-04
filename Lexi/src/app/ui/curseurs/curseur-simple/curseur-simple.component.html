@@ -1,19 +1,17 @@
-<div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
-    <div class="card">
-        <div class="card-header">
-            <span style="width: 30px; height: 30px; color : rgb(0, 0, 0) ; font-size : 16px;" class="badge badge-warning">{{curseurID}}</span>
-            {{question}}
+<div class="card">
+    <div class="card-header">
+        <span style="width: 30px; height: 30px; color : rgb(0, 0, 0) ; font-size : 16px;" class="badge badge-warning">{{curseurID}}</span>
+        <div class="innerContent" [innerHTML]="question | safeHTMLStyle"></div>
+    </div>
+    <div *ngIf="answers.length != 0" class="card-block">
+        <div class="card-header" *ngFor="let answer of answers; let index = index">
+            <span style="width: 20px; height: 20px; color : white" class="badge badge-info">{{index + 1}}</span>
+            <div class="innerContent" [innerHTML]="answer | safeHTMLStyle"></div>
         </div>
-        <div *ngIf="answers.length != 0" class="card-block">
-            <div class="card-header" *ngFor="let answer of answers; let index = index">
-                <span style="width: 20px; height: 20px; color : white" class="badge badge-info">{{index + 1}}</span>
-                <span style="color : white">{{answer}}</span>
-            </div>
-        </div>
-        <div class="card-footer">
-            <div [attr.id]="'picker' + curseurID">
-                <div [attr.id]="'pickerNumber' + curseurID" class="ui-slider-handle custom-handle"></div>
-            </div>
+    </div>
+    <div class="card-footer">
+        <div [attr.id]="'picker' + curseurID">
+            <div [attr.id]="'pickerNumber' + curseurID" class="ui-slider-handle custom-handle"></div>
         </div>
     </div>
 </div>

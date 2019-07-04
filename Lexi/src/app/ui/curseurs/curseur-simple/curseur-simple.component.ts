@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import $ from 'jquery';
 import 'jquery-ui-dist/jquery-ui';
-import { DomSanitizer } from '@angular/platform-browser';
 import { QCMColor } from 'src/app/model/qcm-color.enum';
 
 @Component(
     {
         selector: 'curseur-simple',
         templateUrl: './curseur-simple.component.html',
-        styleUrls: ['./curseur-simple.component.css']
+        styleUrls: ['./curseur-simple.component.css'],
+        encapsulation: ViewEncapsulation.None
     })
 export class CurseurSimpleComponent implements OnInit, OnDestroy, AfterViewInit
 {
@@ -26,13 +26,15 @@ export class CurseurSimpleComponent implements OnInit, OnDestroy, AfterViewInit
 
     @Input()
     answers: string[] = []; //TODO: Cannot change after view init.
-    
+
     @Output()
     valueChanged = new EventEmitter<number>();
 
     @Input()
-    set color(color: QCMColor) {
-        switch (color) {
+    set color(color: QCMColor)
+    {
+        switch (color)
+        {
             case QCMColor.Green:
                 $("#picker" + this.curseurID).css("background-color", "green");
                 $("#pickerNumber" + this.curseurID).css("border-color", "green");
@@ -68,7 +70,7 @@ export class CurseurSimpleComponent implements OnInit, OnDestroy, AfterViewInit
         }
     }
 
-    constructor(private sanitizer: DomSanitizer) { }
+    constructor() { }
 
     ngOnInit()
     {
