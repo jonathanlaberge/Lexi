@@ -1,0 +1,90 @@
+
+.four {
+    width: 100%;
+    max-width: 100%;
+}
+
+img {
+
+height:100%;
+width: 100%;
+
+}
+
+/* COLUMNS */
+
+.col {
+    display: block;
+    float: left;
+    margin: 0% 0 1% 1.6%;
+}
+
+    .col:first-of-type {
+        margin-left: 0;
+
+    }
+
+/* CLEARFIX */
+
+.cf:before,
+.cf:after {
+    content: " ";
+    display: table;
+}
+
+.cf:after {
+    clear: both;
+}
+
+
+/* FORM */
+
+.plan input,  .payment-plan input,  .payment-type input {
+    display: none;
+
+}
+
+
+
+
+
+ label {
+    position: relative;
+    color: Black;
+    
+    font-size: 26px;
+    text-align: center;
+    height: 150px;
+    line-height: 150px;
+    display: block;
+    cursor: pointer;
+    border: 3px solid transparent;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+plan input:checked + label,  .payment-plan input:checked + label,  .payment-type input:checked + label {
+    border: 3px solid #E9FF00;
+    background-color: #BBEF0009;
+
+}
+
+
+    .plan input:checked + label:after, .payment-plan input:checked + label:after,  .payment-type input:checked + label:after {
+        content: "\2713";
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 100%;
+        border: 2px solid #FAFF3C;
+        background-color: #FFD400;
+        z-index: 999;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+
+    }
+
+
+
