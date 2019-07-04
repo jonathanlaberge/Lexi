@@ -1,3 +1,38 @@
-<p>
-  curseur-image works!
-</p>
+
+<div class="card">
+    <div class="card-header">
+        <span style="width: 30px; height: 30px; color : rgb(0, 0, 0) ; font-size : 16px;" class="badge badge-warning">{{curseurID}}</span>
+        <span [innerHtml]="question"></span>
+    </div>
+    <div class="card-block">
+
+
+        <div *ngIf="answers.length != 0" class="card-text">
+            <hr>
+            <div class="plan" *ngFor="let answer of answers; let index = index">
+
+
+                <input type="radio"  name="{{curseurID}}" id="{{curseurID}} + {{index + 1}}">
+
+                <label class="free-label four col" (click)="onClick(curseurID, index)" for="{{curseurID}} + {{index + 1}}" [innerHtml]="answer"></label>
+
+                <span style="opacity:0;">.</span>
+                <hr/>
+            </div>
+
+
+
+
+
+        </div>
+
+
+        <div class="card-footer">
+            <div [attr.id]="'picker' + curseurID">
+                <div [attr.id]="'pickerNumber' + curseurID" class="ui-slider-handle custom-handle"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
