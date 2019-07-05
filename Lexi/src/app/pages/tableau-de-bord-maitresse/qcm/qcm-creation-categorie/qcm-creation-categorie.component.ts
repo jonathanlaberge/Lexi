@@ -1,16 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ClrForm } from '@clr/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { APIService } from 'src/app/service/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Categorie } from 'src/app/model/categorie';
+import { Subscription } from 'rxjs';
 
 @Component(
     {
         selector: 'app-qcm-creation-categorie',
         templateUrl: './qcm-creation-categorie.component.html'
     })
-export class QCMCreationCategorieComponent implements OnInit
+export class QCMCreationCategorieComponent implements OnInit, OnDestroy
 {
     @ViewChild(ClrForm, { static: true }) creationFormValidator;
 
@@ -21,11 +22,13 @@ export class QCMCreationCategorieComponent implements OnInit
 
     errorServer: boolean = false;
 
+    subscriptionAdminControllerCategorieCreation: Subscription;
+
     constructor(
         private apiService: APIService,
         private formBuilder: FormBuilder,
         private router: Router,
-        private route: ActivatedRoute) { }
+        private activeRoute: ActivatedRoute) { }
 
     ngOnInit()
     {
@@ -36,6 +39,12 @@ export class QCMCreationCategorieComponent implements OnInit
                 niveau: ['', [Validators.required]],
                 estPublic: ['', [Validators.required]]
             });
+    }
+
+    ngOnDestroy()
+    {
+        if (this.subscriptionAdminControllerCategorieCreation != null)
+            this.subscriptionAdminControllerCategorieCreation.unsubscribe();
     }
 
     SubmitCreationForm()
@@ -54,22 +63,23 @@ export class QCMCreationCategorieComponent implements OnInit
             categorie.niveau = this.creationForm.value.niveau;
             categorie.estPublic = this.creationForm.value.estPublic;
 
-            this.apiService.AdminController_CategorieCreation(categorie).subscribe(
-                (data: any) =>
-                {
-                    if (data.code == 200)
+            this.subscriptionAdminControllerCategorieCreation =
+                this.apiService.AdminController_CategorieCreation(categorie).subscribe(
+                    (data: any) =>
                     {
-                        this.isLoadingModal = false;
-                        this.Close();
-                    }
-                    else
+                        if (data.code == 200)
+                        {
+                            this.isLoadingModal = false;
+                            this.Close();
+                        }
+                        else
+                            this.errorServer = true;
+                    },
+                    () =>
+                    {
                         this.errorServer = true;
-                },
-                () =>
-                {
-                    this.errorServer = true;
-                    this.isLoadingModal = false;
-                });
+                        this.isLoadingModal = false;
+                    });
         }
     }
 
@@ -78,6 +88,6 @@ export class QCMCreationCategorieComponent implements OnInit
         this.errorServer = false;
         this.isLoadingModal = false;
         this.creationForm.reset();
-        this.router.navigate([`../`], { relativeTo: this.route });
+        this.router.navigate([`../`], { relativeTo: this.activeRoute });
     }
 }

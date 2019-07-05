@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { RoutingService } from 'src/app/service/routing.service';
 import { APIService } from 'src/app/service/api.service';
 import { Eleve } from 'src/app/model/eleve';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 @Component(
@@ -11,21 +12,29 @@ import { ActivatedRoute, Router } from '@angular/router';
         templateUrl: './tableau-de-bord-eleve.component.html',
         styleUrls: ['./tableau-de-bord-eleve.component.css']
     })
-export class TableauDeBordEleveComponent implements OnInit
+export class TableauDeBordEleveComponent implements OnInit, OnDestroy
 {
     elevesList: Eleve[] = [];
     isReady: boolean = false;
 
     errorServer: boolean = false;
 
-    constructor(private apiService: APIService, private router: Router, private activeRoute: ActivatedRoute, private ref: ChangeDetectorRef) { }
+    subscriptionAdminControllerUserGetList: Subscription;
+    subscriptionAccountControllerMode: Subscription;
+    subscriptionURL: Subscription;
+
+    constructor(
+        private apiService: APIService,
+        private router: Router,
+        private activeRoute: ActivatedRoute,
+        private ref: ChangeDetectorRef) { }
 
     ngOnInit()
     {
         RoutingService.adminMode = false;
         RoutingService.SetRouteToEleve();
 
-        this.activeRoute.url.subscribe(() =>
+        this.subscriptionURL = this.activeRoute.url.subscribe(() =>
         {
             if (this.router.url === '/eleve')
             {
@@ -35,17 +44,36 @@ export class TableauDeBordEleveComponent implements OnInit
             this.ref.detectChanges();
         });
 
-        this.apiService.AdminController_UserGetList(0).subscribe((data: any) =>
-        {
-            if (data != null)
-                data.forEach(function (value)
+        this.subscriptionAdminControllerUserGetList =
+            this.apiService.AdminController_UserGetList(0).subscribe(
+                (data: any) =>
                 {
-                    this.elevesList.push(value as Eleve);
-                }.bind(this));
+                    if (data != null)
+                        data.forEach(function (value)
+                        {
+                            this.elevesList.push(value as Eleve);
+                        }.bind(this));
 
-            this.isReady = true;
-            this.ref.detectChanges();
-        });
+                    this.isReady = true;
+                    this.ref.detectChanges();
+                },
+                () =>
+                {
+                    this.errorServer = true;
+                    this.isReady = true;
+                });
+    }
+
+    ngOnDestroy()
+    {
+        if (this.subscriptionAdminControllerUserGetList != null)
+            this.subscriptionAdminControllerUserGetList.unsubscribe();
+
+        if (this.subscriptionAccountControllerMode != null)
+            this.subscriptionAccountControllerMode.unsubscribe();
+
+        if (this.subscriptionURL != null)
+            this.subscriptionURL.unsubscribe();
     }
 
     IsShowingPortail()
@@ -57,34 +85,33 @@ export class TableauDeBordEleveComponent implements OnInit
     {
         this.isReady = false;
 
-        var args = { idEleveEnCours: idEleve };
-
-        this.apiService.AccountController_Mode(args).subscribe(
-            (data: any) =>
-            {
-                if (data.token != null)
+        this.subscriptionAccountControllerMode =
+            this.apiService.AccountController_Mode({ idEleveEnCours: idEleve }).subscribe(
+                (data: any) =>
                 {
-                    APIService.token = data.token;
-                    localStorage.setItem('token', JSON.stringify(APIService.token));
-                    RoutingService.adminMode = false;
-                    RoutingService.eleveConnected = true;
-                    RoutingService.SetRouteToEleve();
-                    this.errorServer = false;
-                    this.isReady = true;
-                    this.router.navigate(['/eleve/fiche']);
-                }
-                else
+                    if (data.token != null)
+                    {
+                        APIService.token = data.token;
+                        localStorage.setItem('token', JSON.stringify(APIService.token));
+                        RoutingService.adminMode = false;
+                        RoutingService.eleveConnected = true;
+                        RoutingService.SetRouteToEleve();
+                        this.errorServer = false;
+                        this.isReady = true;
+                        this.router.navigate(['/eleve/fiche']);
+                    }
+                    else
+                    {
+                        this.errorServer = true;
+                        this.isReady = true;
+                    }
+
+                    this.ref.detectChanges();
+                },
+                () =>
                 {
                     this.errorServer = true;
                     this.isReady = true;
-                }
-
-                this.ref.detectChanges();
-            },
-            () =>
-            {
-                this.errorServer = true;
-                this.isReady = true;
-            });
+                });
     }
 }

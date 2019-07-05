@@ -1,16 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ClrForm } from '@clr/angular';
 import { Eleve } from 'src/app/model/eleve';
 import { APIService } from 'src/app/service/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component(
     {
         selector: 'app-eleve-creation',
         templateUrl: './eleve-creation.component.html'
     })
-export class EleveCreationComponent implements OnInit
+export class EleveCreationComponent implements OnInit, OnDestroy
 {
     @ViewChild(ClrForm, { static: true }) creationFormValidator;
 
@@ -23,6 +24,8 @@ export class EleveCreationComponent implements OnInit
 
     avatars: any[];
     selectedAvatarPath: string;
+
+    subscriptionAdminControllerUserCreation: Subscription;
 
     constructor(
         private apiService: APIService,
@@ -42,18 +45,34 @@ export class EleveCreationComponent implements OnInit
         this.SetupAvatarList();
     }
 
+    ngOnDestroy()
+    {
+        if (this.subscriptionAdminControllerUserCreation != null)
+            this.subscriptionAdminControllerUserCreation.unsubscribe();
+    }
+
     SetupAvatarList()
     {
         this.avatars = [];
 
         for (var i = 0; i <= 22; i++)
         {
-            this.avatars.push({ source: 'assets/kids-avatars/png/boy-' + i + '.png', alt: 'Avatar Gars ' + 1, title: 'Gars ' + i });
+            this.avatars.push(
+                {
+                    source: 'assets/kids-avatars/png/boy-' + i + '.png',
+                    alt: 'Avatar Gars ' + 1,
+                    title: 'Gars ' + i
+                });
         }
 
         for (var i = 0; i <= 26; i++)
         {
-            this.avatars.push({ source: 'assets/kids-avatars/png/girl-' + i + '.png', alt: 'Avatar Gille ' + 1, title: 'Fille ' + i });
+            this.avatars.push(
+                {
+                    source: 'assets/kids-avatars/png/girl-' + i + '.png',
+                    alt: 'Avatar Fille ' + 1,
+                    title: 'Fille ' + i
+                });
         }
     }
 
@@ -61,7 +80,7 @@ export class EleveCreationComponent implements OnInit
     {
         this.selectedAvatarPath = this.avatars[index].source;
     }
-    
+
     SubmitCreationForm()
     {
         if (this.creationForm.invalid)
@@ -85,25 +104,26 @@ export class EleveCreationComponent implements OnInit
             if (this.selectedAvatarPath != "")
                 eleve.avatar = this.selectedAvatarPath;
 
-            this.apiService.AdminController_UserCreation(eleve).subscribe(
-                (data: any) =>
-                {
-                    if (data.code == 200)
+            this.subscriptionAdminControllerUserCreation =
+                this.apiService.AdminController_UserCreation(eleve).subscribe(
+                    (data: any) =>
                     {
-                        this.isLoadingModal = false;
-                        this.Close();
-                    }
-                    else
+                        if (data.code == 200)
+                        {
+                            this.isLoadingModal = false;
+                            this.Close();
+                        }
+                        else
+                            this.errorServer = true;
+                    },
+                    () =>
+                    {
                         this.errorServer = true;
-                },
-                () =>
-                {
-                    this.errorServer = true;
-                    this.isLoadingModal = false;
-                });
+                        this.isLoadingModal = false;
+                    });
         }
     }
-    
+
     Close()
     {
         this.errorServer = false;

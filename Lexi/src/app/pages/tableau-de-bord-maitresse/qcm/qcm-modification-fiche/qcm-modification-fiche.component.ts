@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Fiche } from 'src/app/model/fiche';
 import { APIService } from 'src/app/service/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Question } from 'src/app/model/question';
+import { Subscription } from 'rxjs';
 
 @Component(
     {
         selector: 'app-qcm-modification-fiche',
         templateUrl: './qcm-modification-fiche.component.html'
     })
-export class QCMModificationFicheComponent implements OnInit
+export class QCMModificationFicheComponent implements OnInit, OnDestroy
 {
     isLoading: boolean = false;
     isReady: boolean = false;
@@ -19,34 +20,51 @@ export class QCMModificationFicheComponent implements OnInit
     errorServer: boolean = false;
     errorInput: boolean = false;
 
+    subscriptionParams: Subscription;
+    subscriptionAdminControllerFicheSet: Subscription;
+    subscriptionAdminControllerFicheGet: Subscription;
+
     constructor(
         private apiService: APIService,
         private router: Router,
-        private route: ActivatedRoute) { }
+        private activeRoute: ActivatedRoute) { }
 
     ngOnInit()
     {
-        this.route.params.subscribe(params =>
+        this.subscriptionParams = this.activeRoute.params.subscribe(params =>
         {
             if (!isNaN(parseFloat(params['idCategorie'])) && !isNaN(parseFloat(params['idFiche'])))
             {
-                this.apiService.AdminController_FicheGet(params['idCategorie'], params['idFiche']).subscribe(
-                    (data) =>
-                    {
-                        this.fiche = data as Fiche;
-                        this.isReady = true;
-                    },
-                    () =>
-                    {
-                        this.isLoading = false;
-                        this.errorServer = true;
-                    });
+                this.subscriptionAdminControllerFicheGet =
+                    this.apiService.AdminController_FicheGet(params['idCategorie'], params['idFiche']).subscribe(
+                        (data) =>
+                        {
+                            this.fiche = data as Fiche;
+                            this.isReady = true;
+                        },
+                        () =>
+                        {
+                            this.isLoading = false;
+                            this.errorServer = true;
+                        });
             }
             else
-                this.router.navigate([`../`], { relativeTo: this.route });
+                this.router.navigate([`../`], { relativeTo: this.activeRoute });
         });
     }
-    
+
+    ngOnDestroy()
+    {
+        if (this.subscriptionParams != null)
+            this.subscriptionParams.unsubscribe();
+
+        if (this.subscriptionAdminControllerFicheSet != null)
+            this.subscriptionAdminControllerFicheSet.unsubscribe();
+
+        if (this.subscriptionAdminControllerFicheGet != null)
+            this.subscriptionAdminControllerFicheGet.unsubscribe();
+    }
+
     SubmitEditForm()
     {
         this.errorInput = false;
@@ -60,22 +78,23 @@ export class QCMModificationFicheComponent implements OnInit
         {
             this.isLoading = true;
 
-            this.apiService.AdminController_FicheSet(this.fiche).subscribe(
-                (data: any) =>
-                {
-                    this.isLoading = false;
-                    if (data.code == 200)
-                        this.Close();
-                    else
+            this.subscriptionAdminControllerFicheSet =
+                this.apiService.AdminController_FicheSet(this.fiche).subscribe(
+                    (data: any) =>
                     {
+                        this.isLoading = false;
+                        if (data.code == 200)
+                            this.Close();
+                        else
+                        {
+                            this.errorServer = true;
+                        }
+                    },
+                    () =>
+                    {
+                        this.isLoading = false;
                         this.errorServer = true;
-                    }
-                },
-                () =>
-                {
-                    this.isLoading = false;
-                    this.errorServer = true;
-                });
+                    });
         }
     }
 
@@ -131,7 +150,7 @@ export class QCMModificationFicheComponent implements OnInit
     Close()
     {
         this.errorServer = false;
-        this.router.navigate([`../../`], { relativeTo: this.route });
+        this.router.navigate([`../../`], { relativeTo: this.activeRoute });
     }
 
     TrackByIndex(index: number, obj: any): any

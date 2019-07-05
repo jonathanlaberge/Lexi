@@ -1,17 +1,18 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { QCMColor } from 'src/app/model/qcm-color.enum';
 import { APIService } from 'src/app/service/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Question } from 'src/app/model/question';
 import { Fiche } from 'src/app/model/fiche';
 import { FicheDTO } from 'src/app/model/dto/fiche-dto';
+import { Subscription } from 'rxjs';
 
 @Component(
     {
         selector: 'app-eleve-qcm',
         templateUrl: './eleve-qcm.component.html'
     })
-export class EleveQCMComponent implements OnInit
+export class EleveQCMComponent implements OnInit, OnDestroy
 {
     fiche: Fiche;
     colorCurseur: QCMColor[] = [];
@@ -37,6 +38,11 @@ export class EleveQCMComponent implements OnInit
     qcmModeLimitNumberOfQuestion: number = 0;
     qcmModeCurseur: number = 0;
 
+    subscriptionParams: Subscription;
+    subscriptionUserControllerFicheGet: Subscription;
+    subscriptionUserControllerFicheValidation: Subscription;
+    subscriptionUserControllerFicheGetList: Subscription;
+
 
     constructor(
         private apiService: APIService,
@@ -46,37 +52,53 @@ export class EleveQCMComponent implements OnInit
 
     ngOnInit()
     {
-        this.activeRoute.params.subscribe(params =>
+        this.subscriptionParams = this.activeRoute.params.subscribe(params =>
         {
             this.ResetVariable();
             if (!isNaN(parseFloat(params['idCategorie'])) && !isNaN(parseFloat(params['idFiche'])))
             {
                 this.errorServer = false;
-                this.apiService.UserController_FicheGet(params['idCategorie'], params['idFiche']).subscribe(
-                    (data) =>
-                    {
-                        this.fiche = data as Fiche;
-
-                        for (var i = 0; i < this.fiche.listeQuestion.length; ++i)
+                this.subscriptionUserControllerFicheGet =
+                    this.apiService.UserController_FicheGet(params['idCategorie'], params['idFiche']).subscribe(
+                        (data) =>
                         {
-                            this.disabledCurseur[i] = false;
-                            this.colorCurseur[i] = QCMColor.Neutral;
-                        }
+                            this.fiche = data as Fiche;
 
-                        this.isReady = true;
-                        this.ref.detectChanges();
-                    },
-                    error =>
-                    {
-                        if (error.status == 404)
-                            this.router.navigate([`../../`], { relativeTo: this.activeRoute });
+                            for (var i = 0; i < this.fiche.listeQuestion.length; ++i)
+                            {
+                                this.disabledCurseur[i] = false;
+                                this.colorCurseur[i] = QCMColor.Neutral;
+                            }
 
-                        this.errorServer = true;
-                    });
+                            this.isReady = true;
+                            this.ref.detectChanges();
+                        },
+                        error =>
+                        {
+                            if (error.status == 404)
+                                this.router.navigate([`../../`], { relativeTo: this.activeRoute });
+
+                            this.errorServer = true;
+                        });
             }
             else
                 this.router.navigate([`/eleve/fiche`]);
         });
+    }
+
+    ngOnDestroy()
+    {
+        if (this.subscriptionParams != null)
+            this.subscriptionParams.unsubscribe();
+
+        if (this.subscriptionUserControllerFicheGet != null)
+            this.subscriptionUserControllerFicheGet.unsubscribe();
+
+        if (this.subscriptionUserControllerFicheValidation != null)
+            this.subscriptionUserControllerFicheValidation.unsubscribe();
+
+        if (this.subscriptionUserControllerFicheGetList != null)
+            this.subscriptionUserControllerFicheGetList.unsubscribe();
     }
 
     ResetVariable()
@@ -115,11 +137,11 @@ export class EleveQCMComponent implements OnInit
         return false;
     }
 
-    OnChangeCurseur(reponseSlider: number, idReponse: number)
+    OnChangeCurseur(reponseCurseur: number, idCurseur: number)
     {
         //console.log({ i: reponseSlider, j: idReponse });
 
-        this.reponseList.set(idReponse, reponseSlider);
+        this.reponseList.set(idCurseur, reponseCurseur);
 
         // Activation du boutton ou non selon une réponse non selectionnée.
         for (let value of this.reponseList.values())
@@ -146,55 +168,60 @@ export class EleveQCMComponent implements OnInit
 
         this.errorServer = false;
 
-        this.apiService.UserController_FicheValidation(
-            {
-                idCategorie: this.fiche.idCategorie,
-                idFiche: this.fiche.idFiche,
-                listeReponseEleve: reponses
-            }).subscribe(
-                (data: any) =>
+        this.subscriptionUserControllerFicheValidation =
+            this.apiService.UserController_FicheValidation(
                 {
-                    this.showLoadingModal = false;
-                    if (data != null)
+                    idCategorie: this.fiche.idCategorie,
+                    idFiche: this.fiche.idFiche,
+                    listeReponseEleve: reponses
+                }).subscribe(
+                    (data: any) =>
                     {
-                        this.errorNumber = data.nombreErreur;
-
-                        if (data.nombreErreur == 0)
+                        this.showLoadingModal = false;
+                        if (data != null)
                         {
-                            this.colorCurseur.forEach(
-                                (value, index) =>
-                                {
-                                    this.colorCurseur[index] = QCMColor.Green;
-                                });
-                            this.disabledCurseur.forEach(
-                                (value, index) =>
-                                {
-                                    this.disabledCurseur[index] = true
-                                });
+                            this.errorNumber = data.nombreErreur;
 
-                            this.canValidate = false;
-                            this.showSuccessModal = true;
-                            this.canContinue = true;
+                            if (data.nombreErreur == 0)
+                            {
+                                this.colorCurseur.forEach(
+                                    (value, index) =>
+                                    {
+                                        this.colorCurseur[index] = QCMColor.Green;
+                                    });
+                                this.disabledCurseur.forEach(
+                                    (value, index) =>
+                                    {
+                                        this.disabledCurseur[index] = true
+                                    });
+
+                                this.canValidate = false;
+                                this.showSuccessModal = true;
+                                this.canContinue = true;
+                            }
+                            else
+                            {
+                                this.showErrorModal = true;
+                                data.correction.forEach(
+                                    (value, index) =>
+                                    {
+                                        value ?
+                                            this.colorCurseur[index] = QCMColor.Green :
+                                            this.colorCurseur[index] = QCMColor.Red;
+                                        value ?
+                                            this.disabledCurseur[index] = true :
+                                            this.disabledCurseur[index] = false;
+                                    });
+                            }
                         }
                         else
-                        {
-                            this.showErrorModal = true;
-                            data.correction.forEach(
-                                (value, index) =>
-                                {
-                                    value ? this.colorCurseur[index] = QCMColor.Green : this.colorCurseur[index] = QCMColor.Red;
-                                    value ? this.disabledCurseur[index] = true : this.disabledCurseur[index] = false;
-                                });
-                        }
-                    }
-                    else
+                            this.errorServer = true;
+                    },
+                    () =>
+                    {
+                        this.showLoadingModal = false;
                         this.errorServer = true;
-                }/*,
-                () =>
-                {
-                    this.showLoadingModal = false;
-                    this.errorServer = true;
-                }*/);
+                    });
     }
 
     Close()
@@ -205,21 +232,28 @@ export class EleveQCMComponent implements OnInit
     Continue()
     {
         this.showLoadingModal = true;
-        this.apiService.UserController_FicheGetList(0).subscribe((data: any) =>
-        {
-            var fiche: FicheDTO[] = [];
-            if (data != null)
-                data.forEach(function (value)
+        this.subscriptionUserControllerFicheGetList =
+            this.apiService.UserController_FicheGetList(0).subscribe(
+                (data: any) =>
                 {
-                    fiche.push(value as FicheDTO);
-                }.bind(this));
+                    var fiche: FicheDTO[] = [];
+                    if (data != null)
+                        data.forEach(function (value)
+                        {
+                            fiche.push(value as FicheDTO);
+                        }.bind(this));
 
-            this.ResetVariable();
+                    this.ResetVariable();
 
-            if (fiche.length > 0)
-                this.router.navigate(['/eleve/qcm', fiche[0].idCategorie, fiche[0].idFiche]);
-            else
-                this.Close();
-        });
+                    if (fiche.length > 0)
+                        this.router.navigate(['/eleve/qcm', fiche[0].idCategorie, fiche[0].idFiche]);
+                    else
+                        this.Close();
+                },
+                () =>
+                {
+                    this.ResetVariable();
+                    this.Close();
+                });
     }
 }

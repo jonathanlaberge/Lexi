@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RoutingService } from 'src/app/service/routing.service';
 import { APIService } from 'src/app/service/api.service';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
         selector: 'dashboard-navbar',
         templateUrl: './navbar.component.html'
     })
-export class NavbarComponent implements OnInit
+export class NavbarComponent implements OnInit, OnDestroy
 {
     isAdmin: boolean = false;
     eleveConnected: boolean = false;
@@ -22,8 +22,8 @@ export class NavbarComponent implements OnInit
 
     loginPassword: string = null;
     loginIsReady: boolean = false;
-
-    routeSubscription: Subscription;
+    
+    subscriptionRoutingService: Subscription;
 
     constructor(private router: Router, private apiService: APIService) { }
 
@@ -33,12 +33,18 @@ export class NavbarComponent implements OnInit
         this.eleveConnected = RoutingService.eleveConnected;
         this.name = `${APIService.currentMaitresse.prenom} ${APIService.currentMaitresse.nom}`;
 
-        this.routeSubscription = RoutingService.routeSubject.subscribe(() => 
+        this.subscriptionRoutingService = RoutingService.routeSubject.subscribe(() => 
         {
             this.isAdmin = RoutingService.adminMode;
             this.eleveConnected = RoutingService.eleveConnected;
             this.name = `${APIService.currentMaitresse.prenom} ${APIService.currentMaitresse.nom}`;
         });
+    }
+
+    ngOnDestroy()
+    {
+        if (this.subscriptionRoutingService != null)
+            this.subscriptionRoutingService.unsubscribe();
     }
 
     ShowProfile()

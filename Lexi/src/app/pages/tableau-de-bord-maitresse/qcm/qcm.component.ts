@@ -31,7 +31,11 @@ export class QCMComponent implements OnInit, OnDestroy
 
     errorServer: boolean = false;
 
-    getCategorieListAPIService: Subscription;
+    subscriptionURL: Subscription;
+    subscriptionAdminControllerCategorieGetList: Subscription;
+    subscriptionAdminControllerFicheGetListCategorie: Subscription;
+    subscriptionAdminControllerCategorieDelete: Subscription;
+    subscriptionAdminControllerFicheDelete: Subscription;
 
     constructor(
         private apiService: APIService,
@@ -45,7 +49,7 @@ export class QCMComponent implements OnInit, OnDestroy
 
         this.GetCategorieList(0);
 
-        this.activeRoute.url.subscribe(() =>
+        this.subscriptionURL = this.activeRoute.url.subscribe(() =>
         {
             if (this.router.url !== '/tableaudebord/qcm')
             {
@@ -57,27 +61,45 @@ export class QCMComponent implements OnInit, OnDestroy
 
     ngOnDestroy()
     {
-        if (this.getCategorieListAPIService != null)
-            this.getCategorieListAPIService.unsubscribe();
+        if (this.subscriptionURL != null)
+            this.subscriptionURL.unsubscribe();
+
+        if (this.subscriptionAdminControllerCategorieGetList != null)
+            this.subscriptionAdminControllerCategorieGetList.unsubscribe();
+
+        if (this.subscriptionAdminControllerFicheGetListCategorie != null)
+            this.subscriptionAdminControllerFicheGetListCategorie.unsubscribe();
+
+        if (this.subscriptionAdminControllerCategorieDelete != null)
+            this.subscriptionAdminControllerCategorieDelete.unsubscribe();
+
+        if (this.subscriptionAdminControllerFicheDelete != null)
+            this.subscriptionAdminControllerFicheDelete.unsubscribe();
     }
 
     GetCategorieList(page: number)
     {
         this.isLoadingCategorie = true;
         this.categorieList = [];
-        
-        this.getCategorieListAPIService = this.apiService.AdminController_CategorieGetList(page).subscribe((data: any) =>
-        {
-            this.categorieList = [];
-            if (data != null)
-                data.forEach(function (value)
-                {
-                    this.categorieList.push(value as Categorie);
-                }.bind(this));
 
-            this.isLoadingCategorie = false;
-            this.ref.detectChanges();
-        });
+        this.subscriptionAdminControllerCategorieGetList =
+            this.apiService.AdminController_CategorieGetList(page).subscribe(
+                (data: any) =>
+                {
+                    this.categorieList = [];
+                    if (data != null)
+                        data.forEach(function (value)
+                        {
+                            this.categorieList.push(value as Categorie);
+                        }.bind(this));
+
+                    this.isLoadingCategorie = false;
+                    this.ref.detectChanges();
+                },
+                () =>
+                {
+                    this.isLoadingCategorie = false;
+                });
     }
 
     GetFicheList(page: number, idCategorie: number)
@@ -85,18 +107,24 @@ export class QCMComponent implements OnInit, OnDestroy
         this.isLoadingFiche = true;
         this.ficheList = [];
 
-        this.apiService.AdminController_FicheGetListCategorie(page, idCategorie).subscribe((data: any) =>
-        {
-            this.ficheList = [];
-            if (data != null)
-                data.forEach(function (value)
+        this.subscriptionAdminControllerFicheGetListCategorie =
+            this.apiService.AdminController_FicheGetListCategorie(page, idCategorie).subscribe(
+                (data: any) =>
                 {
-                    this.ficheList.push(value as Fiche);
-                }.bind(this));
+                    this.ficheList = [];
+                    if (data != null)
+                        data.forEach(function (value)
+                        {
+                            this.ficheList.push(value as Fiche);
+                        }.bind(this));
 
-            this.isLoadingFiche = false;
-            this.ref.detectChanges();
-        });
+                    this.isLoadingFiche = false;
+                    this.ref.detectChanges();
+                },
+                () =>
+                {
+                    this.isLoadingFiche = false;
+                });
     }
 
     Refresh()
@@ -131,39 +159,42 @@ export class QCMComponent implements OnInit, OnDestroy
         this.isLoadingModal = true;
         this.errorServer = false;
 
-        this.apiService.AdminController_CategorieDelete(this.selectedCategorie.idCategorie).subscribe(
-            (data: any) =>
-            {
-                this.isLoadingModal = false;
-                if (data.code == 200)
+        this.subscriptionAdminControllerCategorieDelete =
+            this.apiService.AdminController_CategorieDelete(this.selectedCategorie.idCategorie).subscribe(
+                (data: any) =>
                 {
-                    this.isCategorieDeleteModalOpen = false;
+                    this.isLoadingModal = false;
+                    if (data.code == 200)
+                    {
+                        this.isCategorieDeleteModalOpen = false;
 
-                    if (this.selectedCategorie == this.selectedCategorieRow)
-                        this.selectedCategorieRow = null;
+                        if (this.selectedCategorie == this.selectedCategorieRow)
+                            this.selectedCategorieRow = null;
 
-                    this.GetCategorieList(0);
-                }
-                else
+                        this.GetCategorieList(0);
+                    }
+                    else
+                        this.errorServer = true;
+                },
+                () =>
+                {
+                    this.isLoadingModal = false;
                     this.errorServer = true;
-            },
-            () =>
-            {
-                this.isLoadingModal = false;
-                this.errorServer = true;
-            });
+                });
     }
 
     OnEditFiche(fiche: Fiche)
     {
         this.isParentPageHidden = true;
-        this.router.navigate(['modificationfiche', fiche.idCategorie, fiche.idFiche], { relativeTo: this.activeRoute });
+        this.router.navigate(['modificationfiche', fiche.idCategorie, fiche.idFiche],
+            { relativeTo: this.activeRoute });
     }
 
     OnCreateFiche()
     {
         this.isParentPageHidden = true;
-        this.router.navigate(['creationfiche', this.selectedCategorieRow.idCategorie], { relativeTo: this.activeRoute });
+        this.router.navigate(['creationfiche', this.selectedCategorieRow.idCategorie],
+            { relativeTo: this.activeRoute });
     }
 
     OnDeleteFiche(fiche: Fiche)
@@ -177,22 +208,25 @@ export class QCMComponent implements OnInit, OnDestroy
         this.isLoadingModal = true;
         this.errorServer = false;
 
-        this.apiService.AdminController_FicheDelete(this.selectedFiche.idCategorie, this.selectedFiche.idFiche).subscribe(
-            (data: any) =>
-            {
-                if (data.code == 200)
-                {
-                    this.isLoadingModal = false;
-                    this.isFicheDeleteModalOpen = false;
-                    this.GetFicheList(0, this.selectedCategorieRow.idCategorie);
-                }
-                else
-                    this.errorServer = true;
-            },
-            () =>
-            {
-                this.isLoadingModal = false;
-                this.errorServer = true;
-            });
+        this.subscriptionAdminControllerFicheDelete =
+            this.apiService.AdminController_FicheDelete(
+                this.selectedFiche.idCategorie,
+                this.selectedFiche.idFiche).subscribe(
+                    (data: any) =>
+                    {
+                        if (data.code == 200)
+                        {
+                            this.isLoadingModal = false;
+                            this.isFicheDeleteModalOpen = false;
+                            this.GetFicheList(0, this.selectedCategorieRow.idCategorie);
+                        }
+                        else
+                            this.errorServer = true;
+                    },
+                    () =>
+                    {
+                        this.isLoadingModal = false;
+                        this.errorServer = true;
+                    });
     }
 }

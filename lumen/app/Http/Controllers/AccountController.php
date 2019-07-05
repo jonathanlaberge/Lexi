@@ -140,14 +140,14 @@ class AccountController extends Controller
 			VALUES (?,?,?,?)",
 			[$body->email, $hashed, $body->prenom, $body->nom]);
 
-        if(!isset($body->dateNaissance))
+        if(isset($body->dateNaissance))
             DB::update('
                 UPDATE `maitresse`
                 SET `dateNaissance` =?
                 WHERE `maitresse`.`idMaitresse` =?',
                 [$body->dateNaissance,$idMaitresse]);
 
-        if(!isset($body->genre))
+        if(isset($body->genre))
             DB::update('
                 UPDATE `maitresse`
                 SET `genre` =?

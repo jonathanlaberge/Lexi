@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ClrForm } from '@clr/angular';
 import { Maitresse } from 'src/app/model/maitresse';
@@ -6,6 +6,7 @@ import { APIService } from 'src/app/service/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConnectionDTO } from 'src/app/model/dto/connection-dto';
 import { RoutingService } from 'src/app/service/routing.service';
+import { Subscription } from 'rxjs';
 
 @Component(
     {
@@ -13,8 +14,9 @@ import { RoutingService } from 'src/app/service/routing.service';
         templateUrl: './connection.component.html',
         styleUrls: ['./connection.component.css']
     })
-export class ConnectionComponent implements OnInit
+export class ConnectionComponent implements OnInit, OnDestroy
 {
+    
     @ViewChild(ClrForm, { static: true }) loginClrForm;
     @ViewChild(ClrForm, { static: true }) registerClrForm;
 
@@ -32,10 +34,14 @@ export class ConnectionComponent implements OnInit
     errorRegisterServer: boolean = false;
     warningTokenExpired: boolean = false;
 
+    subscriptionAccountControllerConnection: Subscription;
+    subscriptionAccountControllerEnregistrement: Subscription;
+    subscriptionQueryParams: Subscription;
+
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
-        private route: ActivatedRoute,
+        private activeRoute: ActivatedRoute,
         private apiService: APIService) { }
 
     ngOnInit()
@@ -74,12 +80,24 @@ export class ConnectionComponent implements OnInit
             RoutingService.SetRouteToAdmin();
         }
 
-        this.route.queryParams.subscribe(params =>
+        this.subscriptionQueryParams = this.activeRoute.queryParams.subscribe(params =>
         {
             this.return = params['return'] || '/tableaudebord';
             if (RoutingService.isLoggedIn == true)
                 this.router.navigateByUrl(this.return);
         });
+    }
+
+    ngOnDestroy()
+    {
+        if (this.subscriptionAccountControllerConnection != null)
+            this.subscriptionAccountControllerConnection.unsubscribe();
+
+        if (this.subscriptionAccountControllerEnregistrement != null)
+            this.subscriptionAccountControllerEnregistrement.unsubscribe();
+
+        if (this.subscriptionQueryParams != null)
+            this.subscriptionQueryParams.unsubscribe();
     }
 
     SubmitLogin()
@@ -102,7 +120,7 @@ export class ConnectionComponent implements OnInit
             maitresse.motdepasse = this.loginForm.value.motdepasse;
             maitresse.email = this.loginForm.value.email;
 
-            this.apiService.AccountController_Connection(maitresse).subscribe(
+            this.subscriptionAccountControllerConnection = this.apiService.AccountController_Connection(maitresse).subscribe(
                 (data: any) =>
                 {
                     if (data.token != null)
@@ -131,8 +149,7 @@ export class ConnectionComponent implements OnInit
                         this.errorLoginInvalid = true;
                     else
                         this.errorLoginServer = true;
-                }
-            );
+                });
         }
     }
 
@@ -159,7 +176,8 @@ export class ConnectionComponent implements OnInit
             maitresse.dateNaissance = this.registerForm.value.dateNaissance as Date;
             maitresse.genre = this.registerForm.value.genre;
 
-            this.apiService.AccountController_Enregistrement(maitresse).subscribe(
+            this.subscriptionAccountControllerEnregistrement =
+                this.apiService.AccountController_Enregistrement(maitresse).subscribe(
                 (data: any) =>
                 {
                     if (data.code == 200)
@@ -203,6 +221,5 @@ export function MustMatch(controlName: string, matchingControlName: string)
         {
             matchingControl.setErrors(null);
         }
-
     }
 }

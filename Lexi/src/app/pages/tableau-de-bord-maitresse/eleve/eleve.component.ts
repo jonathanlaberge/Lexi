@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, OnDestroy } from '@angular/core';
 import { Eleve } from 'src/app/model/eleve';
 import { APIService } from 'src/app/service/api.service';
 import { ClrForm } from '@clr/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component(
     {
@@ -11,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
         templateUrl: './eleve.component.html',
         styleUrls: ['./eleve.component.css']
     })
-export class EleveComponent implements OnInit
+export class EleveComponent implements OnInit, OnDestroy
 {
     @ViewChild(ClrForm, { static: true }) editFormValidator;
 
@@ -22,22 +23,26 @@ export class EleveComponent implements OnInit
     isDeleteModalOpen: boolean = false;
 
     editForm: FormGroup;
-    
+
     errorServer: boolean = false;
 
     isLoadingModal: boolean = false;
     isLoading: boolean = false;
-    
+
     avatars: any[];
     avatarPathIndex: number;
     selectedAvatarPath: string;
+
+    subscriptionAdminControllerUserGetList: Subscription;
+    subscriptionAdminControllerUserSet: Subscription;
+    subscriptionAdminControllerUserDelete: Subscription;
 
     constructor(
         private apiService: APIService,
         private ref: ChangeDetectorRef,
         private formBuilder: FormBuilder,
         private router: Router,
-        private route: ActivatedRoute) { }
+        private activeRoute: ActivatedRoute) { }
 
     ngOnInit()
     {
@@ -53,21 +58,39 @@ export class EleveComponent implements OnInit
         this.GetEleveList(0);
     }
 
+    ngOnDestroy()
+    {
+        if (this.subscriptionAdminControllerUserGetList != null)
+            this.subscriptionAdminControllerUserGetList.unsubscribe();
+
+        if (this.subscriptionAdminControllerUserSet != null)
+            this.subscriptionAdminControllerUserSet.unsubscribe();
+
+        if (this.subscriptionAdminControllerUserDelete != null)
+            this.subscriptionAdminControllerUserDelete.unsubscribe();
+    }
+
     GetEleveList(page: number)
     {
         this.elevesList = [];
         this.isLoading = true;
-        this.apiService.AdminController_UserGetList(page).subscribe((data: any) =>
-        {
-            if (data != null)
-                data.forEach(function (value)
-                {
-                    this.elevesList.push(value as Eleve);
-                }.bind(this));
 
-            this.isLoading = false;
-            this.ref.detectChanges();
-        });
+        this.subscriptionAdminControllerUserGetList =
+            this.apiService.AdminController_UserGetList(page).subscribe((data: any) =>
+            {
+                if (data != null)
+                    data.forEach(function (value)
+                    {
+                        this.elevesList.push(value as Eleve);
+                    }.bind(this));
+
+                this.isLoading = false;
+                this.ref.detectChanges();
+            },
+                () =>
+                {
+                    this.isLoading = false;
+                });
     }
 
 
@@ -81,10 +104,15 @@ export class EleveComponent implements OnInit
                 genre: eleve.genre,
                 dateNaissance: eleve.dateNaissance
             });
-        
-        this.SetupAvatarList({ source: this.selectedEleve.avatar, alt: 'Avatar actuel', title: 'Avatar actuel' });
+
+        this.SetupAvatarList(
+            {
+                source: this.selectedEleve.avatar,
+                alt: 'Avatar actuel',
+                title: 'Avatar actuel'
+            });
         this.SetChosenAvatar(0);
-        
+
         this.errorServer = false;
         this.isEditModalOpen = true;
     }
@@ -104,12 +132,22 @@ export class EleveComponent implements OnInit
 
         for (var i = 0; i <= 22; i++)
         {
-            this.avatars.push({ source: 'assets/kids-avatars/png/boy-' + i + '.png', alt: 'Avatar Gars ' + 1, title: 'Gars ' + i });
+            this.avatars.push(
+                {
+                    source: 'assets/kids-avatars/png/boy-' + i + '.png',
+                    alt: 'Avatar Gars ' + 1,
+                    title: 'Gars ' + i
+                });
         }
 
         for (var i = 0; i <= 26; i++)
         {
-            this.avatars.push({ source: 'assets/kids-avatars/png/girl-' + i + '.png', alt: 'Avatar Gille ' + 1, title: 'Fille ' + i });
+            this.avatars.push(
+                {
+                    source: 'assets/kids-avatars/png/girl-' + i + '.png',
+                    alt: 'Avatar Gille ' + 1,
+                    title: 'Fille ' + i
+                });
         }
     }
 
@@ -135,23 +173,24 @@ export class EleveComponent implements OnInit
             this.isLoadingModal = true;
             this.errorServer = false;
 
-            this.apiService.AdminController_UserSet(eleve).subscribe(
-                (data: any) =>
-                {
-                    this.isLoadingModal = false;
-                    if (data.code == 200)
+            this.subscriptionAdminControllerUserSet =
+                this.apiService.AdminController_UserSet(eleve).subscribe(
+                    (data: any) =>
                     {
-                        this.GetEleveList(0);
-                        this.isEditModalOpen = false;
-                    }
-                    else
+                        this.isLoadingModal = false;
+                        if (data.code == 200)
+                        {
+                            this.GetEleveList(0);
+                            this.isEditModalOpen = false;
+                        }
+                        else
+                            this.errorServer = true;
+                    },
+                    () =>
+                    {
+                        this.isLoadingModal = false;
                         this.errorServer = true;
-                },
-                () =>
-                {
-                    this.isLoadingModal = false;
-                    this.errorServer = true;
-                });
+                    });
         }
     }
 
@@ -168,23 +207,24 @@ export class EleveComponent implements OnInit
         this.isLoadingModal = true;
         this.errorServer = false;
 
-        this.apiService.AdminController_UserDelete(idEleve).subscribe(
-            (data: any) =>
-            {
-                this.isLoadingModal = false;
-                if (data.code == 200)
+        this.subscriptionAdminControllerUserDelete =
+            this.apiService.AdminController_UserDelete(idEleve).subscribe(
+                (data: any) =>
                 {
-                    this.GetEleveList(0);
-                    this.isDeleteModalOpen = false;
-                }
-                else
+                    this.isLoadingModal = false;
+                    if (data.code == 200)
+                    {
+                        this.GetEleveList(0);
+                        this.isDeleteModalOpen = false;
+                    }
+                    else
+                        this.errorServer = true;
+                },
+                () =>
+                {
+                    this.isLoadingModal = false;
                     this.errorServer = true;
-            },
-            () =>
-            {
-                this.isLoadingModal = false;
-                this.errorServer = true;
-            });
+                });
     }
 
     //ShowHistory(user: Eleve)
@@ -194,6 +234,6 @@ export class EleveComponent implements OnInit
 
     SelectPlayList(user: Eleve)
     {
-        this.router.navigate(['fichearemplir', user.idEleve], { relativeTo: this.route });
+        this.router.navigate(['fichearemplir', user.idEleve], { relativeTo: this.activeRoute });
     }
 }

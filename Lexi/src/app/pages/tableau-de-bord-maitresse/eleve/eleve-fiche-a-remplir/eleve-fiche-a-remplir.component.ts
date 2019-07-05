@@ -1,15 +1,16 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { APIService } from 'src/app/service/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Categorie } from 'src/app/model/categorie';
 import { Fiche } from 'src/app/model/fiche';
+import { Subscription } from 'rxjs';
 
 @Component(
     {
         selector: 'app-eleve-fiche-a-remplir',
         templateUrl: './eleve-fiche-a-remplir.component.html'
     })
-export class EleveFicheARemplirComponent implements OnInit
+export class EleveFicheARemplirComponent implements OnInit, OnDestroy
 {
     idEleve: number = 0;
 
@@ -29,11 +30,17 @@ export class EleveFicheARemplirComponent implements OnInit
 
     public isLoadingFiche: boolean = false;
 
+    subscriptionParams: Subscription;
+    subscriptionAdminControllerUserGetTODOList: Subscription;
+    subscriptionAdminControllerCategorieGetList: Subscription;
+    subscriptionAdminControllerFicheGetListCategorie: Subscription;
+    subscriptionAdminControllerUserSetTODOList: Subscription;
+
     constructor(
         private apiService: APIService,
         private ref: ChangeDetectorRef,
         private router: Router,
-        private route: ActivatedRoute) { }
+        private activeRoute: ActivatedRoute) { }
 
 
     ngOnInit()
@@ -42,26 +49,44 @@ export class EleveFicheARemplirComponent implements OnInit
 
         this.GetCategorieList(0);
 
-        this.route.params.subscribe(params =>
+        this.subscriptionParams = this.activeRoute.params.subscribe(params =>
         {
             if (!isNaN(parseFloat(params['id'])))
             {
                 this.idEleve = parseFloat(params['id']);
 
-                this.apiService.AdminController_UserGetTODOList(this.idEleve).subscribe((data: any) =>
-                {
-                    console.log(data);
-                    if (data != null)
-                        data.forEach(function (value)
-                        {
-                            this.selectedGlobalList.push(value);
-                        }.bind(this));
-                    this.ref.detectChanges();
-                });
+                this.subscriptionAdminControllerUserGetTODOList =
+                    this.apiService.AdminController_UserGetTODOList(this.idEleve).subscribe((data: any) =>
+                    {
+                        if (data != null)
+                            data.forEach(function (value)
+                            {
+                                this.selectedGlobalList.push(value);
+                            }.bind(this));
+                        this.ref.detectChanges();
+                    });
             }
             else
-                this.router.navigate([`../`], { relativeTo: this.route });
+                this.router.navigate([`../`], { relativeTo: this.activeRoute });
         });
+    }
+
+    ngOnDestroy()
+    {
+        if (this.subscriptionParams != null)
+            this.subscriptionParams.unsubscribe();
+
+        if (this.subscriptionAdminControllerUserGetTODOList != null)
+            this.subscriptionAdminControllerUserGetTODOList.unsubscribe();
+
+        if (this.subscriptionAdminControllerCategorieGetList != null)
+            this.subscriptionAdminControllerCategorieGetList.unsubscribe();
+
+        if (this.subscriptionAdminControllerFicheGetListCategorie != null)
+            this.subscriptionAdminControllerFicheGetListCategorie.unsubscribe();
+
+        if (this.subscriptionAdminControllerUserSetTODOList != null)
+            this.subscriptionAdminControllerUserSetTODOList.unsubscribe();
     }
 
     Close()
@@ -69,7 +94,7 @@ export class EleveFicheARemplirComponent implements OnInit
         this.errorServer = false;
         this.isLoadingModal = false;
 
-        this.router.navigate([`../../`], { relativeTo: this.route });
+        this.router.navigate([`../../`], { relativeTo: this.activeRoute });
     }
 
     GetCategorieList(page: number)
@@ -77,17 +102,18 @@ export class EleveFicheARemplirComponent implements OnInit
         this.isLoadingCategorie = true;
         this.categorieList = [];
 
-        this.apiService.AdminController_CategorieGetList(page).subscribe((data: any) =>
-        {
-            if (data != null)
-                data.forEach(function (value)
-                {
-                    this.categorieList.push(value as Categorie);
-                }.bind(this));
+        this.subscriptionAdminControllerCategorieGetList =
+            this.apiService.AdminController_CategorieGetList(page).subscribe((data: any) =>
+            {
+                if (data != null)
+                    data.forEach(function (value)
+                    {
+                        this.categorieList.push(value as Categorie);
+                    }.bind(this));
 
-            this.isLoadingCategorie = false;
-            this.ref.detectChanges();
-        });
+                this.isLoadingCategorie = false;
+                this.ref.detectChanges();
+            });
     }
 
     GetFicheList(page: number, idCategorie: number)
@@ -95,18 +121,19 @@ export class EleveFicheARemplirComponent implements OnInit
         this.isLoadingFiche = true;
         this.ficheList = [];
 
-        this.apiService.AdminController_FicheGetListCategorie(page, idCategorie).subscribe((data: any) =>
-        {
-            if (data != null)
-                data.forEach(function (value)
-                {
-                    this.ficheList.push(value as Fiche);
-                }.bind(this));
+        this.subscriptionAdminControllerFicheGetListCategorie =
+            this.apiService.AdminController_FicheGetListCategorie(page, idCategorie).subscribe((data: any) =>
+            {
+                if (data != null)
+                    data.forEach(function (value)
+                    {
+                        this.ficheList.push(value as Fiche);
+                    }.bind(this));
 
-            this.SetSelectedFiche();
-            this.isLoadingFiche = false;
-            this.ref.detectChanges();
-        });
+                this.SetSelectedFiche();
+                this.isLoadingFiche = false;
+                this.ref.detectChanges();
+            });
     }
 
 
@@ -159,21 +186,22 @@ export class EleveFicheARemplirComponent implements OnInit
         this.isLoadingModal = true;
         this.SetSelectedGlobalFiche();
 
-        this.apiService.AdminController_UserSetTODOList(this.selectedGlobalList, this.idEleve).subscribe(
-            (data: any) =>
-            {
-                if (data.code == 200)
+        this.subscriptionAdminControllerUserSetTODOList =
+            this.apiService.AdminController_UserSetTODOList(this.selectedGlobalList, this.idEleve).subscribe(
+                (data: any) =>
                 {
-                    this.isLoadingModal = false;
-                    this.Close();
-                }
-                else
+                    if (data.code == 200)
+                    {
+                        this.isLoadingModal = false;
+                        this.Close();
+                    }
+                    else
+                        this.errorServer = true;
+                },
+                () =>
+                {
                     this.errorServer = true;
-            },
-            () =>
-            {
-                this.errorServer = true;
-                this.isLoadingModal = false;
-            });
+                    this.isLoadingModal = false;
+                });
     }
 }
