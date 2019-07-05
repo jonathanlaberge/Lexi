@@ -14,12 +14,9 @@ export const API_URL = "http://lexi.jolab.me/v1/";
     })
 export class APIService
 {
-
-
     private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
 
     public static currentMaitresse: Maitresse = null;
-    public static currentEleve: Eleve = null;
 
     public static token: string = null;
     public static tokenExpired: boolean = false;
@@ -30,7 +27,7 @@ export class APIService
 
     private SetHeader()
     {
-        console.log("Token: " + APIService.token);
+        //console.log("Token: " + APIService.token);
 
         if (APIService.token != null)
             this.options =
@@ -78,14 +75,11 @@ export class APIService
         this.SetHeader();
         return this.httpClient.post(`${API_URL}compte/mode`, JSON.stringify(obj), this.options);
     }
-
-
-
-
-    AccountController_ProfilUpdate(maitresse: Maitresse) {
+    
+    public AccountController_ProfilUpdate(maitresse: Maitresse)
+    {
         this.SetHeader();
-        return this.httpClient.post(`${API_URL}/compte/profil`, JSON.stringify(maitresse), this.options);
-
+        return this.httpClient.post(`${API_URL}compte/profil`, JSON.stringify(maitresse), this.options);
     }
 
 
