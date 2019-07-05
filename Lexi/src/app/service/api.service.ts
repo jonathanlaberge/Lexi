@@ -15,6 +15,7 @@ export const API_URL = "http://lexi.jolab.me/v1/";
 export class APIService
 {
 
+
     private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
 
     public static currentMaitresse: Maitresse = null;
@@ -77,6 +78,16 @@ export class APIService
         this.SetHeader();
         return this.httpClient.post(`${API_URL}compte/mode`, JSON.stringify(obj), this.options);
     }
+
+
+
+
+    AccountController_ProfilUpdate(maitresse: Maitresse) {
+        this.SetHeader();
+        return this.httpClient.post(`${API_URL}/compte/profil`, JSON.stringify(maitresse), this.options);
+
+    }
+
 
 
     // Admin - Eleve
