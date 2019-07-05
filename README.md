@@ -7,14 +7,14 @@
 **Vous pouvez utiliser [ce logiciel](http://x "ce logiciel") pré-configuré et portable pour vous épargner de la configuration et de l'installation.**
 #### Logiciel néccessaire
 Avant de commencer, il est néccessaire d'avoir ces logiciels d'installés pour le bon fonctionnement du programme:
-- Un serveur **Apache 2.4** avec les modules suivants:
- - **mod_rewrite** pour les redirections
- - **mod_negotiation**
-- **PHP 7.1** ou plus récent avec les extensions suivants:
- - **OpenSSL** PHP
- - **PDO** PHP
- - **Mbstring** PHP
-- Un serveur Mysql 5.7 ou équivalant
++ Un serveur **Apache 2.4** avec les modules suivants:
+  + **mod_rewrite** pour les redirections
+  + **mod_negotiation**
++ **PHP 7.1** ou plus récent avec les extensions suivants:
+  + **OpenSSL** PHP
+  + **PDO** PHP
+  + **Mbstring** PHP
++ Un serveur Mysql 5.7 ou équivalant
 
 ##### Téléchargement des dépendances du web service Lumen
 Pour pouvoir exécuter le web service, il faut télécharger les dépendances de Lumen. Pour ce faire, il faut le logiciels suivants:
