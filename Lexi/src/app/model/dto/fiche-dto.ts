@@ -1,6 +1,5 @@
-
-export class FicheDTO {
-
+export class FicheDTO
+{
     idFiche: number;
     idCategorie: number;
     titre: string;

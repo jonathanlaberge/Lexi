@@ -1,9 +1,5 @@
-
-export class MessageDTO {
-
-
+export class MessageDTO
+{
     code: number;
     message: string;
-
-
 }

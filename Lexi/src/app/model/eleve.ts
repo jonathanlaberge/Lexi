@@ -6,7 +6,5 @@ export class Eleve
     dateNaissance: Date;
     genre: number;
     avatar: string;
-
-  
-    
+    qcmMode: number;
 }

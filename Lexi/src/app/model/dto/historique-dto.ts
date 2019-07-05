@@ -1,5 +1,5 @@
-export class HistoriqueDTO {
-
+export class HistoriqueDTO
+{
     titre: string;
     nom: string;
     matiere: string;
@@ -10,5 +10,4 @@ export class HistoriqueDTO {
     nombreTentative: number;
     erreurMax: number;
     erreurMin: number;
-
 }
