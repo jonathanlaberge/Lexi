@@ -186,6 +186,15 @@ class AccountController extends Controller
 		$body = json_decode($request->getContent());
 
 		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
+		
+		
+        if(!isset($body->motdepasseConfirmation))
+			return response()->json(['code' => 400 ,'message' => 'Invalid Parameter'], 400);
+		$result = DB::select('SELECT * FROM `maitresse` WHERE idMaitresse =?', [$idMaitresse]);
+        if($result == null || !password_verify($body->motdepasseConfirmation, $result[0]->motdepasse))
+			return response()->json(['code' => 401 ,'message' => 'Invalid Credentials'], 401);
+
+
 
 		$numberAffected = 0;
 
