@@ -91,12 +91,14 @@ class AccountController extends Controller
 		else
 		{
             $resultEleve = DB::select('SELECT * FROM `classe_eleve_maitresse` WHERE `idMaitresse` =? AND `idEleve` =?', [$idMaitresse, $body->idEleveEnCours]);
+            $resultEleveQCMMode = DB::select('SELECT `qcmMode` FROM `eleve` WHERE `idEleve` =?', [$body->idEleveEnCours]);
 
-            if($resultEleve == null)
+            if($resultEleve == null || $resultEleveQCMMode == null)
 				return response()->json(['code' => 401 ,'message' => 'Invalid Eleve'], 401);
 
 			$user->mode = "user";
 			$user->idEleveEnCours = $body->idEleveEnCours;
+			$user->qcmMode = $resultEleveQCMMode[0]->qcmMode;
 		}
 
 		$user->idMaitresse = $result[0]->idMaitresse;
@@ -187,14 +189,13 @@ class AccountController extends Controller
 
 		$idMaitresse = JWTAuth::parseToken()->getPayload()["sub"];
 		
-		
         if(!isset($body->motdepasseConfirmation))
 			return response()->json(['code' => 400 ,'message' => 'Invalid Parameter'], 400);
+		
 		$result = DB::select('SELECT * FROM `maitresse` WHERE idMaitresse =?', [$idMaitresse]);
+		
         if($result == null || !password_verify($body->motdepasseConfirmation, $result[0]->motdepasse))
 			return response()->json(['code' => 401 ,'message' => 'Invalid Credentials'], 401);
-
-
 
 		$numberAffected = 0;
 

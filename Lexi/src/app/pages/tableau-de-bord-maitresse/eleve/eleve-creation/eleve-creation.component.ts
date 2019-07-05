@@ -40,8 +40,17 @@ export class EleveCreationComponent implements OnInit, OnDestroy
                 prenom: ['', [Validators.required]],
                 nom: ['', [Validators.required]],
                 genre: ['', []],
-                dateNaissance: ['', []]
+                dateNaissance: ['', []],
+                limitNumberOfQuestions: ['', []],
+                isShowingErrorWhenValidating: ['', []]
             });
+
+        this.creationForm.patchValue(
+            {
+                limitNumberOfQuestions: "0",
+                isShowingErrorWhenValidating: true
+            });
+
         this.SetupAvatarList();
     }
 
@@ -103,6 +112,23 @@ export class EleveCreationComponent implements OnInit, OnDestroy
 
             if (this.selectedAvatarPath != "")
                 eleve.avatar = this.selectedAvatarPath;
+
+
+            if (this.creationForm.value.isShowingErrorWhenValidating == true)
+                eleve.qcmMode = 1;
+
+            switch (this.creationForm.value.limitNumberOfQuestions)
+            {
+                case "10":
+                    eleve.qcmMode = + 128;
+                    break;
+                case "8":
+                    eleve.qcmMode = + 256;
+                    break;
+                case "6":
+                    eleve.qcmMode = + 512;
+                    break;
+            }
 
             this.subscriptionAdminControllerUserCreation =
                 this.apiService.AdminController_UserCreation(eleve).subscribe(

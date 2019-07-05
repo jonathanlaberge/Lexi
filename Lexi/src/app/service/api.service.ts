@@ -57,6 +57,11 @@ export class APIService
             APIService.jwtHelper.decodeToken(APIService.token).idEleveEnCours > 0);
     }
 
+    public static GetQMCMode(): number
+    {
+        return APIService.jwtHelper.decodeToken(APIService.token).qcmMode;
+    }
+
 
     public AccountController_Connection(maitresse: Maitresse)
     {

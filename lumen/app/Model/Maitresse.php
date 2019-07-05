@@ -14,8 +14,11 @@ class Maitresse extends Personne implements JWTSubject
 	public $idMaitresse;
 	public $email;
     private $motdepasse;
+	
+	
     private $mode = "admin";
     private $idEleveEnCours = 0;
+    private $qcmMode = 0;
 
 
 	function __construct()
@@ -56,7 +59,12 @@ class Maitresse extends Personne implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return ['mode' => $this->mode, 'idEleveEnCours' => $this->idEleveEnCours];
+        return 
+		[
+			'mode' => $this->mode, 
+			'idEleveEnCours' => $this->idEleveEnCours, 
+			'qcmMode' => $this->qcmMode
+		];
     }
  }
 

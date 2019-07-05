@@ -39,7 +39,7 @@
 </clr-datagrid>
 
 
-<clr-modal *ngIf="selectedEleve != null" [(clrModalOpen)]="isEditModalOpen">
+<clr-modal *ngIf="selectedEleve != null" [(clrModalOpen)]="isEditModalOpen" [clrModalSize]="'lg'">
     <h3 class="modal-title">Modification de <b>{{selectedEleve.prenom}} {{selectedEleve.nom}}</b></h3>
     <div class="modal-body">
         <div class="alert alert-danger" role="alert" [hidden]="!errorServer">
@@ -54,44 +54,76 @@
                 </div>
             </div>
         </div>
-        <form class="login" clrForm [formGroup]="editForm">
-            <clr-input-container>
-                <label>Prénom</label>
-                <input clrInput type="text" formControlName="prenom" name="Prenom" required />
-                <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
-            </clr-input-container>
-            <clr-input-container>
-                <label>Nom</label>
-                <input clrInput type="text" formControlName="nom" name="Nom" required />
-                <clr-control-error *clrIfError="'required'">Le nom est obligatoire</clr-control-error>
-            </clr-input-container>
-            <clr-input-container>
-                <label>Date de naissance</label>
-                <input clrInput type="date" formControlName="dateNaissance" name="Date de naissance" />
-            </clr-input-container>
-            <br />
-            <div class="btn-group">
-                <div class="radio btn">
-                    <input formControlName="genre" value="1" type="radio" name="genre" id="btn-radio-1" [checked]="selectedEleve.genre === 1">
-                    <label for="btn-radio-1">Homme</label>
-                </div>
-                <div class="radio btn">
-                    <input formControlName="genre" value="0" type="radio" name="genre" id="btn-radio-2" [checked]="selectedEleve.genre === 0">
-                    <label for="btn-radio-2">Femme</label>
-                </div>
-            </div>
+        <form clrForm [formGroup]="editForm" clrLayout="vertical">
+            <div class="pull-left">
+                <clr-input-container>
+                    <label>Prénom</label>
+                    <input clrInput type="text" formControlName="prenom" name="Prenom" placeholder="Prénom" required />
+                    <clr-control-error *clrIfError="'required'">Le prénom est obligatoire.</clr-control-error>
+                </clr-input-container>
 
-            <clr-input-container>
-                <label>Avatar</label>
-            </clr-input-container>
-            <p-galleria [activeIndex]="0"
-                        (onImageChange)="SetChosenAvatar($event.index)"
-                        [frameWidth]="40"
-                        [images]="avatars"
-                        [panelWidth]="500"
-                        [panelHeight]="300"
-                        [autoPlay]="false"
-                        [showCaption]="false"></p-galleria>
+                <clr-input-container>
+                    <label>Nom</label>
+                    <input clrInput type="text" formControlName="nom" name="Nom" placeholder="Nom" required />
+                    <clr-control-error *clrIfError="'required'">Le nom est obligatoire.</clr-control-error>
+                </clr-input-container>
+
+                <clr-input-container>
+                    <label>Date de naissance</label>
+                    <input clrInput type="date" formControlName="dateNaissance" />
+                </clr-input-container>
+
+                <br />
+                <div class="btn-group">
+                    <div class="radio btn">
+                        <input formControlName="genre" value="1" type="radio" name="genre" id="btn-radio-1">
+                        <label for="btn-radio-1">Homme</label>
+                    </div>
+                    <div class="radio btn">
+                        <input formControlName="genre" value="0" type="radio" name="genre" id="btn-radio-2">
+                        <label for="btn-radio-2">Femme</label>
+                    </div>
+                </div>
+
+                <clr-radio-container>
+                    <label>Limitation du nombre de questions</label>
+                    <clr-radio-wrapper>
+                        <input type="radio" clrRadio name="limitNumberOfQuestions" required value="0" formControlName="limitNumberOfQuestions" />
+                        <label>Ne pas limiter</label>
+                    </clr-radio-wrapper>
+                    <clr-radio-wrapper>
+                        <input type="radio" clrRadio name="limitNumberOfQuestions" required value="10" formControlName="limitNumberOfQuestions" />
+                        <label>Ce limiter à 10 questions max</label>
+                    </clr-radio-wrapper>
+                    <clr-radio-wrapper>
+                        <input type="radio" clrRadio name="limitNumberOfQuestions" required value="8" formControlName="limitNumberOfQuestions" />
+                        <label>Ce limiter à 8 questions max</label>
+                    </clr-radio-wrapper>
+                    <clr-radio-wrapper>
+                        <input type="radio" clrRadio name="limitNumberOfQuestions" required value="6" formControlName="limitNumberOfQuestions" />
+                        <label>Ce limiter à 6 questions max</label>
+                    </clr-radio-wrapper>
+                </clr-radio-container>
+
+                <br />
+                <clr-checkbox-wrapper>
+                    <input type="checkbox" clrCheckbox name="isShowingErrorWhenValidating" formControlName="isShowingErrorWhenValidating" />
+                    <label>Afficher les erreurs lorsque <br />l'élève valide le questionnaire</label>
+                </clr-checkbox-wrapper>
+            </div>
+            <div class="pull-right">
+                <clr-input-container>
+                    <label>Avatar</label>
+                </clr-input-container>
+                <p-galleria [activeIndex]="0"
+                            (onImageChange)="SetChosenAvatar($event.index)"
+                            [frameWidth]="40"
+                            [images]="avatars"
+                            [panelWidth]="500"
+                            [panelHeight]="380"
+                            [autoPlay]="false"
+                            [showCaption]="false"></p-galleria>
+            </div>
         </form>
     </div>
     <div class="modal-footer">

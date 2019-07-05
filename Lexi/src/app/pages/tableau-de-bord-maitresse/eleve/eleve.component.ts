@@ -52,7 +52,9 @@ export class EleveComponent implements OnInit, OnDestroy
                 prenom: [[Validators.required]],
                 nom: [[Validators.required]],
                 genre: [[Validators.required]],
-                dateNaissance: ['', []]
+                dateNaissance: ['', []],
+                limitNumberOfQuestions: ['', []],
+                isShowingErrorWhenValidating: ['', []]
             });
 
         this.GetEleveList(0);
@@ -96,13 +98,39 @@ export class EleveComponent implements OnInit, OnDestroy
 
     OnEdit(eleve: Eleve)
     {
+        var qcmMode: number = eleve.qcmMode;
+        var limitNumberOfQuestions: number = 0;
+        var isShowingErrorWhenValidating: boolean = false;
+        if (qcmMode - 512 >= 0)
+        {
+            limitNumberOfQuestions = 6;
+            qcmMode = qcmMode - 512;
+        }
+        if (qcmMode - 256 >= 0)
+        {
+            limitNumberOfQuestions = 8;
+            qcmMode = qcmMode - 256;
+        }
+        if (qcmMode - 128 >= 0)
+        {
+            limitNumberOfQuestions = 10;
+            qcmMode = qcmMode - 128;
+        }
+        if (qcmMode - 1 >= 0)
+        {
+            isShowingErrorWhenValidating = true;
+            qcmMode = qcmMode - 128;
+        }
+
         this.selectedEleve = eleve;
         this.editForm.setValue(
             {
                 prenom: eleve.prenom,
                 nom: eleve.nom,
                 genre: eleve.genre,
-                dateNaissance: eleve.dateNaissance
+                dateNaissance: eleve.dateNaissance,
+                limitNumberOfQuestions: limitNumberOfQuestions.toString(),
+                isShowingErrorWhenValidating: isShowingErrorWhenValidating
             });
 
         this.SetupAvatarList(
@@ -169,6 +197,22 @@ export class EleveComponent implements OnInit, OnDestroy
 
             if (this.selectedAvatarPath != "")
                 eleve.avatar = this.selectedAvatarPath;
+
+            if (this.editForm.value.isShowingErrorWhenValidating == true)
+                eleve.qcmMode = 1;
+
+            switch (this.editForm.value.limitNumberOfQuestions)
+            {
+                case "10":
+                    eleve.qcmMode = + 128;
+                    break;
+                case "8":
+                    eleve.qcmMode = + 256;
+                    break;
+                case "6":
+                    eleve.qcmMode = + 512;
+                    break;
+            }
 
             this.isLoadingModal = true;
             this.errorServer = false;

@@ -342,13 +342,7 @@ class AdminController extends Controller
 				{
 					if (isset($question->idQuestion, $question->idFiche, $question->idCategorie, $question->question, $question->choixDeReponses, $question->bonneReponse))
 					{
-						$numberAffected++;
-						//DB::update('
-						//	UPDATE `question`
-						//	SET `question` =?,`choixDeReponses` =?,`bonneReponse` =?
-						//	WHERE `idQuestion` =?,`idFiche` =?,`idCategorie` =?',
-                        //  [$question->question, $question->choixDeReponses, $question->bonneReponse, $question->idQuestion, $question->idFiche, $question->idCategorie]);
-                            
+						$numberAffected++; 
                         DB::insert('
                             INSERT INTO `question`
                             (`idQuestion`, `idFiche`, `idCategorie`, `question`, `choixDeReponses`, `bonneReponse`)
@@ -455,6 +449,13 @@ class AdminController extends Controller
                 SET `avatar` =?
                 WHERE `idEleve` =?',
                 [$body->avatar, $idEleveResult[0]->id]);
+				
+        if(isset($body->qcmMode))
+            DB::update('
+                UPDATE `eleve`
+                SET `qcmMode` =?
+                WHERE `idEleve` =?',
+                [$body->qcmMode, $idEleveResult[0]->id]);
 
 		return response()->json(["code" => "200", "message" => "OK"], 200);
 	}
@@ -482,7 +483,7 @@ class AdminController extends Controller
 			return response()->json(["code" => "400", "message" => "Invalid Parameter"], 400);
 
 		$result = DB::select('
-			SELECT `eleve`.`idEleve`, `prenom`, `nom`, `dateNaissance`, `genre`, `avatar`
+			SELECT `eleve`.`idEleve`, `prenom`, `nom`, `dateNaissance`, `genre`, `avatar`, `qcmMode`
 			FROM `eleve`
 			JOIN `classe_eleve_maitresse` ON `classe_eleve_maitresse`.`idEleve` = `eleve`.`idEleve`
 			WHERE `eleve`.`idEleve` =? AND `classe_eleve_maitresse`.`idMaitresse` =?',[$idEleve, $idMaitresse]);
@@ -574,7 +575,15 @@ class AdminController extends Controller
 					[$body->avatar, $idEleve]);
 			}
 
-            
+			if(isset($body->qcmMode))
+			{
+				$numberAffected++;
+				DB::update('
+					UPDATE `eleve`
+					SET `qcmMode` =?
+					WHERE `idEleve` =?',
+					[$body->qcmMode, $idEleve]);
+            }
 			DB::commit();
 		}
 		catch (Exception $e)
@@ -645,7 +654,7 @@ class AdminController extends Controller
 
 		if ($page == 0)
 			return response()->json(DB::select('
-				SELECT `eleve`.`idEleve`, `classe_eleve_maitresse`.`idMaitresse`, `prenom`, `nom`, `genre`, `avatar`, `dateNaissance`
+				SELECT `eleve`.`idEleve`, `classe_eleve_maitresse`.`idMaitresse`, `prenom`, `nom`, `genre`, `avatar`, `dateNaissance`, `qcmMode`
 				FROM `eleve`
 				JOIN `classe_eleve_maitresse` ON `classe_eleve_maitresse`.`idEleve` = `eleve`.`idEleve`
 				WHERE `classe_eleve_maitresse`.`idMaitresse` =?',[$idMaitresse]), 200);
