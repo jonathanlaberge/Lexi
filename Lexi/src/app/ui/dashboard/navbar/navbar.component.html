@@ -101,41 +101,59 @@
             </div>
         </div>
 
-       
-
-            <clr-input-container>
-                <label>Entrer le mot de passe actuel</label>
-
-                <input clrInput placeholder="Mot de passe" type="password" [(ngModel)]="motdepasse" name="motdepasse" required />
-            </clr-input-container>
-
-
-
-            <clr-input-container>
-                <label>Nouveau mot de passe</label>
-                <input clrInput placeholder="Répété le mot de passe" type="password" [(ngModel)]="confirmationmotdepasse" name="confirmationmotdepasse" required />
-
-             </clr-input-container>
+        <div class="alert alert-danger" role="alert" [hidden]="!currentPasswordError">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        Votre mot de passe actuelle n'est pas valide.
+                    </span>
+                </div>
+            </div>
+        </div>
 
 
-            <clr-input-container>
-                <label>Prénom</label>
-                <input placeholder="Prénom" clrInput type="text" [(ngModel)]="prenom" name="Prénom" required />
-            </clr-input-container>
-
-
-            <clr-input-container>
-                <label>Nom</label>
-                <input placeholder="Nom" clrInput type="text" [(ngModel)]="nom" name="Nom" required />
-            </clr-input-container>
+        <clr-input-container>
+            <label>Entrer le mot de passe actuel</label>
+            <input clrInput placeholder="Mot de passe actuelle" type="password" (input)="confirmPassword()" [(ngModel)]="motdepasseConfirmation" name="motdepasseConfirmation" required />
+            <label style="color:red;" [hidden]="!passwordLenght">Le mot passe doit être de 8 charactères au minimum.</label>
+        </clr-input-container>
 
 
 
-      
+        <clr-input-container>
+            <label>Nouveau mot de passe</label>
+            <input clrInput placeholder="Nouveau mot de passe" type="password" [(ngModel)]="motdepasse" (input)="confirmPassword()" name="motdepasse" required />
+
+        </clr-input-container>
+
+
+        <clr-input-container>
+            <label>Nouveau mot de passe</label>
+            <input clrInput placeholder="Répété le nouveau mot de passe" type="password" [(ngModel)]="motdepasse2" (input)="confirmPassword()" name="motdepasse2" required />
+            <label style="color:red;" [hidden]="!mismatch">Le mot passe ne corespond pas ou n'est pas valide.</label>
+        </clr-input-container>
+
+
+        <clr-input-container>
+            <label>Prénom</label>
+            <input placeholder="Prénom" clrInput type="text" [(ngModel)]="prenom" name="Prénom" required />
+        </clr-input-container>
+
+
+        <clr-input-container>
+            <label>Nom</label>
+            <input placeholder="Nom" clrInput type="text" [(ngModel)]="nom" name="Nom" required />
+        </clr-input-container>
+
+
+
         <br />
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn" (click)="isEditModalOpen = false">Annuler</button>
-        <button type="submit" class="btn btn-success" (click)="SubmitEdit()">Modifier</button>
+        <button type="button" class="btn"   (click)="closeEdit()"    >Annuler</button>
+        <button type="submit" [hidden]="mismatch" class="btn btn-success" (click)="SubmitEdit()">Modifier</button>
     </div>
 </clr-modal>
