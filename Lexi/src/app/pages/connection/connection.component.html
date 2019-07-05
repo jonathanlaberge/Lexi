@@ -77,9 +77,6 @@
     </form>
 </div>
 
-
-
-
 <!-- -- Register Form -- -->
 <clr-modal [(clrModalOpen)]="isRegisterModalOpen">
     <h3 class="modal-title">Enregistrement</h3>
@@ -109,7 +106,7 @@
             </div>
         </div>
         <p>Pour s'enregister, remplisser ce formulaire.</p>
-        <form class="login" clrForm [formGroup]="registerForm">
+        <form clrForm [formGroup]="registerForm" clrLayout="vertical">
             <clr-input-container>
                 <label>Utilisateur</label>
                 <input placeholder="Email de connection" clrInput type="email" formControlName="email" name="Utilisateur" required />

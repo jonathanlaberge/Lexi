@@ -45,8 +45,6 @@ export class EleveFicheARemplirComponent implements OnInit, OnDestroy
 
     ngOnInit()
     {
-
-
         this.GetCategorieList(0);
 
         this.subscriptionParams = this.activeRoute.params.subscribe(params =>

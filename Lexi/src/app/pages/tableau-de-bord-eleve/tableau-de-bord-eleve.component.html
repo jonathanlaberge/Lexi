@@ -17,6 +17,18 @@
                 </div>
             </div>
             <div *ngIf="IsShowingPortail()" class="clr-row">
+                <div class="alert alert-info" role="alert" [hidden]="!(isReady && elevesList.length == 0)">
+                    <div class="alert-items">
+                        <div class="alert-item static">
+                            <div class="alert-icon-wrapper">
+                                <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                            </div>
+                            <span class="alert-text">
+                                La liste des élèves est vide. Pensez à créer un élève!
+                            </span>
+                        </div>
+                    </div>
+                </div>
                 <div *ngIf="!isReady" class="center">
                     <span class="spinner spinner-lg">
                         Chargement...
