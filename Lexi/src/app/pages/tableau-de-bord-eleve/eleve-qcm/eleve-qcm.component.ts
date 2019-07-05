@@ -34,9 +34,8 @@ export class EleveQCMComponent implements OnInit, OnDestroy
     showErrorModal: boolean = false;
     showLoadingModal: boolean = false;
 
-    qcmModeShowErrorOnValidation: boolean = true;
+    qcmModeShowErrorOnValidation: boolean = false;
     qcmModeLimitNumberOfQuestion: number = 0;
-    qcmModeCurseur: number = 0;
 
     subscriptionParams: Subscription;
     subscriptionUserControllerFicheGet: Subscription;
@@ -69,6 +68,31 @@ export class EleveQCMComponent implements OnInit, OnDestroy
                                 this.disabledCurseur[i] = false;
                                 this.colorCurseur[i] = QCMColor.Neutral;
                             }
+
+                            var qcmMode: number = APIService.GetQMCMode();
+                            if (qcmMode - 512 >= 0)
+                            {
+                                this.qcmModeLimitNumberOfQuestion = 6;
+                                qcmMode = qcmMode - 512;
+                            }
+                            if (qcmMode - 256 >= 0)
+                            {
+                                this.qcmModeLimitNumberOfQuestion = 8;
+                                qcmMode = qcmMode - 256;
+                            }
+                            if (qcmMode - 128 >= 0)
+                            {
+                                this.qcmModeLimitNumberOfQuestion = 10;
+                                qcmMode = qcmMode - 128;
+                            }
+                            if (qcmMode - 1 >= 0)
+                            {
+                                this.qcmModeShowErrorOnValidation = true;
+                                qcmMode = qcmMode - 128;
+                            }
+
+                            if (this.qcmModeLimitNumberOfQuestion != 0)
+                                this.fiche.listeQuestion = this.fiche.listeQuestion.slice(0, this.qcmModeLimitNumberOfQuestion);
 
                             this.isReady = true;
                             this.ref.detectChanges();
@@ -123,9 +147,8 @@ export class EleveQCMComponent implements OnInit, OnDestroy
         this.showErrorModal = false;
         this.showLoadingModal = false;
 
-        this.qcmModeShowErrorOnValidation = true;
+        this.qcmModeShowErrorOnValidation = false;
         this.qcmModeLimitNumberOfQuestion = 0;
-        this.qcmModeCurseur = 0;
     }
 
     IsUsingDots(question: Question)
@@ -205,12 +228,15 @@ export class EleveQCMComponent implements OnInit, OnDestroy
                                 data.correction.forEach(
                                     (value, index) =>
                                     {
-                                        value ?
-                                            this.colorCurseur[index] = QCMColor.Green :
-                                            this.colorCurseur[index] = QCMColor.Red;
-                                        value ?
-                                            this.disabledCurseur[index] = true :
-                                            this.disabledCurseur[index] = false;
+                                        if (this.qcmModeShowErrorOnValidation)
+                                        {
+                                            value ?
+                                                this.colorCurseur[index] = QCMColor.Green :
+                                                this.colorCurseur[index] = QCMColor.Red;
+                                            value ?
+                                                this.disabledCurseur[index] = true :
+                                                this.disabledCurseur[index] = false;
+                                        }
                                     });
                             }
                         }
