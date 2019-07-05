@@ -54,7 +54,6 @@ export class RoutingService
             localStorage.clear();
 
         APIService.currentMaitresse = null;
-        APIService.currentEleve = null;
         APIService.token = null;
         RoutingService.isLoggedIn = false;
         RoutingService.adminMode = false;
