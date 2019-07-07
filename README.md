@@ -92,14 +92,37 @@ Il faut importer la base de données. Le fichier des tables est **Database.sql**
 Copier les fichiers produit précédemment par la commande `ng build --prod` sur la racine du dossier **www** du serveur Apache. Ensuite, copier les fichiers avec tous les dépendances du web service Lumen à côté du dossier **www**. En d'autre mot, ne pas mettre le web service dans le dossier **www**. Dans le fichier de configuration Apache, rajouter ces lignes:
 
 ```apache
-DocumentRoot /Jonathan/lamp_serveur/www/lexi.jolab/lumen/public
-DirectoryIndex index.php
-<Directory /Jonathan/lamp_serveur/www/lexi.jolab/lumen/public>
-	AllowOverride All
-	Allow from All
-</Directory>
+<VirtualHost *:80>
+	DocumentRoot "**Localisation du dossier WWW**/"
+	ServerName "main-server"
+	Alias "/api/" "**Localisation du web service lumen**/public/"
+	Alias "/api" "**Localisation du web service lumen**/public/"
+	<Directory "**Localisation du dossier WWW**/">
+		AllowOverride All
+		Options FollowSymLinks Indexes	
+	</Directory>
+	<Directory "**Localisation du web service lumen**/">
+		AllowOverride All
+		Options FollowSymLinks Includes Indexes 
+	</Directory>
+</VirtualHost>
+```
+**N'oublier pas de remplacer les localisations des dossiers par les bons chemins.**
+
+Finalement, créer un fichier dans le dossier **www** portant le nom **.htaccess**. Ne pas omettre le point avant htaccess. Dans ce fichier, rajouter ces lignes:
+```apache
+Options All -Indexes
+
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.html [L]
+
+php_value display_errors off
 ```
 
 ### Accès administrateur
-Utilisateur : *admin@admin* 
+Utilisateur : *admin@admin*
 Mot de passe : *123allo!@#ALLO*
