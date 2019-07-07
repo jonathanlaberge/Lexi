@@ -2,10 +2,11 @@
 *Un questionnaire intéractif*
 
 ## Structure du programme
-
+...
 ## Installation
 **Vous pouvez utiliser [ce logiciel](http://x "ce logiciel") pré-configuré et portable pour vous épargner de la configuration et de l'installation.**
-#### Logiciel néccessaire
+
+### Logiciel néccessaire
 Avant de commencer, il est néccessaire d'avoir ces logiciels d'installés pour le bon fonctionnement du programme:
 + Un serveur **Apache 2.4** avec les modules suivants:
   + **mod_rewrite** pour les redirections
@@ -32,7 +33,49 @@ Une fois installé, exécuter la commande `npm install` sur la racine du projet 
 #### Configuration du projet
 Le programme comporte 2 fichiers de configuration. Un pour le front-end Angular et un autre pour le web service Lumen.
 
-...
+Le fichier de configuration pour Lumen est dans le fichier **lumen/.env**. Celui-ci comporte les variables suivantes:
+
+    APP_NAME=Lumen
+    APP_ENV=local
+    APP_KEY=
+    APP_DEBUG=false
+    APP_URL=http://localhost/api
+    APP_TIMEZONE=UTC
+    
+    LOG_CHANNEL=stack
+    LOG_SLACK_WEBHOOK_URL=
+    
+    DB_CONNECTION=mysql
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_DATABASE=QCM
+    DB_USERNAME=username
+    DB_PASSWORD=password
+    
+    CACHE_DRIVER=file
+    QUEUE_CONNECTION=sync
+    
+    JWT_SECRET=secret
+    JWT_TTL=2880
+Voici les variables à configurer:
+
+ - `APP_DEBUG` Permet d'afficher ou non les informations détaillées en cas d'exception sur la page du client. Accepte seulement **true** ou **false**. 
+ - `APP_URL` Lien permanent de l'API.
+ - `DB_HOST` Adresse du serveur Mysql. Utiliser **localhost** si ce serveur est sur la même machine que le serveur Apache.
+ - `DB_PORT` Port du serveur Mysql. Par défaut, le port est **3306**.
+ - `DB_DATABASE` Nom de la base de donnée. Par défaut, si vous importez le fichier Database.sql sur le serveur Mysql, le nom de la base de données est **QCM**. Si vous renommez ce nom sur ce serveur, vous devez également le modifier ici.
+ - `DB_USERNAME` Utilisateur Mysql ayant accès à la base de données.
+ - `DB_PASSWORD`Mot de passe de l'utilisateur Mysql ayant accès à la base de données.
+ - `JWT_SECRET` Ceci est le mot de passe secret pour la génération des tokens. Nous vous recommandons fortement de générer une chaîne de caractères d'une longueur de 64 caractères. Vous pouvez utiliser la commande `php artisan jwt:secret` dans le dossier **lumen** pour générer automatiquement cette chaîne de caractères. Pour des raisons évidentes de sécurité, ne partager pas cette variable sur internet.
+ - `JWT_TTL` Nombre de minutes avant l'expiration d'un token. Par défaut, 2880 minutes équivaut à 2 jours.
+
+Le fichier de configuration pour le front-end Angular est dans le fichier **Lexi/src/app/service/api.service.ts**. Celui-ci comporte la variable constante suivante:
+
+```ts
+export const API_URL = "http://localhost/api/v1/";
+```
+Ceci correspond à l'adresse du web service Lumen.  Dans le fichier de configuration Lumen,
+Si l'adresse du service web est `http://localhost/api`, il faut rajouter `/v1/` à la fin.
 
 #### Compilation du front-end Angular
 Après avoir téléchargé et configuré le front-end Angular, compiler le projet à l'aide de la commande `ng build --prod` sur la racine du projet. Cette commande créera un dossier avec le nom **dist/Lexi** dans la racine du projet contenant l'intégralité du front-end. Ces fichiers seront utilisés pour le serveur Apache.
@@ -41,8 +84,11 @@ Après avoir téléchargé et configuré le front-end Angular, compiler le proje
 
 #### Importation de la base de données
 
-...
+Il faut importer la base de données. Le fichier des tables est **Database.sql** et se trouve dans la racine du répertoire. Celui-ci créera une base de données pourtant le nom **QCM** et intégrera tous les tables nécessaires.
 
 #### Configuration du serveur Apache
 
 ...
+### Accès administrateur
+Utilisateur : *admin@admin*
+Mot de passe : *123allo!@#ALLO*
