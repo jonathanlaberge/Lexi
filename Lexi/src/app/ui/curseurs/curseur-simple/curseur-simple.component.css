@@ -9,7 +9,13 @@
 }
 
 .innerContent {
-    color: white !important;
-    font-size: 1rem;
-    margin-top: 0;
+    margin-left: 5px;
+    position: relative;
+    top: -1rem;
+}
+
+.biggerBadge {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
 }

@@ -32,8 +32,8 @@
     <br />
 </div>
 <div *ngIf="isReady">
-    <div class="row">
-        <div *ngFor="let question of fiche.listeQuestion; let index = index" class="col-md-4">
+    <div class="clr-row" style="width:100%">
+        <div *ngFor="let question of fiche.listeQuestion; let index = index" class="clr-col-md-6 clr-col-lg-4 clr-col-xl-3">
             <curseur-simple [curseurID]="question.idQuestion"
                             [useDots]="IsUsingDots(question)"
                             [answers]="IsUsingDots(question) ? [] : question.choixDeReponses"
@@ -43,7 +43,7 @@
                             [disable]="disabledCurseur[question.idQuestion - 1]"></curseur-simple>
         </div>
     </div>
-    <div class="pull-right">
+    <div class="clr-row">
         <button type="button" class="btn btn-primary" (click)="Close()">
             <clr-icon shape="login"></clr-icon>
             Retourner en arrière

@@ -1,11 +1,11 @@
 <div class="card">
     <div class="card-header">
-        <span style="width: 30px; height: 30px; color : rgb(0, 0, 0) ; font-size : 16px;" class="badge badge-warning">{{curseurID}}</span>
+        <span class="badge badge-warning biggerBadge pull-left">{{curseurID}}</span>
         <div class="innerContent" [innerHTML]="question | safeHTMLStyle"></div>
     </div>
     <div *ngIf="answers.length != 0" class="card-block">
         <div class="card-header" *ngFor="let answer of answers; let index = index">
-            <span style="width: 20px; height: 20px; color : white" class="badge badge-info">{{index + 1}}</span>
+            <span  class="badge badge-info biggerBadge pull-left">{{index + 1}}</span>
             <div class="innerContent" [innerHTML]="answer | safeHTMLStyle"></div>
         </div>
     </div>
