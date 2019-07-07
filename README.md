@@ -12,7 +12,7 @@ Avant de commencer, il est nécessaire d'avoir ces logiciels d'installés pour l
 + Un serveur **Apache 2.4** avec les modules suivants:
   + **mod_rewrite** pour les redirections
   + **mod_negotiation**
-+ **PHP 7.1** ou plus récent *(une version antérieure peut fonctionner si vous n'utilisez pas Composer)* avec les extensions suivants:
++ **PHP 7.1** ou plus récent avec les extensions suivants:
   + **OpenSSL** PHP
   + **PDO** PHP
   + **Mbstring** PHP
@@ -85,7 +85,7 @@ Après avoir téléchargé et configuré le front-end Angular, compiler le proje
 
 #### Importation de la base de données
 
-Il faut importer la base de données. Le fichier des tables est **Database.sql** et se trouve dans la racine du répertoire. Celui-ci créera une base de données pourtant le nom **QCM** et intégrera tous les tables nécessaires.
+Il faut importer la base de données. Le fichier des tables est **Database.sql** et se trouve dans la racine du répertoire. Vous devez vous-même créer la base de données et importer le fichier **Database.sql** dans le serveur Mysql. Celui-ci créera tous les tables nécessaires. Le nom de la base de données doit être le même que dans le fichier de configuration du web service Lumen.
 
 #### Configuration du serveur Apache
 
@@ -123,6 +123,6 @@ RewriteRule . index.html [L]
 php_value display_errors off
 ```
 
-### Accès administrateur
+### Accès administrateur du programme
 Utilisateur : *admin@admin*
 Mot de passe : *123allo!@#ALLO*
