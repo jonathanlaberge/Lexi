@@ -1,17 +1,18 @@
 # Lexi
 *Un questionnaire intéractif*
 
-## Structure du programme
-...
-## Installation
-**Vous pouvez utiliser [ce logiciel](http://x "ce logiciel") pré-configuré et portable pour vous épargner de la configuration et de l'installation.**
+## Fonctionnement du programme
+*À venir...*
 
-### Logiciel néccessaire
-Avant de commencer, il est néccessaire d'avoir ces logiciels d'installés pour le bon fonctionnement du programme:
+## Installation
+**Vous pouvez utiliser [ce logiciel](https://github.com/jonathanlaberge/Lexi/releases "ce logiciel") pré-configuré et portable pour vous épargner de la configuration et de l'installation.**
+
+### Logiciel nécessaire
+Avant de commencer, il est nécessaire d'avoir ces logiciels d'installés pour le bon fonctionnement du programme:
 + Un serveur **Apache 2.4** avec les modules suivants:
   + **mod_rewrite** pour les redirections
   + **mod_negotiation**
-+ **PHP 7.1** ou plus récent avec les extensions suivants:
++ **PHP 7.1** ou plus récent *(une version antérieure peut fonctionner si vous n'utilisez pas Composer)* avec les extensions suivants:
   + **OpenSSL** PHP
   + **PDO** PHP
   + **Mbstring** PHP
@@ -88,7 +89,17 @@ Il faut importer la base de données. Le fichier des tables est **Database.sql**
 
 #### Configuration du serveur Apache
 
-...
+Copier les fichiers produit précédemment par la commande `ng build --prod` sur la racine du dossier **www** du serveur Apache. Ensuite, copier les fichiers avec tous les dépendances du web service Lumen à côté du dossier **www**. En d'autre mot, ne pas mettre le web service dans le dossier **www**. Dans le fichier de configuration Apache, rajouter ces lignes:
+
+```apache
+DocumentRoot /Jonathan/lamp_serveur/www/lexi.jolab/lumen/public
+DirectoryIndex index.php
+<Directory /Jonathan/lamp_serveur/www/lexi.jolab/lumen/public>
+	AllowOverride All
+	Allow from All
+</Directory>
+```
+
 ### Accès administrateur
-Utilisateur : *admin@admin*
+Utilisateur : *admin@admin* 
 Mot de passe : *123allo!@#ALLO*
