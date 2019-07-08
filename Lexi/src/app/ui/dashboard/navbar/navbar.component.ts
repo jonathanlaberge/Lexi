@@ -66,11 +66,11 @@ export class NavbarComponent implements OnInit, OnDestroy
         if (this.subscriptionRoutingService != null)
             this.subscriptionRoutingService.unsubscribe();
 
-        if (this.subscriptionRoutingService != null)
-            this.subscriptionRoutingService.unsubscribe();
+        if (this.subscriptionAccountControllerMode != null)
+            this.subscriptionAccountControllerMode.unsubscribe();
 
-        if (this.subscriptionRoutingService != null)
-            this.subscriptionRoutingService.unsubscribe();
+        if (this.subscriptionAccountControllerProfilUpdate != null)
+            this.subscriptionAccountControllerProfilUpdate.unsubscribe();
     }
 
     ShowProfile()
