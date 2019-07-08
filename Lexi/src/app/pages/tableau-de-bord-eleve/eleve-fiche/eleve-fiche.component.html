@@ -4,7 +4,7 @@
     <clr-dg-column>Nom de maitressse</clr-dg-column>
     <clr-dg-column></clr-dg-column>
 
-    <clr-dg-placeholder>La liste de questionnaires est vide.</clr-dg-placeholder>
+    <clr-dg-placeholder>La liste des questionnaires est vide.</clr-dg-placeholder>
 
     <clr-dg-row *clrDgItems="let item of ficheList; let index = index" (click)="SetSelectedFiche(item)">
         <clr-dg-cell><clr-icon shape="tasks" class="has-alert is-solid"></clr-icon> {{item.titre}}</clr-dg-cell>
@@ -16,9 +16,9 @@
     </clr-dg-row>
     <clr-dg-footer>
         <clr-dg-pagination #pagination [clrDgPageSize]="10">
-            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Élèves par page</clr-dg-page-size>
+            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Questionnaires par page</clr-dg-page-size>
             {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
-            de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "élève" : "élèves"}}
+            de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "questionnaire" : "questionnaires"}}
         </clr-dg-pagination>
     </clr-dg-footer>
 </clr-datagrid>

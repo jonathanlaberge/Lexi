@@ -4,11 +4,11 @@
     <clr-dg-column>Date de complétion</clr-dg-column>
     <clr-dg-column>Matière</clr-dg-column>
     <clr-dg-column>Niveau</clr-dg-column>
-    <clr-dg-column>Nombre de tentative</clr-dg-column>
+    <clr-dg-column>Nombre de tentatives</clr-dg-column>
     <clr-dg-column>Erreur maximum</clr-dg-column>
     <clr-dg-column>Erreur minimum</clr-dg-column>
 
-    <clr-dg-placeholder>La liste d'historique est vide.</clr-dg-placeholder>
+    <clr-dg-placeholder>La liste des historiques est vide.</clr-dg-placeholder>
 
     <clr-dg-row *clrDgItems="let item of historiqueList">
 
@@ -23,8 +23,8 @@
         
     </clr-dg-row>
     <clr-dg-footer>
-        <clr-dg-pagination #pagination [clrDgPageSize]="10">
-            <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Élèves par page</clr-dg-page-size>
+        <clr-dg-pagination #pagination [clrDgPageSize]="30">
+            <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Éléments par page</clr-dg-page-size>
             {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
             de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "historique" : "historiques"}}
         </clr-dg-pagination>

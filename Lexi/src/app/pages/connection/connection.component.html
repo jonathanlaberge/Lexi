@@ -59,13 +59,13 @@
                 <label>Utilisateur</label>
                 <input placeholder="Email de connection" clrInput type="email" formControlName="email" name="Utilisateur" required />
                 <clr-control-error *clrIfError="'required'">L'email est obligatoire</clr-control-error>
-                <clr-control-error *clrIfError="'email'">L'email ne contien pas de @. </clr-control-error>
+                <clr-control-error *clrIfError="'email'">L'email ne contient pas de @. </clr-control-error>
             </clr-input-container>
             <clr-input-container>
                 <label>Mot de passe</label>
                 <span class="label">Mot de passe</span>
                 <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
-                <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
+                <clr-control-error *clrIfError="'required'">Le mot de passe est requis.</clr-control-error>
                 <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{loginForm.value.motdepasse.length}} {{loginForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 caractères au minimum. </clr-control-error>
             </clr-input-container>
             <div>
@@ -110,34 +110,34 @@
             <clr-input-container>
                 <label>Utilisateur</label>
                 <input placeholder="Email de connection" clrInput type="email" formControlName="email" name="Utilisateur" required />
-                <clr-control-error *clrIfError="'required'">L'email est obligatoire</clr-control-error>
-                <clr-control-error *clrIfError="'email'">L'email ne contien pas d'arobase (@). </clr-control-error>
+                <clr-control-error *clrIfError="'required'">L'email est obligatoire.</clr-control-error>
+                <clr-control-error *clrIfError="'email'">L'email ne contient pas d'arobase (@).</clr-control-error>
             </clr-input-container>
             <clr-input-container>
                 <label>Mot de passe</label>
                 <span class="label">Mot de passe</span>
                 <input clrInput placeholder="Mot de passe" type="password" formControlName="motdepasse" name="motdepasse" required />
-                <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
+                <clr-control-error *clrIfError="'required'">Le mot de passe est requis.</clr-control-error>
                 <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.motdepasse.length}} {{registerForm.value.motdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 caractères au minimum. </clr-control-error>
-                <clr-control-error *clrIfError="'mustMatch'">Les mots de passe sont differents. </clr-control-error>
+                <clr-control-error *clrIfError="'mustMatch'">Les mots de passe sont differents.</clr-control-error>
             </clr-input-container>
             <clr-input-container>
                 <label>Confirmation mot de passe</label>
                 <span class="label">Mot de passe</span>
                 <input clrInput placeholder="Répété le mot de passe" type="password" formControlName="confirmationmotdepasse" name="confirmationmotdepasse" required />
-                <clr-control-error *clrIfError="'required'">Le mots de passe est requis.</clr-control-error>
+                <clr-control-error *clrIfError="'required'">Le mot de passe est requis.</clr-control-error>
                 <clr-control-error *clrIfError="'minlength'">Le mot de passe est de {{registerForm.value.confirmationmotdepasse.length}} {{registerForm.value.confirmationmotdepasse.length == 1 ? "caractère" : "caractères"}}. Il faut 8 caractères au minimum. </clr-control-error>
-                <clr-control-error *clrIfError="'mustMatch'">Les mots de passe sont differents. </clr-control-error>
+                <clr-control-error *clrIfError="'mustMatch'">Les mots de passe sont differents.</clr-control-error>
             </clr-input-container>
             <clr-input-container>
                 <label>Prénom</label>
                 <input placeholder="Prénom" clrInput type="text" formControlName="prenom" name="Prénom" required />
-                <clr-control-error *clrIfError="'required'">Le prénom est obligatoire</clr-control-error>
+                <clr-control-error *clrIfError="'required'">Le prénom est obligatoire.</clr-control-error>
             </clr-input-container>
             <clr-input-container>
                 <label>Nom</label>
                 <input placeholder="Nom" clrInput type="text" formControlName="nom" name="Nom" required />
-                <clr-control-error *clrIfError="'required'">Le nom est obligatoire</clr-control-error>
+                <clr-control-error *clrIfError="'required'">Le nom est obligatoire.</clr-control-error>
             </clr-input-container>
             <clr-input-container>
                 <label>Date de Naissance</label>

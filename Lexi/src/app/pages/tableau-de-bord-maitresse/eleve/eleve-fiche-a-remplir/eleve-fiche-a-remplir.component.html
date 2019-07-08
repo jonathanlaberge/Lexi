@@ -39,7 +39,7 @@
             </clr-dg-row>
             <clr-dg-footer>
                 <clr-dg-pagination #pagination [clrDgPageSize]="10">
-                    <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégorie par page</clr-dg-page-size>
+                    <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégories par page</clr-dg-page-size>
                     {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
                     de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "catégorie" : "catégories"}}
                 </clr-dg-pagination>
@@ -61,7 +61,7 @@
                 </clr-dg-row>
                 <clr-dg-footer>
                     <clr-dg-pagination #pagination [clrDgPageSize]="10">
-                        <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégorie par page</clr-dg-page-size>
+                        <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégories par page</clr-dg-page-size>
                         {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
                         de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "fiche" : "fiches"}}
                     </clr-dg-pagination>

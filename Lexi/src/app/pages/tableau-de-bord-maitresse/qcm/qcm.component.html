@@ -38,7 +38,7 @@
         </clr-dg-row>
         <clr-dg-footer>
             <clr-dg-pagination #pagination [clrDgPageSize]="10">
-                <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégorie par page</clr-dg-page-size>
+                <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de catégories par page</clr-dg-page-size>
                 {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
                 de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "catégorie" : "catégories"}}
             </clr-dg-pagination>
@@ -68,7 +68,7 @@
                 </clr-dg-cell>
 
                 <clr-dg-cell>{{item.titre}}</clr-dg-cell>
-                <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell><!-- @TODO: Bug: Fix date format for safari. -->
+                <clr-dg-cell>{{item.dateCreation | date}}</clr-dg-cell>
                 <clr-dg-cell>{{item.estPublic == 1 ? "Public" : "Privé"}}</clr-dg-cell>
 
                 <clr-dg-cell *ngIf="idMaitresse != item.idMaitresseCreatrice">{{item.prenomCreatrice}} {{item.nomCreatrice}}</clr-dg-cell>
@@ -76,7 +76,7 @@
             </clr-dg-row>
             <clr-dg-footer>
                 <clr-dg-pagination #pagination [clrDgPageSize]="30">
-                    <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de fiche par page</clr-dg-page-size>
+                    <clr-dg-page-size [clrPageSizeOptions]="[10,30,50,100]">Nombre de fiches par page</clr-dg-page-size>
                     {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
                     de {{pagination.totalItems}} {{pagination.totalItems == 1 ? "fiche" : "fiches"}}
                 </clr-dg-pagination>
@@ -94,7 +94,7 @@
                             <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
                         </div>
                         <span class="alert-text">
-                            Il y a eu une erreur lors de la supression. Veuillez réessayer plus tard.
+                            Il y a eu une erreur lors de la suppression. Veuillez réessayer plus tard.
                         </span>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
             <p>
                 Voulez-vous vraiment supprimer cette catégorie ?
                 <br>
-                <span style="color:red">Cette action n'est pas réversible et supprimera tous les fiches et les questions associées à cette categorie?</span>
+                <span style="color:red">Cette action n'est pas réversible et supprimera toutes les fiches et les questions associées à cette categorie?</span>
             </p>
         </div>
         <div class="modal-footer">
@@ -124,7 +124,7 @@
                             <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
                         </div>
                         <span class="alert-text">
-                            Il y a eu une erreur lors de la supression. Veuillez réessayer plus tard.
+                            Il y a eu une erreur lors de la suppression. Veuillez réessayer plus tard.
                         </span>
                     </div>
                 </div>
@@ -132,7 +132,7 @@
             <p>
                 Voulez-vous vraiment supprimer cette fiche ?
                 <br>
-                <span style="color:red">Cette action n'est pas réversible et supprimera tous les questions associées à cette fiche?</span>
+                <span style="color:red">Cette action n'est pas réversible et supprimera toutes les questions associées à cette fiche?</span>
             </p>
         </div>
         <div class="modal-footer">
