@@ -1,9 +1,6 @@
 # Lexi
 *Un questionnaire intéractif*
 
-## Fonctionnement du programme
-*À venir...*
-
 ## Installation
 **Vous pouvez utiliser [ce logiciel](https://github.com/jonathanlaberge/Lexi/releases "ce logiciel") pré-configuré et portable pour vous épargner de la configuration et de l'installation.**
 
@@ -22,7 +19,7 @@ Avant de commencer, il est nécessaire d'avoir ces logiciels d'installés pour l
 Pour pouvoir exécuter le web service, il faut télécharger les dépendances de Lumen. Pour ce faire, il faut le logiciels suivants:
 - [Composer](https://getcomposer.org/download/ "Composer") 
 
-Une fois installé, exécuter la commande `composer update` sur la racine du web service (étant dans le dossier **lumen** de ce répertoire).
+Une fois installé, exécuter la commande `composer install` sur la racine du web service (étant dans le dossier **lumen** de ce répertoire).
 
 ##### Téléchargement des dépendances du front-end Angular
 Pour pouvoir compiler le projet angular, il faut les logiciels suivants:
